@@ -43,31 +43,31 @@ node example.js "The company ABC GmbH is located in Berlin."
     "status": "success",
     "entities": [
         {
-            "text": "Mustermann GmbH",
+            "text": "Acme Corporation",
             "type": "organization",
-            "start": 4,
-            "end": 19,
+            "start": 0,
+            "end": 16,
             "confidence": 0.95
         },
         {
-            "text": "München",
+            "text": "New York",
             "type": "location",
-            "start": 33,
-            "end": 40,
+            "start": 27,
+            "end": 35,
             "confidence": 0.98
         },
         {
-            "text": "15. März 2025",
+            "text": "March 15, 2025",
             "type": "date",
-            "start": 48,
-            "end": 61,
+            "start": 82,
+            "end": 96,
             "confidence": 0.97
         },
         {
-            "text": "250.000 EUR",
+            "text": "250,000 USD",
             "type": "money",
-            "start": 83,
-            "end": 94,
+            "start": 62,
+            "end": 73,
             "confidence": 0.96
         }
     ]
@@ -78,13 +78,13 @@ node example.js "The company ABC GmbH is located in Berlin."
 
 | Type | Description | Examples |
 |---|---|---|
-| `person` | Person names | Max Mustermann, Dr. Meier |
-| `organization` | Companies, authorities | Mustermann GmbH, Finanzamt München |
-| `location` | Places, addresses | München, Hauptstraße 5 |
-| `date` | Date references | 15. März 2025, Q1/2024 |
-| `money` | Monetary amounts | 250.000 EUR, 1.500,00 € |
-| `phone` | Phone numbers | +49 89 123456 |
-| `email` | Email addresses | info@beispiel.de |
+| `person` | Person names | John Smith, Dr. Miller |
+| `organization` | Companies, authorities | Acme Corp., IRS |
+| `location` | Places, addresses | New York, 5th Avenue |
+| `date` | Date references | March 15, 2025, Q1/2024 |
+| `money` | Monetary amounts | 250,000 USD, 1,500.00 EUR |
+| `phone` | Phone numbers | +1 212 555 0123 |
+| `email` | Email addresses | info@example.com |
 
 ## Common use cases
 

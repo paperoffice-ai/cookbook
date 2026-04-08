@@ -4,7 +4,7 @@ set -euo pipefail
 
 API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
 BASE_URL="https://api.paperoffice.ai/latest/knowledge_graph"
-TEXT="${1:-Die Mustermann GmbH hat ihren Hauptsitz in München. CEO ist Max Mustermann. Das Unternehmen wurde 2010 gegründet und beschäftigt 500 Mitarbeiter. Hauptkunde ist die Beispiel AG aus Berlin.}"
+TEXT="${1:-Acme Corporation is headquartered in New York. The CEO is John Smith. The company was founded in 2010 and employs 500 people. Their main customer is Example Inc. from Chicago.}"
 
 echo "=== 1. Build knowledge graph ==="
 echo "Text: ${TEXT:0:80}..."
@@ -26,10 +26,10 @@ fi
 echo ""
 echo "=== 2. Query knowledge graph ==="
 echo "Graph ID: ${GRAPH_ID}"
-echo "Question: Who is the CEO of Mustermann GmbH?"
+echo "Question: Who is the CEO of Acme Corporation?"
 echo ""
 
 curl -s -X POST "${BASE_URL}/query" \
   -H "Authorization: Bearer ${API_KEY}" \
   -F "graph_id=${GRAPH_ID}" \
-  -F "query=Wer ist der CEO der Mustermann GmbH?" | python3 -m json.tool
+  -F "query=Who is the CEO of Acme Corporation?" | python3 -m json.tool

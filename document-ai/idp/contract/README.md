@@ -94,7 +94,7 @@ node example.js contract.pdf
       "suggested_fields": {
         "_party_a_name": {
           "type": "string",
-          "value": "Mustermann GmbH",
+          "value": "Acme Corporation",
           "source_boxes_confidence": "high"
         },
         "_duration": {

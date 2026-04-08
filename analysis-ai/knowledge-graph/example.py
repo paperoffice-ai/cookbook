@@ -9,9 +9,9 @@ BASE_URL = "https://api.paperoffice.ai/latest/knowledge_graph"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 EXAMPLE_TEXT = (
-    "Die Mustermann GmbH hat ihren Hauptsitz in München. "
-    "CEO ist Max Mustermann. Das Unternehmen wurde 2010 gegründet "
-    "und beschäftigt 500 Mitarbeiter. Hauptkunde ist die Beispiel AG aus Berlin."
+    "Acme Corporation is headquartered in New York. "
+    "The CEO is John Smith. The company was founded in 2010 "
+    "and employs 500 people. Their main customer is Example Inc. from Chicago."
 )
 
 
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     # Query graph
-    question = "Wer ist der CEO der Mustermann GmbH?"
+    question = "Who is the CEO of Acme Corporation?"
     print(f"\n=== Query knowledge graph ===")
     print(f"Question: {question}\n")
 

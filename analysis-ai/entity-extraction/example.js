@@ -5,9 +5,9 @@ const API_URL = "https://api.paperoffice.ai/latest/document_intelligence/entitie
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
 const EXAMPLE_TEXT =
-  "Die Mustermann GmbH mit Sitz in München hat am 15. März 2025 " +
-  "einen Vertrag über 250.000 EUR mit der Beispiel AG abgeschlossen. " +
-  "Ansprechpartner ist Max Mustermann, erreichbar unter +49 89 123456.";
+  "Acme Corporation, based in New York, signed a contract worth " +
+  "250,000 USD with Example Inc. on March 15, 2025. " +
+  "Contact person is John Smith, reachable at +1 212 555 0123.";
 
 async function extract_entities(text, entity_types = null) {
   if (!API_KEY) throw new Error("PAPEROFFICE_API_KEY not set");

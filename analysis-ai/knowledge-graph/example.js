@@ -5,9 +5,9 @@ const BASE_URL = "https://api.paperoffice.ai/latest/knowledge_graph";
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
 const EXAMPLE_TEXT =
-  "Die Mustermann GmbH hat ihren Hauptsitz in München. " +
-  "CEO ist Max Mustermann. Das Unternehmen wurde 2010 gegründet " +
-  "und beschäftigt 500 Mitarbeiter. Hauptkunde ist die Beispiel AG aus Berlin.";
+  "Acme Corporation is headquartered in New York. " +
+  "The CEO is John Smith. The company was founded in 2010 " +
+  "and employs 500 people. Their main customer is Example Inc. from Chicago.";
 
 async function build_graph(text) {
   if (!API_KEY) throw new Error("PAPEROFFICE_API_KEY not set");
@@ -65,7 +65,7 @@ if (!graph_id) {
 }
 
 // Query graph
-const question = "Wer ist der CEO der Mustermann GmbH?";
+const question = "Who is the CEO of Acme Corporation?";
 console.log(`\n=== Query knowledge graph ===`);
 console.log(`Question: ${question}\n`);
 

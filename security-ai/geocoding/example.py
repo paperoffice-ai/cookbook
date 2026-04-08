@@ -38,7 +38,7 @@ def geocode_reverse(lat: float, lng: float, lang: str = "de", token: str = API_K
 
 
 if __name__ == "__main__":
-    address = sys.argv[1] if len(sys.argv) > 1 else "Alexanderplatz 1, Berlin"
+    address = sys.argv[1] if len(sys.argv) > 1 else "Times Square, New York"
 
     print(f"=== Forward: {address} ===")
     fwd = geocode_forward(address)

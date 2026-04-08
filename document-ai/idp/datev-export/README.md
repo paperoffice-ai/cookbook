@@ -57,7 +57,7 @@ The generated CSV follows the **DATEV posting batch** format:
 | BU-Schlüssel                     | `9`              | Derived from `_vat_rate`   |
 | Belegdatum                       | `1503`           | `_invoice_date` → DDMM    |
 | Belegfeld 1                      | `2024-001`       | `_invoice_number`          |
-| Buchungstext                     | `Mustermann GmbH`| `_supplier_name`           |
+| Buchungstext                     | `Acme Corp.`     | `_supplier_name`           |
 
 ### BU key mapping
 
@@ -84,14 +84,14 @@ For **SKR03**, adjust the account numbers in the examples (e.g. account `1800` f
 --- Extracted Invoice Data ---
   Invoice no.:  2024-001
   Date:         2024-03-15
-  Supplier:     Mustermann GmbH
+  Supplier:     Acme Corp.
   Amount:       1.469,06
   Net:          1.234,50
   VAT:          234,56
 
 --- DATEV Accounting Entry (CSV) ---
 Umsatz (ohne Soll/Haben-Kz);Soll/Haben-Kennzeichen;Konto;Gegenkonto;BU-Schlüssel;Belegdatum;Belegfeld 1;Buchungstext
-1469.06;S;70000;1200;9;1503;2024-001;Mustermann GmbH
+1469.06;S;70000;1200;9;1503;2024-001;Acme Corp.
 ```
 
 ## Extension possibilities

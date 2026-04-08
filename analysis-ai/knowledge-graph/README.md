@@ -50,13 +50,13 @@ node example.js
     "status": "success",
     "graph_id": "kg_123",
     "nodes": [
-        { "id": "n1", "label": "Mustermann GmbH", "type": "organization" },
-        { "id": "n2", "label": "München", "type": "location" },
-        { "id": "n3", "label": "Max Mustermann", "type": "person" }
+        { "id": "n1", "label": "Acme Corporation", "type": "organization" },
+        { "id": "n2", "label": "New York", "type": "location" },
+        { "id": "n3", "label": "John Smith", "type": "person" }
     ],
     "edges": [
-        { "source": "n1", "target": "n2", "relation": "hat_sitz_in" },
-        { "source": "n3", "target": "n1", "relation": "ist_ceo_von" }
+        { "source": "n1", "target": "n2", "relation": "headquartered_in" },
+        { "source": "n3", "target": "n1", "relation": "is_ceo_of" }
     ],
     "stats": { "nodes": 15, "edges": 22 }
 }
@@ -67,10 +67,10 @@ node example.js
 ```json
 {
     "status": "success",
-    "answer": "Max Mustermann ist der CEO der Mustermann GmbH.",
+    "answer": "John Smith is the CEO of Acme Corporation.",
     "relevant_nodes": [
-        { "id": "n3", "label": "Max Mustermann", "type": "person" },
-        { "id": "n1", "label": "Mustermann GmbH", "type": "organization" }
+        { "id": "n3", "label": "John Smith", "type": "person" },
+        { "id": "n1", "label": "Acme Corporation", "type": "organization" }
     ],
     "confidence": 0.87
 }

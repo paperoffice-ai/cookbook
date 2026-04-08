@@ -39,7 +39,7 @@ node example.js /path/to/file.pdf
 
 | Instruction | Result |
 |-------------|--------|
-| `Name by document type and date` | `Invoice_2024-03-15_Mustermann_GmbH.pdf` |
+| `Name by document type and date` | `Invoice_2024-03-15_Acme_Corp.pdf` |
 | `Use invoice number as filename` | `RE-2024-00142.pdf` |
 | `Name by sender and type` | `Telekom_Invoice.pdf` |
 | `Number sequentially with prefix SCAN` | `SCAN_001.pdf` |
@@ -54,13 +54,13 @@ node example.js /path/to/file.pdf
   "result": {
     "documents": [
       {
-        "suggested_filename": "Invoice_2024-03-15_Mustermann_GmbH.pdf",
+        "suggested_filename": "Invoice_2024-03-15_Acme_Corp.pdf",
         "document_type": "Invoice",
         "page_range": "1-3",
         "pages": 3,
         "date": "2024-03-15",
-        "sender": "Mustermann GmbH",
-        "reasoning": "The document is an invoice from Mustermann GmbH..."
+        "sender": "Acme Corp.",
+        "reasoning": "The document is an invoice from Acme Corp..."
       }
     ],
     "files": [

@@ -3,7 +3,7 @@
 set -euo pipefail
 
 API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
-ADDRESS="${1:-Alexanderplatz 1, Berlin}"
+ADDRESS="${1:-Times Square, New York}"
 
 echo "=== Forward Geocoding: $ADDRESS ==="
 curl -s -X POST "https://api.paperoffice.ai/latest/geocoding/forward" \

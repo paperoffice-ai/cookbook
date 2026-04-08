@@ -32,14 +32,14 @@ POST https://api.paperoffice.ai/latest/geocoding/reverse
 export PAPEROFFICE_API_KEY=po_sk_xxx
 
 # Bash
-bash example.sh "Alexanderplatz 1, Berlin"
+bash example.sh "Times Square, New York"
 
 # Python
 pip install requests
-python3 example.py "Brandenburger Tor, Berlin"
+python3 example.py "Central Park, New York"
 
 # Node.js (v18+)
-node example.js "Marienplatz, München"
+node example.js "Times Square, New York"
 ```
 
 ## Expected response (Forward)
@@ -50,11 +50,11 @@ node example.js "Marienplatz, München"
     "found": true,
     "lat": 52.52,
     "lng": 13.41,
-    "display_name": "Alexanderplatz, Mitte, Berlin, Deutschland",
+    "display_name": "Times Square, Manhattan, New York, USA",
     "address": {
-        "road": "Alexanderplatz",
-        "city": "Berlin",
-        "country": "Deutschland"
+        "road": "Broadway",
+        "city": "New York",
+        "country": "United States"
     },
     "results": []
 }

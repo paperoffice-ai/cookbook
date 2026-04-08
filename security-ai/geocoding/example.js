@@ -33,7 +33,7 @@ async function geocode_reverse(lat, lng, lang = "de", token = API_KEY) {
   return response.json();
 }
 
-const address = process.argv[2] || "Alexanderplatz 1, Berlin";
+const address = process.argv[2] || "Times Square, New York";
 
 console.log(`=== Forward: ${address} ===`);
 const fwd = await geocode_forward(address);

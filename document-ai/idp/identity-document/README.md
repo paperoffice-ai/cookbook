@@ -81,7 +81,7 @@ node example.js id_card.pdf
       "suggested_fields": {
         "_full_name": {
           "type": "string",
-          "value": "Max Mustermann",
+          "value": "John Smith",
           "source_boxes_confidence": "high"
         },
         "_document_number": {
