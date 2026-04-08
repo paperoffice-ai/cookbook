@@ -6,11 +6,10 @@ PaperOffice DMS provides **5 search endpoints** with different capabilities: Ult
 
 | Endpoint | Method | Best for |
 |---|---|---|
-| `/documents/list` | POST | **Ultimate Search** — intelligent auto-routing across all 4 search modes |
-| `/documents/semantic-search` | POST | Pure vector-based semantic search |
-| `/documents/search-hybrid` | POST | Combined fulltext + semantic |
-| `/documents/search-fulltext` | POST | Traditional keyword search |
-| `/documents/rag-search` | POST | RAG context retrieval (for AI/LLM pipelines) |
+| `/documents/documents-list` | POST | **Ultimate Search** — intelligent auto-routing across all 4 search modes |
+| `/documents/document-search` | POST | Semantic, Hybrid, Fulltext, and RAG search (mode determined by parameters) |
+
+> **Note:** All specialized search types (Semantic, Hybrid, Fulltext, RAG) use the **same endpoint** `/documents/document-search`. The search behavior is controlled by parameters like `mode`, `connector_types`, and `source_types`.
 
 **Authentication:** Bearer Token (API key required)
 
@@ -66,7 +65,7 @@ POST https://api.paperoffice.ai/latest/documents/documents-list
 ### Example
 
 ```bash
-curl -X POST "https://api.paperoffice.ai/latest/documents/list" \
+curl -X POST "https://api.paperoffice.ai/latest/documents/documents-list" \
   -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -86,7 +85,7 @@ curl -X POST "https://api.paperoffice.ai/latest/documents/list" \
 Pure AI-powered vector search using embeddings.
 
 ```
-POST https://api.paperoffice.ai/latest/documents/semantic-search
+POST https://api.paperoffice.ai/latest/documents/document-search
 ```
 
 | Parameter | Type | Required | Default | Description |
@@ -109,7 +108,7 @@ POST https://api.paperoffice.ai/latest/documents/semantic-search
 Combined fulltext + semantic scoring for best relevance.
 
 ```
-POST https://api.paperoffice.ai/latest/documents/search-hybrid
+POST https://api.paperoffice.ai/latest/documents/document-search
 ```
 
 | Parameter | Type | Required | Default | Description |
@@ -126,7 +125,7 @@ POST https://api.paperoffice.ai/latest/documents/search-hybrid
 Traditional keyword search (fastest, exact matches only).
 
 ```
-POST https://api.paperoffice.ai/latest/documents/search-fulltext
+POST https://api.paperoffice.ai/latest/documents/document-search
 ```
 
 | Parameter | Type | Required | Default | Description |
@@ -143,7 +142,7 @@ POST https://api.paperoffice.ai/latest/documents/search-fulltext
 Optimized for retrieving context chunks for AI/LLM pipelines.
 
 ```
-POST https://api.paperoffice.ai/latest/documents/rag-search
+POST https://api.paperoffice.ai/latest/documents/document-search
 ```
 
 | Parameter | Type | Required | Default | Description |
@@ -200,7 +199,7 @@ node example.js "invoice 2026" 42 20
 | Find documents by meaning | `/documents/documents-list` | `semantic` | `semantic` |
 | Find exact invoice number | `/documents/documents-list` | `fulltext` | `keyword` |
 | Best overall relevance | `/documents/documents-list` | `hybrid` | `balanced` |
-| AI/LLM context retrieval | `/documents/rag-search` | — | — |
+| AI/LLM context retrieval | `/documents/document-search` | — | — |
 | Score > 0.8 = very good match | any | — | — |
 
 ## Tips

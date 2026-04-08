@@ -2,23 +2,43 @@
 
 Extracts named entities (persons, organizations, locations, dates, amounts, etc.) from texts or documents using AI-powered NER analysis.
 
-## Endpoint
+## Endpoints
 
-```
-POST https://api.paperoffice.ai/latest/document_intelligence/entities
-```
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/document_intelligence/entities` | POST | Extract entities from text |
+| `/document_intelligence/entities/{document_id}` | GET | Get entities for an existing DMS document |
+| `/document_intelligence/entities/search` | GET | Search entities across all documents |
+| `/document_intelligence/entities/canonical` | GET | Get canonical (deduplicated) entities |
 
 **Authentication:** Bearer Token
 
-## Parameters
+## Parameters — `POST /document_intelligence/entities`
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `text` | string | ✅* | Text to analyze |
-| `file_1` | file | ✅* | Alternatively: upload a document (PDF, DOCX, etc.) |
-| `entity_types` | string | ❌ | Comma-separated list: `person`, `organization`, `location`, `date`, `money`, `phone`, `email` |
+| `text` | string | Yes | Text to analyze |
+| `type` | string | No | Filter by entity type (e.g., `person`, `organization`, `location`) |
+| `min_confidence` | float | No | Minimum confidence threshold (0.0–1.0) |
+| `include_positions` | bool | No | Include character positions in the response |
 
-\* Either `text` or `file_1` must be provided.
+## Parameters — `GET /document_intelligence/entities/{document_id}`
+
+Returns entities extracted from an already-indexed DMS document.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `{document_id}` | path | Yes | DMS document ID |
+| `include_relations` | bool | No | Include entity relationships |
+
+## Parameters — `GET /document_intelligence/entities/search`
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `query` | string | Yes | Search term |
+| `workspace_id` | int | No | Restrict to a workspace |
+| `entity_type` | string | No | Filter by type |
+| `limit` | int | No | Max results |
 
 ## How to run
 

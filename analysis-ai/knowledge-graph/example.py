@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Build and query knowledge graph"""
+"""PaperOffice AI — Query and visualize knowledge graph"""
 import os
 import sys
 import json
@@ -8,78 +8,85 @@ import requests
 BASE_URL = "https://api.paperoffice.ai/latest/knowledge_graph"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
-EXAMPLE_TEXT = (
-    "Acme Corporation is headquartered in New York. "
-    "The CEO is John Smith. The company was founded in 2010 "
-    "and employs 500 people. Their main customer is Example Inc. from Chicago."
-)
 
-
-def build_graph(text: str) -> dict:
-    """Creates a knowledge graph from text."""
+def api_headers() -> dict:
     if not API_KEY:
         raise ValueError("PAPEROFFICE_API_KEY not set")
-
-    response = requests.post(
-        f"{BASE_URL}/build",
-        headers={"Authorization": f"Bearer {API_KEY}"},
-        data={"text": text},
-    )
-    response.raise_for_status()
-    return response.json()
+    return {"Authorization": f"Bearer {API_KEY}"}
 
 
-def query_graph(graph_id: str, query: str) -> dict:
-    """Asks a question against an existing knowledge graph."""
-    if not API_KEY:
-        raise ValueError("PAPEROFFICE_API_KEY not set")
+def get_stats() -> dict:
+    """Get knowledge graph statistics."""
+    r = requests.get(f"{BASE_URL}/stats", headers=api_headers())
+    r.raise_for_status()
+    return r.json()
 
-    response = requests.post(
-        f"{BASE_URL}/query",
-        headers={"Authorization": f"Bearer {API_KEY}"},
-        data={"graph_id": graph_id, "query": query},
-    )
-    response.raise_for_status()
-    return response.json()
+
+def query_graph(question: str, pofid: str = "", max_hops: int = 3) -> dict:
+    """Ask a natural language question against the knowledge graph."""
+    payload = {"question": question, "max_hops": max_hops}
+    if pofid:
+        payload["pofid"] = pofid
+    r = requests.post(f"{BASE_URL}/universe", headers=api_headers(), data=payload)
+    r.raise_for_status()
+    return r.json()
+
+
+def get_mermaid(pofid: str = "", depth: int = 3) -> dict:
+    """Get knowledge graph as Mermaid diagram."""
+    payload = {"format": "mermaid", "depth": depth}
+    if pofid:
+        payload["pofid"] = pofid
+    r = requests.post(f"{BASE_URL}/universe", headers=api_headers(), data=payload)
+    r.raise_for_status()
+    return r.json()
+
+
+def get_partners(workspace_id: int = None, query: str = "") -> dict:
+    """Get business partner network."""
+    params = {}
+    if workspace_id:
+        params["workspace_id"] = workspace_id
+    if query:
+        params["query"] = query
+    r = requests.get(f"{BASE_URL}/partners", headers=api_headers(), params=params)
+    r.raise_for_status()
+    return r.json()
 
 
 if __name__ == "__main__":
-    text = sys.argv[1] if len(sys.argv) > 1 else EXAMPLE_TEXT
+    question = sys.argv[1] if len(sys.argv) > 1 else "Who are the main business partners?"
+    pofid = sys.argv[2] if len(sys.argv) > 2 else ""
 
-    # Build graph
-    print("=== Build knowledge graph ===")
-    print(f"Text: {text[:100]}...\n")
+    # 1. Graph statistics
+    print("=== Graph statistics ===")
+    stats = get_stats()
+    print(json.dumps(stats, indent=2))
 
-    build_result = build_graph(text)
-    graph_id = build_result.get("graph_id", "")
-    stats = build_result.get("stats", {})
+    # 2. Query the graph
+    print(f"\n=== Query: {question} ===")
+    if pofid:
+        print(f"Scoped to document: {pofid}")
+    result = query_graph(question, pofid=pofid)
+    print(f"Answer:     {result.get('answer', '?')}")
+    print(f"Confidence: {result.get('confidence', '?')}")
 
-    print(f"Graph ID:  {graph_id}")
-    print(f"Nodes:     {stats.get('nodes', '?')}")
-    print(f"Edges:     {stats.get('edges', '?')}")
-
-    # Display nodes
-    nodes = build_result.get("nodes", [])
-    if nodes:
-        print(f"\nNodes ({len(nodes)}):")
-        for node in nodes[:10]:
-            print(f"  • {node.get('label', node.get('id', '?'))}")
-
-    if not graph_id:
-        print("\n⚠ No graph_id received, skipping query.")
-        sys.exit(0)
-
-    # Query graph
-    question = "Who is the CEO of Acme Corporation?"
-    print(f"\n=== Query knowledge graph ===")
-    print(f"Question: {question}\n")
-
-    query_result = query_graph(graph_id, question)
-    print(f"Answer:     {query_result.get('answer', '?')}")
-    print(f"Confidence: {query_result.get('confidence', '?')}")
-
-    relevant = query_result.get("relevant_nodes", [])
+    relevant = result.get("relevant_nodes", [])
     if relevant:
-        print(f"\nRelevant nodes:")
-        for node in relevant:
-            print(f"  • {node.get('label', node.get('id', '?'))}")
+        print(f"\nRelevant nodes ({len(relevant)}):")
+        for node in relevant[:10]:
+            print(f"  - {node.get('label', node.get('id', '?'))} ({node.get('type', '?')})")
+
+    # 3. Mermaid visualization
+    print("\n=== Mermaid diagram ===")
+    mermaid = get_mermaid(pofid=pofid)
+    graph_str = mermaid.get("graph", "")
+    if graph_str:
+        print(graph_str[:500])
+    else:
+        print(json.dumps(mermaid, indent=2))
+
+    # 4. Business partners
+    print("\n=== Business partners ===")
+    partners = get_partners()
+    print(json.dumps(partners, indent=2))

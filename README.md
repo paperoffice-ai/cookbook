@@ -90,14 +90,14 @@ Native AI tool integration for Cursor, Claude, ChatGPT.
 | [Document Upload](document-ai/dms/document-upload/) | Upload documents to DMS | `/documents/document-put` |
 | [Smart Search](document-ai/dms/smart-search/) | 5 search modes (intelligent, semantic, hybrid, fulltext, RAG) | `/documents/documents-list` |
 | [Document Generation](document-ai/dms/document-generation/) | Create PDFs from content or templates | `/document_generation/*` |
-| [Document Chat](document-ai/dms/document-chat/) | Chat with a document (RAG) | `/document_intelligence/chat` |
+| [Document Chat](document-ai/dms/document-chat/) | Chat with a document (GraphRAG) | `/knowledge_graph/universe` |
 
 ### Analysis AI
 
 | Recipe | What it does | Endpoint |
 |---|---|---|
 | [Entity Extraction](analysis-ai/entity-extraction/) | Named Entity Recognition (NER) | `/document_intelligence/entities` |
-| [Knowledge Graph](analysis-ai/knowledge-graph/) | Build + query knowledge graph | `/knowledge_graph/*` |
+| [Knowledge Graph](analysis-ai/knowledge-graph/) | Query + visualize knowledge graph | `/knowledge_graph/universe` |
 
 ### Agent + Media AI
 
@@ -188,10 +188,7 @@ export PAPEROFFICE_API_KEY="po_sk_xxx"
 | `GET /webhooks/list` | Webhook Management |
 | `GET /knowledge/kb_list` | Knowledge Base |
 | `POST /documents/documents-list` | DMS Ultimate Search |
-| `POST /documents/semantic-search` | DMS Semantic Search |
-| `POST /documents/search-hybrid` | DMS Hybrid Search |
-| `POST /documents/search-fulltext` | DMS Fulltext Search |
-| `POST /documents/rag-search` | DMS RAG Search |
+| `POST /documents/document-search` | DMS Semantic / Hybrid / Fulltext / RAG Search |
 | `POST /documents/ocr-get` | DMS OCR Text Retrieval |
 | `POST /document_generation/create-from-content` | Create Document from Content |
 | `POST /document_generation/create-from-template` | Create Document from Template |

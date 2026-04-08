@@ -30,16 +30,16 @@ async function api_post(endpoint, data) {
 
 const kb_list = () => api_get("kb_list");
 const kb_create = (name, description = "", primary_language = "de") =>
-  api_post("kb_create", { name, description, primary_language });
-const kb_update = (kb_id, data) => api_post("kb_update", { kb_id, ...data });
-const kb_delete = (kb_id) => api_post("kb_delete", { kb_id });
+  api_post("kb_add", { name, description, primary_language });
+const kb_update = (kb_id, data) => api_post("kb_update", { id: kb_id, ...data });
+const kb_delete = (kb_id) => api_post("kb_delete", { id: kb_id });
 
 const article_create = (kb_id, title, content, category = "") =>
-  api_post("article_create", { kb_id, title, content, ...(category && { category }) });
-const article_list = (kb_id) => api_get(`article_list?kb_id=${kb_id}`);
+  api_post("add", { kb_id, title, content, ...(category && { category }) });
+const article_list = (kb_id) => api_get(`list?kb_id=${kb_id}`);
 const article_update = (article_id, data) =>
-  api_post("article_update", { article_id, ...data });
-const article_delete = (article_id) => api_post("article_delete", { article_id });
+  api_post("update", { id: article_id, ...data });
+const article_delete = (article_id) => api_post("delete", { id: article_id });
 
 // --- Complete CRUD Cycle ---
 

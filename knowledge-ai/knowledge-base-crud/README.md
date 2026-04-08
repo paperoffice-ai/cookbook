@@ -6,21 +6,22 @@ Create, read, update and delete knowledge bases and their articles. A knowledge 
 
 ```
 GET  https://api.paperoffice.ai/latest/knowledge/kb_list
-POST https://api.paperoffice.ai/latest/knowledge/kb_create
+POST https://api.paperoffice.ai/latest/knowledge/kb_add
 POST https://api.paperoffice.ai/latest/knowledge/kb_update
 POST https://api.paperoffice.ai/latest/knowledge/kb_delete
 
-POST https://api.paperoffice.ai/latest/knowledge/article_create
-GET  https://api.paperoffice.ai/latest/knowledge/article_list
-POST https://api.paperoffice.ai/latest/knowledge/article_update
-POST https://api.paperoffice.ai/latest/knowledge/article_delete
+POST https://api.paperoffice.ai/latest/knowledge/add
+GET  https://api.paperoffice.ai/latest/knowledge/list
+GET  https://api.paperoffice.ai/latest/knowledge/get
+POST https://api.paperoffice.ai/latest/knowledge/update
+POST https://api.paperoffice.ai/latest/knowledge/delete
 ```
 
 **Authentication:** Bearer Token for all endpoints.
 
 ## Knowledge Base parameters
 
-### `kb_create`
+### `kb_add`
 
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
@@ -59,7 +60,7 @@ POST https://api.paperoffice.ai/latest/knowledge/article_delete
 
 ## Article parameters
 
-### `article_create`
+### `add` (create article)
 
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
@@ -98,7 +99,7 @@ The `content` parameter accepts two formats:
 }
 ```
 
-### `article_update`
+### `update` (update article)
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
@@ -115,7 +116,7 @@ The `content` parameter accepts two formats:
 | `position` | int | No | Position |
 | `selected_languages` | array | No | Target languages |
 
-### `article_delete`
+### `delete` (delete article)
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
@@ -157,10 +158,10 @@ node example.js
 
 ## Workflow
 
-1. **Create KB** → `kb_create` returns the new KB with ID
-2. **Add articles** → `article_create` with `kb_id`, set `type` and `category`
+1. **Create KB** → `kb_add` returns the new KB with ID
+2. **Add articles** → `add` with `kb_id`, set `type` and `category`
 3. **Search articles** → See recipe [KB Search](../kb-search/)
-4. **Update** → `kb_update` / `article_update` with respective ID
+4. **Update** → `kb_update` / `update` with respective ID
 5. **Delete** → `kb_delete` removes KB including all articles (`hard=true` for permanent)
 
 ## Use Cases

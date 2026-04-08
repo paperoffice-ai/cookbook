@@ -1,58 +1,46 @@
 #!/usr/bin/env node
-/** PaperOffice AI — Chat with a document (RAG) */
+/** PaperOffice AI — Chat with documents via GraphRAG */
 
 const api_base = "https://api.paperoffice.ai/latest";
-const api_key = process.env.PAPEROFFICE_API_KEY || "";
+const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
-async function document_chat(document_id, question, context_window = null, token = api_key) {
-  if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
+async function chat_with_document(question, pofid = "", max_hops = 3) {
+  if (!API_KEY) throw new Error("PAPEROFFICE_API_KEY not set");
 
-  const params = new URLSearchParams({ document_id: String(document_id), question });
-  if (context_window !== null) params.set("context_window", String(context_window));
+  const params = new URLSearchParams({ question, max_hops: String(max_hops) });
+  if (pofid) params.set("pofid", pofid);
 
-  const response = await fetch(`${api_base}/document_intelligence/chat`, {
+  const response = await fetch(`${api_base}/knowledge_graph/universe`, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
+    headers: { "Authorization": `Bearer ${API_KEY}` },
     body: params,
   });
 
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
   return response.json();
 }
 
-(async () => {
-  const document_id = process.argv[2];
-  const question = process.argv[3];
+const question = process.argv[2];
+const pofid = process.argv[3] || "";
 
-  if (!document_id || !question) {
-    console.error("Usage: node example.js <document_id> <question>");
-    process.exit(1);
+if (!question) {
+  console.log("Usage: node example.js <question> [pofid]");
+  process.exit(1);
+}
+
+console.log(`Question: ${question}`);
+if (pofid) console.log(`Document: ${pofid}`);
+console.log();
+
+const result = await chat_with_document(question, pofid);
+
+console.log(`Answer: ${result.answer || "(no answer)"}`);
+if (result.confidence) console.log(`Confidence: ${result.confidence}`);
+
+const nodes = result.relevant_nodes || [];
+if (nodes.length > 0) {
+  console.log(`\nEvidence (${nodes.length} nodes):`);
+  for (const node of nodes.slice(0, 5)) {
+    console.log(`  - ${node.label || node.id || "?"} (${node.type || "?"})`);
   }
-
-  console.log(`→ Question to document ${document_id}: ${question}`);
-  const data = await document_chat(parseInt(document_id, 10), question);
-
-  if (data.status !== "success") {
-    console.error("Error:", JSON.stringify(data, null, 2));
-    process.exit(1);
-  }
-
-  console.log();
-  console.log("Answer:");
-  console.log(data.answer ?? "—");
-  console.log();
-
-  const sources = data.sources || [];
-  if (sources.length) {
-    console.log(`Sources (${sources.length}):`);
-    for (const s of sources) {
-      const page = s.page ?? "—";
-      const conf = s.confidence ?? "—";
-      const text = (s.text ?? "").slice(0, 100);
-      console.log(`  Page ${page} [${conf}]: ${text}`);
-    }
-  }
-})();
+}

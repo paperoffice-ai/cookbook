@@ -1,39 +1,35 @@
 #!/usr/bin/env bash
-# PaperOffice AI — Chat with a document (RAG)
+# PaperOffice AI — Chat with documents via GraphRAG
 set -euo pipefail
 
+api_key="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
 api_base="https://api.paperoffice.ai/latest"
-api_key="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY}"
+question="${1:?Usage: $0 <question> [pofid]}"
+pofid="${2:-}"
 
-document_id="${1:?Please provide document ID as argument}"
-question="${2:?Please provide question as second argument}"
+echo "Question: ${question}"
 
-echo "→ Question to document ${document_id}: ${question}"
+args=(-F "question=${question}" -F "max_hops=3")
+if [ -n "${pofid}" ]; then
+  args+=(-F "pofid=${pofid}")
+  echo "Document: ${pofid}"
+fi
+echo ""
 
-response=$(curl -s -X POST "${api_base}/document_intelligence/chat" \
+response=$(curl -s -X POST "${api_base}/knowledge_graph/universe" \
   -H "Authorization: Bearer ${api_key}" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "document_id=${document_id}" \
-  -d "question=${question}")
+  "${args[@]}")
 
 echo "${response}" | python3 -c "
 import sys, json
 data = json.load(sys.stdin)
-if data.get('status') != 'success':
-    print('Error:', json.dumps(data, indent=2))
-    sys.exit(1)
-
-print()
-print('Answer:')
-print(data.get('answer', '—'))
-print()
-
-sources = data.get('sources', [])
-if sources:
-    print(f'Sources ({len(sources)}):')
-    for s in sources:
-        page = s.get('page', '—')
-        conf = s.get('confidence', '—')
-        text = s.get('text', '')[:100]
-        print(f'  Page {page} [{conf}]: {text}')
+print('Answer:', data.get('answer', '(no answer)'))
+conf = data.get('confidence')
+if conf:
+    print(f'Confidence: {conf}')
+nodes = data.get('relevant_nodes', [])
+if nodes:
+    print(f'Evidence ({len(nodes)} nodes):')
+    for n in nodes[:5]:
+        print(f'  - {n.get(\"label\", n.get(\"id\", \"?\"))} ({n.get(\"type\", \"?\")})')
 "

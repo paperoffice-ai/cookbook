@@ -25,7 +25,7 @@ def kb_list() -> dict:
 def kb_create(name: str, description: str = "", language: str = "de") -> dict:
     """Create a new knowledge base."""
     r = requests.post(
-        f"{BASE_URL}/kb_create",
+        f"{BASE_URL}/kb_add",
         headers=api_headers(),
         data={"name": name, "description": description, "primary_language": language},
     )
@@ -35,7 +35,7 @@ def kb_create(name: str, description: str = "", language: str = "de") -> dict:
 
 def kb_update(kb_id: int, **kwargs) -> dict:
     """Update a knowledge base (name, description)."""
-    payload = {"kb_id": kb_id, **kwargs}
+    payload = {"id": kb_id, **kwargs}
     r = requests.post(f"{BASE_URL}/kb_update", headers=api_headers(), data=payload)
     r.raise_for_status()
     return r.json()
@@ -44,7 +44,7 @@ def kb_update(kb_id: int, **kwargs) -> dict:
 def kb_delete(kb_id: int) -> dict:
     """Delete a knowledge base."""
     r = requests.post(
-        f"{BASE_URL}/kb_delete", headers=api_headers(), data={"kb_id": kb_id}
+        f"{BASE_URL}/kb_delete", headers=api_headers(), data={"id": kb_id}
     )
     r.raise_for_status()
     return r.json()
@@ -56,7 +56,7 @@ def article_create(kb_id: int, title: str, content: str, category: str = "") -> 
     if category:
         payload["category"] = category
     r = requests.post(
-        f"{BASE_URL}/article_create", headers=api_headers(), data=payload
+        f"{BASE_URL}/add", headers=api_headers(), data=payload
     )
     r.raise_for_status()
     return r.json()
@@ -65,7 +65,7 @@ def article_create(kb_id: int, title: str, content: str, category: str = "") -> 
 def article_list(kb_id: int) -> dict:
     """List all articles in a KB."""
     r = requests.get(
-        f"{BASE_URL}/article_list", headers=api_headers(), params={"kb_id": kb_id}
+        f"{BASE_URL}/list", headers=api_headers(), params={"kb_id": kb_id}
     )
     r.raise_for_status()
     return r.json()
@@ -73,9 +73,9 @@ def article_list(kb_id: int) -> dict:
 
 def article_update(article_id: int, **kwargs) -> dict:
     """Update an article (title, content)."""
-    payload = {"article_id": article_id, **kwargs}
+    payload = {"id": article_id, **kwargs}
     r = requests.post(
-        f"{BASE_URL}/article_update", headers=api_headers(), data=payload
+        f"{BASE_URL}/update", headers=api_headers(), data=payload
     )
     r.raise_for_status()
     return r.json()
@@ -84,9 +84,9 @@ def article_update(article_id: int, **kwargs) -> dict:
 def article_delete(article_id: int) -> dict:
     """Delete an article."""
     r = requests.post(
-        f"{BASE_URL}/article_delete",
+        f"{BASE_URL}/delete",
         headers=api_headers(),
-        data={"article_id": article_id},
+        data={"id": article_id},
     )
     r.raise_for_status()
     return r.json()

@@ -23,7 +23,7 @@ api_get "kb_list" | python3 -m json.tool
 
 echo ""
 echo "=== 2. Create new knowledge base ==="
-CREATE_RESPONSE=$(api_post "kb_create" \
+CREATE_RESPONSE=$(api_post "kb_add" \
   -F "name=Cookbook-Test-KB" \
   -F "description=Test data for cookbook example" \
   -F "primary_language=de")
@@ -58,13 +58,13 @@ echo "→ KB ID: ${KB_ID}"
 
 echo ""
 echo "=== 3. Add articles to KB ==="
-api_post "article_create" \
+api_post "add" \
   -F "kb_id=${KB_ID}" \
   -F "title=Getting Started with PaperOffice" \
   -F "content=PaperOffice AI provides intelligent document processing, OCR and knowledge management." \
   -F "category=Introduction" | python3 -m json.tool
 
-api_post "article_create" \
+api_post "add" \
   -F "kb_id=${KB_ID}" \
   -F "title=API Authentication" \
   -F "content=All API calls require a Bearer Token in the Authorization header." \
@@ -72,11 +72,11 @@ api_post "article_create" \
 
 echo ""
 echo "=== 4. List articles ==="
-api_get "article_list?kb_id=${KB_ID}" | python3 -m json.tool
+api_get "list?kb_id=${KB_ID}" | python3 -m json.tool
 
 echo ""
 echo "=== 5. Cleanup — Delete KB ==="
-api_post "kb_delete" -F "kb_id=${KB_ID}" | python3 -m json.tool
+api_post "kb_delete" -F "id=${KB_ID}" | python3 -m json.tool
 
 echo ""
 echo "✓ CRUD cycle completed."
