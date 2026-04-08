@@ -19,7 +19,7 @@ def workspace_create(name: str, description: str = "", token: str = api_key) -> 
         raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.post(
-        f"{api_base}/documents/workspace_create",
+        f"{api_base}/documents/workspace-create",
         headers={"Authorization": f"Bearer {token}"},
         data={"name": name, "description": description},
     )
@@ -33,7 +33,7 @@ def workspace_list(token: str = api_key) -> dict:
         raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.get(
-        f"{api_base}/documents/workspace_list",
+        f"{api_base}/documents/workspaces-list",
         headers={"Authorization": f"Bearer {token}"},
     )
     response.raise_for_status()

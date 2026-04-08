@@ -88,7 +88,7 @@ Native AI tool integration for Cursor, Claude, ChatGPT.
 |---|---|---|
 | [Workspace Setup](document-ai/dms/workspace-setup/) | Create/manage workspace (tiers, WORM, BYOS) | `/documents/workspace-create` |
 | [Document Upload](document-ai/dms/document-upload/) | Upload documents to DMS | `/documents/document-put` |
-| [Smart Search](document-ai/dms/smart-search/) | 5 search modes (intelligent, semantic, hybrid, fulltext, RAG) | `/documents/list` |
+| [Smart Search](document-ai/dms/smart-search/) | 5 search modes (intelligent, semantic, hybrid, fulltext, RAG) | `/documents/documents-list` |
 | [Document Generation](document-ai/dms/document-generation/) | Create PDFs from content or templates | `/document_generation/*` |
 | [Document Chat](document-ai/dms/document-chat/) | Chat with a document (RAG) | `/document_intelligence/chat` |
 
@@ -187,7 +187,7 @@ export PAPEROFFICE_API_KEY="po_sk_xxx"
 | `POST /location2weather` | Weather |
 | `GET /webhooks/list` | Webhook Management |
 | `GET /knowledge/kb_list` | Knowledge Base |
-| `POST /documents/list` | DMS Ultimate Search |
+| `POST /documents/documents-list` | DMS Ultimate Search |
 | `POST /documents/semantic-search` | DMS Semantic Search |
 | `POST /documents/search-hybrid` | DMS Hybrid Search |
 | `POST /documents/search-fulltext` | DMS Fulltext Search |

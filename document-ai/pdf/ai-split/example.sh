@@ -8,7 +8,7 @@ input_file="${1:?Please provide file path as argument}"
 # Upload PDF and split using AI
 response=$(curl -s "${api_base}/job/add/workflow" \
   -H "Authorization: Bearer ${api_key}" \
-  -F "file_1=@${input_file}" \
+  -F "file=@${input_file}" \
   -F "template=pdf_ai_split" \
   -F "naming_instruction=Name by document type and date" \
   -F "priority=900")

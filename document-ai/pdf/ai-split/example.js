@@ -19,7 +19,7 @@ if (!input_file) {
 // Upload PDF and split using AI
 const form_data = new FormData();
 const file_buffer = readFileSync(input_file);
-form_data.append("file_1", new Blob([file_buffer]), basename(input_file));
+form_data.append("file", new Blob([file_buffer]), basename(input_file));
 form_data.append("template", "pdf_ai_split");
 form_data.append("naming_instruction", "Name by document type and date");
 form_data.append("priority", "900");

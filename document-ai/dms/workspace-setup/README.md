@@ -7,7 +7,7 @@ Workspaces are the top-level organizational unit in the PaperOffice DMS. Each wo
 | Action | Method | Path |
 |---|---|---|
 | Create | POST | `/documents/workspace-create` |
-| List | GET | `/documents/workspace-list` |
+| List | GET | `/documents/workspaces-list` |
 
 **Authentication:** Bearer Token (API key required)
 

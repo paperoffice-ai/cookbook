@@ -18,7 +18,7 @@ with open(input_file, "rb") as f:
     response = requests.post(
         f"{api_base}/job/add/workflow",
         headers={"Authorization": f"Bearer {api_key}"},
-        files={"file_1": f},
+        files={"file": (os.path.basename(input_file), f)},
         data={
             "template": "pdf_ai_split",
             "naming_instruction": "Name by document type and date",

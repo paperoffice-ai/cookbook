@@ -35,22 +35,22 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 ```json
 [
   {
-    "name": "vertragsnummer",
+    "name": "contract_number",
     "type": "string",
     "description": "Contract number in the document"
   },
   {
-    "name": "kuendigungsfrist",
+    "name": "cancellation_period",
     "type": "string",
     "description": "Cancellation period in months or as a date"
   },
   {
-    "name": "monatlicher_betrag",
+    "name": "monthly_amount",
     "type": "number",
     "description": "Monthly amount in euros"
   },
   {
-    "name": "vertragspartner",
+    "name": "contracting_party",
     "type": "string",
     "description": "Name of the contracting party"
   }
@@ -101,13 +101,13 @@ node example.js contract.pdf
   "result": {
     "pages_idp": [{
       "suggested_fields": {
-        "vertragsnummer": {
+        "contract_number": {
           "type": "string",
           "value": "V-2024-00815",
           "source_boxes": [3, 4],
           "source_boxes_confidence": "high"
         },
-        "kuendigungsfrist": {
+        "cancellation_period": {
           "type": "string",
           "value": "3 Monate zum Quartalsende",
           "source_boxes": [12],

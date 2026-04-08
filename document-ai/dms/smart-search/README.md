@@ -21,7 +21,7 @@ PaperOffice DMS provides **5 search endpoints** with different capabilities: Ult
 The most powerful endpoint — auto-detects the optimal search strategy.
 
 ```
-POST https://api.paperoffice.ai/latest/documents/list
+POST https://api.paperoffice.ai/latest/documents/documents-list
 ```
 
 ### Parameters
@@ -160,18 +160,18 @@ POST https://api.paperoffice.ai/latest/documents/rag-search
 ```bash
 export PAPEROFFICE_API_KEY="your_api_key"
 
-# Bash
-bash example.sh "contract terms"
-bash example.sh "invoice 2026" "Accounting" 5
+# Bash — requires workspace_id (integer)
+bash example.sh "contract terms" 42
+bash example.sh "invoice 2026" 42 20
 
 # Python
 pip install requests
-python3 example.py "contract terms"
-python3 example.py "invoice 2026" "Accounting"
+python3 example.py "contract terms" 42
+python3 example.py "invoice 2026" 42 20
 
 # Node.js
-node example.js "contract terms"
-node example.js "invoice 2026" "Accounting" 5
+node example.js "contract terms" 42
+node example.js "invoice 2026" 42 20
 ```
 
 ## Response structure
@@ -196,10 +196,10 @@ node example.js "invoice 2026" "Accounting" 5
 
 | Goal | Endpoint | search_mode | search_preference |
 |---|---|---|---|
-| General search (don't know query type) | `/documents/list` | `intelligent` | `balanced` |
-| Find documents by meaning | `/documents/list` | `semantic` | `semantic` |
-| Find exact invoice number | `/documents/list` | `fulltext` | `keyword` |
-| Best overall relevance | `/documents/list` | `hybrid` | `balanced` |
+| General search (don't know query type) | `/documents/documents-list` | `intelligent` | `balanced` |
+| Find documents by meaning | `/documents/documents-list` | `semantic` | `semantic` |
+| Find exact invoice number | `/documents/documents-list` | `fulltext` | `keyword` |
+| Best overall relevance | `/documents/documents-list` | `hybrid` | `balanced` |
 | AI/LLM context retrieval | `/documents/rag-search` | — | — |
 | Score > 0.8 = very good match | any | — | — |
 
@@ -212,6 +212,6 @@ node example.js "invoice 2026" "Accounting" 5
 
 ## See also
 
-- [DMS Upload](../upload/) — Upload documents to the DMS
+- [DMS Upload](../document-upload/) — Upload documents to the DMS
 - [Document Chat](../document-chat/) — Chat with documents
 - [OCR Text-Mode](../../ocr/text-mode/) — Extract text for indexing

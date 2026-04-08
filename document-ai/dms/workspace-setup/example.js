@@ -7,7 +7,7 @@ const api_key = process.env.PAPEROFFICE_API_KEY || "";
 async function workspace_create(name, description = "", token = api_key) {
   if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
-  const response = await fetch(`${api_base}/documents/workspace_create`, {
+  const response = await fetch(`${api_base}/documents/workspace-create`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -23,7 +23,7 @@ async function workspace_create(name, description = "", token = api_key) {
 async function workspace_list(token = api_key) {
   if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
-  const response = await fetch(`${api_base}/documents/workspace_list`, {
+  const response = await fetch(`${api_base}/documents/workspaces-list`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 

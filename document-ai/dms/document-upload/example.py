@@ -32,9 +32,9 @@ def document_upload(
 
     with open(file_path, "rb") as f:
         response = requests.post(
-            f"{api_base}/documents/upload",
+            f"{api_base}/documents/document-put",
             headers={"Authorization": f"Bearer {token}"},
-            files={"file_1": f},
+            files={"file": (os.path.basename(file_path), f)},
             data=data,
         )
     response.raise_for_status()

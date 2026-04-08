@@ -17,9 +17,9 @@ fi
 echo "→ Uploading: ${input_file} → Workspace: ${workspace}"
 
 curl_args=(
-  -s -X POST "${api_base}/documents/upload"
+  -s -X POST "${api_base}/documents/document-put"
   -H "Authorization: Bearer ${api_key}"
-  -F "file_1=@${input_file}"
+  -F "file=@${input_file}"
   -F "workspace_name=${workspace}"
 )
 

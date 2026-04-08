@@ -18,22 +18,22 @@ api_key = os.environ.get("PAPEROFFICE_API_KEY", "")
 # Custom extraction fields — freely customizable
 custom_fields = [
     {
-        "name": "vertragsnummer",
+        "name": "contract_number",
         "type": "string",
         "description": "Contract number in the document",
     },
     {
-        "name": "kuendigungsfrist",
+        "name": "cancellation_period",
         "type": "string",
         "description": "Cancellation period in months or as a date",
     },
     {
-        "name": "monatlicher_betrag",
+        "name": "monthly_amount",
         "type": "number",
         "description": "Monthly amount in euros",
     },
     {
-        "name": "vertragspartner",
+        "name": "contracting_party",
         "type": "string",
         "description": "Name of the contracting party",
     },

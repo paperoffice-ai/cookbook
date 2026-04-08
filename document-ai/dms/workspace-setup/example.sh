@@ -10,7 +10,7 @@ workspace_desc="${2:-Automatically created workspace}"
 
 echo "→ Creating workspace: ${workspace_name}"
 
-create_response=$(curl -s -X POST "${api_base}/documents/workspace_create" \
+create_response=$(curl -s -X POST "${api_base}/documents/workspace-create" \
   -H "Authorization: Bearer ${api_key}" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "name=${workspace_name}" \
@@ -32,7 +32,7 @@ print(f'  Created:     {ws.get(\"created_at\", \"—\")}')
 echo ""
 echo "→ Listing all workspaces"
 
-list_response=$(curl -s -X GET "${api_base}/documents/workspace_list" \
+list_response=$(curl -s -X GET "${api_base}/documents/workspaces-list" \
   -H "Authorization: Bearer ${api_key}")
 
 echo "${list_response}" | python3 -c "

@@ -6,10 +6,10 @@ const api_url = "https://api.paperoffice.ai/latest/job/add/workflow";
 const api_key = process.env.PAPEROFFICE_API_KEY || "";
 
 const custom_fields = [
-  { name: "vertragsnummer", type: "string", description: "Contract number in the document" },
-  { name: "kuendigungsfrist", type: "string", description: "Cancellation period in months or as a date" },
-  { name: "monatlicher_betrag", type: "number", description: "Monthly amount in euros" },
-  { name: "vertragspartner", type: "string", description: "Name of the contracting party" },
+  { name: "contract_number", type: "string", description: "Contract number in the document" },
+  { name: "cancellation_period", type: "string", description: "Cancellation period in months or as a date" },
+  { name: "monthly_amount", type: "number", description: "Monthly amount in euros" },
+  { name: "contracting_party", type: "string", description: "Name of the contracting party" },
 ];
 
 async function extract_custom_fields(pdf_path, fields, token = api_key) {

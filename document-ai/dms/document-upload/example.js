@@ -11,11 +11,11 @@ async function document_upload(file_path, workspace_name, tags = "", token = api
 
   const FormData = (await import("form-data")).default;
   const form = new FormData();
-  form.append("file_1", fs.createReadStream(file_path));
+  form.append("file", fs.createReadStream(file_path));
   form.append("workspace_name", workspace_name);
   if (tags) form.append("tags", tags);
 
-  const response = await fetch(`${api_base}/documents/upload`, {
+  const response = await fetch(`${api_base}/documents/document-put`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, ...form.getHeaders() },
     body: form,

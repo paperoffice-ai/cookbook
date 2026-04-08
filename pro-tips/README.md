@@ -37,10 +37,10 @@ POST https://api.paperoffice.ai/latest/job/add/{pipeline}
 | `POST /ip2location/vpn` | VPN/Proxy Detection |
 | `POST /currency_exchange/get_rates` | Exchange Rates |
 | `POST /location2weather` | Weather (FREE) |
-| `POST /documents/search` | DMS Search |
-| `POST /documents/upload` | DMS Upload |
-| `POST /documents/workspace_create` | Create Workspace |
-| `GET /documents/workspace_list` | Workspace List |
+| `POST /documents/documents-list` | DMS Ultimate Search |
+| `POST /documents/document-put` | DMS Upload |
+| `POST /documents/workspace-create` | Create Workspace |
+| `GET /documents/workspaces-list` | Workspace List |
 | `GET /webhooks/list` | Webhook List |
 | `POST /webhooks/subscribe` | Register Webhook |
 | `GET /knowledge/kb_list` | Knowledge Bases |
