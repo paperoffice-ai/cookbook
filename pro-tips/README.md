@@ -1,18 +1,46 @@
 # Pro Tips
 
-## API-Endpoint
+## Kanonische Endpoints
 
-**Alle Datei-basierten Jobs laufen über `/job/add/workflow`:**
+PaperOffice AI hat zwei Endpoint-Muster:
 
-```bash
-POST https://api.paperoffice.ai/latest/job/add/workflow
-```
-
-TTS (Text-to-Speech) hat einen eigenen Endpoint:
+### 1. Job-basierte Endpoints (Dateiverarbeitung)
 
 ```bash
-POST https://api.paperoffice.ai/latest/voice/tts
+POST https://api.paperoffice.ai/latest/job/add/{pipeline}
 ```
+
+| Pipeline | Zweck |
+|---|---|
+| `workflow` | IDP, PDF Split/Merge/Convert/Anonymize |
+| `paperoffice_aiocr___generate` | AI-OCR |
+| `paperoffice_voice___tts` | Text-to-Speech |
+| `paperoffice_voice___stt` | Speech-to-Text |
+| `paperoffice_imagestudio___generate` | Bildgenerierung |
+| `paperoffice_imagestudio___remove_bg` | Hintergrund entfernen |
+
+### 2. Dedizierte REST-Endpoints
+
+| Endpoint | Zweck |
+|---|---|
+| `POST /translate/text` | Übersetzung |
+| `GET /translate/languages` | Sprachliste |
+| `POST /vat/validate` | USt-ID Prüfung |
+| `GET /vat/rates` | EU-Steuersätze (GRATIS) |
+| `POST /fakeemail/check` | Fake-Email-Erkennung |
+| `POST /fingerprint/verify` | Device Fingerprint |
+| `POST /geocoding/forward` | Adresse → Koordinaten |
+| `POST /geocoding/reverse` | Koordinaten → Adresse |
+| `POST /ip2location/full` | IP → Geolocation |
+| `POST /ip2location/vpn` | VPN/Proxy-Erkennung |
+| `POST /currency_exchange/get_rates` | Wechselkurse |
+| `POST /location2weather` | Wetter (GRATIS) |
+| `POST /documents/search` | DMS-Suche |
+| `POST /documents/upload` | DMS-Upload |
+| `GET /webhooks/list` | Webhook-Liste |
+| `POST /webhooks/subscribe` | Webhook registrieren |
+| `GET /knowledge/kb_list` | Knowledge Bases |
+| `POST /knowledge/search` | KB-Suche |
 
 ---
 
@@ -27,85 +55,114 @@ POST https://api.paperoffice.ai/latest/voice/tts
 
 ```python
 # Entwicklung: Sofort-Ergebnis
-data={"priority": 900}
+data = {"priority": 900}
 
 # Produktion: Kosteneffizient
-data={"priority": 500}
+data = {"priority": 500}
 ```
 
-**Tipp:** `priority=900` für Dev, `priority=500` für Produktion. Höhere Priority = höhere Credit-Kosten.
+**Sync (priority ≥ 900):** Antwort enthält sofort das Ergebnis.
+**Async (priority < 900):** Antwort enthält `job_id`, dann pollen:
 
----
-
-## Response-Struktur
-
-Alle Workflow-Responses folgen diesem Schema:
-
-```json
-{
-  "status": "success",
-  "job_id": "poai-job_900_...",
-  "result": {
-    "fulltext": "... extrahierter Text ...",
-    "pages_idp": [{ "suggested_fields": { ... } }],
-    "pages_aiocr": { "summary": { ... }, "pages": { ... } },
-    "pages_images": ["https://..."],
-    "steps": [{ "id": "ocr", "status": "completed", "duration_ms": 285 }],
-    "total_steps": 2,
-    "duration_ms": 3272
-  },
-  "timing": { "actual_ms": 3319, "performance": "57.1x faster than expected" }
-}
+```bash
+# Status abfragen
+curl -s "https://api.paperoffice.ai/latest/job/get/{job_id}" \
+  -H "Authorization: Bearer $PAPEROFFICE_API_KEY"
 ```
 
 ---
 
-## IDP-Felder (Source Boxes)
+## Credit-System
 
-IDP-Responses enthalten `suggested_fields` mit `source_boxes` pro extrahiertem Feld:
+Jeder API-Call verbraucht Credits. Höhere Priority = höhere Kosten.
+
+| Priority | Multiplier | Beispiel (10-Credit-Job) |
+|---|---|---|
+| 500 (default) | 1.0x | 10 Credits |
+| 700 | ~1.16x | ~12 Credits |
+| 900 (sync) | ~1.33x | ~13 Credits |
+
+**Gratis-Endpoints** (keine Credits):
+- `GET /vat/rates`
+- `POST /location2weather`
+- `GET /health`
+
+---
+
+## Response-Strukturen
+
+### OCR
 
 ```python
-result = response.json()
-idp_page = result["result"]["pages_idp"][0]
-fields = idp_page["suggested_fields"]
-
-invoice_number = fields["_invoice_number"]
-print(invoice_number["value"])                    # "RE-2024-001"
-print(invoice_number["source_boxes"])             # [...]
-print(invoice_number["source_boxes_confidence"])  # "high"
-
-total = fields["_total_amount"]
-print(total["value"])  # 1234.56
-```
-
-Verfügbare Invoice-Felder: `_invoice_number`, `_invoice_date`, `_supplier_name`, `_customer_name`, `_total_amount`, `_net_amount`, `_vat_amount`, `_creditor_iban`, `_creditor_bic`, `_payment_due_date`, `_line_items` (Tabelle), etc.
-
----
-
-## OCR-Text
-
-```python
-result = response.json()
-
-# Volltext aller Seiten
-fulltext = result["result"]["fulltext"]
-
-# Pro Seite
-pages = result["result"]["pages_aiocr"]["pages"]
+result = response.json()["result"]
+fulltext = result["output"]["summary"]["poaiocr_extracted_fulltext"]
+pages = result["output"]["pages"]
 page_1 = pages["00001"]
 print(page_1["ocr_text"])
-print(page_1["bounding_boxes"])
 print(page_1["confidence_avg"])
+print(page_1["language"]["primary"])
+```
+
+### IDP (Rechnungsextraktion)
+
+```python
+result = response.json()["result"]
+fields = result["pages_idp"][0]["suggested_fields"]
+
+invoice_nr = fields["_invoice_number"]["value"]         # "2024-001"
+total = fields["_total_amount"]["value_raw"]             # "1469.06" (normalisiert)
+vat = fields["_vat_amount"]["value_raw"]                 # "234.56"
+confidence = fields["_total_amount"]["source_boxes_confidence"]  # "high"
+```
+
+### TTS
+
+```python
+result = response.json()["result"]
+audio_url = result["audio_url"]
+duration = result["audio_duration_seconds"]
+voice = result["voice"]
+```
+
+### STT
+
+```python
+result = response.json()["result"]
+text = result["text"]
+language = result["language"]
+duration = result["audio_duration_seconds"]
+```
+
+### Image Generation
+
+```python
+result = response.json()["result"]
+image_urls = result["image_urls"]  # Array!
+```
+
+### Translation
+
+```python
+data = response.json()["data"]
+translated = data["translation"]
+source_lang = data["source_language"]
+target_lang = data["target_language"]
+characters = data["characters"]
 ```
 
 ---
 
-## Beste TTS-Stimme
+## Beste TTS-Stimmen
 
-Für Deutsch: **Nadja** mit Speed 1.0 klingt am natürlichsten.
+| Sprache | Stimme | Qualität |
+|---|---|---|
+| Deutsch | **Nadja** | Sehr natürlich |
+| Englisch | **Joanna** | Natürlich |
+| Spanisch | **Lucia** | Natürlich |
 
 ```python
-data={
+data = {
+    "text": "Guten Tag!",
     "voice": "Nadja",
     "speed": "1.0",
     "output_format": "mp3",
@@ -118,28 +175,33 @@ data={
 
 ## Authentifizierung
 
-**Bearer Token ist für fast alle Endpoints erforderlich.** Ohne Token → VISITOR-Session (nur `/ip2location`, `/currencyexchange`, `/health`, `/ping`).
+**Bearer Token für fast alle Endpoints erforderlich.**
 
 ```bash
-export PAPEROFFICE_API_KEY=po_sk_xxx
+export PAPEROFFICE_API_KEY="po_sk_xxx"
 
-# Token-Typen:
-# po_sk_xxx — System Key (Server-to-Server, voller Zugriff)
-# po_ut_xxx — User Token (User-scoped, abhängig von Lizenz)
+curl -X POST "https://api.paperoffice.ai/latest/..." \
+  -H "Authorization: Bearer $PAPEROFFICE_API_KEY"
 ```
+
+| Token-Typ | Prefix | Verwendung |
+|---|---|---|
+| System Key | `po_sk_` | Server-to-Server, voller Zugriff |
+| User Token | `po_ut_` | User-scoped, abhängig von Lizenz |
+
+**VISITOR-Mode** (kein Token): Nur `GET /health`, `/ip2location/*`, `/currency_exchange/*`, `GET /vat/rates`.
 
 ---
 
 ## MCP Integration
 
-PaperOffice bietet einen vollständigen MCP-Server für native AI-Tool-Integration.
-
-| Client | MCP URL |
+| Client | URL |
 |---|---|
 | Cursor IDE | `https://mcp.paperoffice.ai/cursor` |
 | Claude Desktop | `https://mcp.paperoffice.ai/claude` |
+| ChatGPT / OpenAI | `https://mcp.paperoffice.ai/openai` |
 | Standard MCP | `https://mcp.paperoffice.ai/mcp` |
-| OpenAI / ChatGPT | `https://mcp.paperoffice.ai/openai` |
+| Universal | `https://mcp.paperoffice.ai/` |
 
 ```json
 {
@@ -156,34 +218,48 @@ PaperOffice bietet einen vollständigen MCP-Server für native AI-Tool-Integrati
 
 ---
 
-## Retry-Strategie
-
-Bei HTTP 429 (Rate Limit): Exponential Backoff.
+## Retry-Strategie (HTTP 429)
 
 ```python
 import time
 import requests
 
-def api_call_with_retry(url, headers, max_retries=5):
+def api_call_with_retry(url, headers, data=None, files=None, max_retries=5):
     for attempt in range(max_retries):
-        r = requests.post(url, headers=headers)
+        r = requests.post(url, headers=headers, data=data, files=files)
         if r.status_code != 429:
             return r
         wait = int(r.headers.get("Retry-After", 2 ** attempt))
+        print(f"Rate limited, warte {wait}s...")
         time.sleep(wait)
-    raise Exception("Rate limit exceeded after retries")
+    raise Exception("Rate limit nach {max_retries} Versuchen überschritten")
 ```
 
 ---
 
-## Credit-System
+## VISITOR-Endpoints (kein Token)
 
-Jeder API-Call verbraucht Credits. Höhere Priority = höhere Kosten.
+Diese Endpoints funktionieren ohne Bearer Token (IP-basiertes Ratelimit):
 
-| Priority | Multiplier | 10-Credit-Job |
+| Endpoint | Limit |
+|---|---|
+| `GET /health` | Unbegrenzt |
+| `POST /ip2location/full` | ~100 Requests/Tag |
+| `POST /ip2location/vpn` | ~100 Requests/Tag |
+| `POST /currency_exchange/get_rates` | ~100 Requests/Tag |
+| `GET /vat/rates` | Gratis, unbegrenzt |
+
+> **Empfehlung:** Auch für VISITOR-Endpoints einen Bearer Token verwenden, um IP-Ratelimits zu umgehen.
+
+---
+
+## Wichtige Parameter-Hinweise
+
+| Parameter | Richtig | Falsch |
 |---|---|---|
-| 500 (default) | 1.0x | 10 Credits |
-| 700 | ~1.16x | ~12 Credits |
-| 900 (sync) | ~1.33x | ~13 Credits |
-
-→ [Pricing Calculator](https://app.paperoffice.ai/en/pricing/calculator)
+| STT Datei-Upload | `file_1` | `file` |
+| Fingerprint ID | `visitorId` | `fingerprint_id` |
+| DMS Suche | `global_search` | `search_query` |
+| Image Gen Breite | `width` | `size` |
+| Weather Koordinaten | `lat` + `lon` | `city` |
+| Workspace | `workspace_name` | `metadata` |

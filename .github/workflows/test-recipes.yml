@@ -2,13 +2,17 @@ name: Test Recipes
 
 on:
   schedule:
-    - cron: '0 6 * * 1'  # Every Monday 06:00 UTC
-  workflow_dispatch:       # Manual trigger
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - 'quick-wins/**'
-      - 'use-cases/**'
+      - 'getting-started/**'
+      - 'document-ai/**'
+      - 'agent-media-ai/**'
+      - 'security-ai/**'
+      - 'knowledge-ai/**'
+      - 'analysis-ai/**'
 
 env:
   PAPEROFFICE_API_KEY: ${{ secrets.PAPEROFFICE_API_KEY }}
@@ -22,17 +26,17 @@ jobs:
 
       - name: Python syntax check
         run: |
-          find . -name "*.py" -exec python3 -m py_compile {} \;
+          find . -name "*.py" -not -path "./.git/*" -exec python3 -m py_compile {} \;
           echo "All Python files OK"
 
       - name: Node.js syntax check
         run: |
-          find . -name "*.js" -exec node --check {} \;
+          find . -name "*.js" -not -path "./.git/*" -not -path "*/node_modules/*" -exec node --check {} \;
           echo "All Node.js files OK"
 
       - name: Shell syntax check
         run: |
-          find . -name "*.sh" -exec bash -n {} \;
+          find . -name "*.sh" -not -path "./.git/*" -exec bash -n {} \;
           echo "All shell files OK"
 
   api-smoke-test:
@@ -60,21 +64,39 @@ jobs:
             exit 1
           fi
 
-      - name: OCR endpoint smoke test
+      - name: Translation endpoint smoke test
         if: env.PAPEROFFICE_API_KEY != ''
         run: |
-          echo "Testing OCR endpoint..."
+          echo "Testing Translation endpoint..."
           RESPONSE=$(curl -s -w "\n%{http_code}" \
             -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
-            -X POST "https://api.paperoffice.ai/latest/job" \
-            -F "ocr_mode=text" \
-            -F "priority=900" \
-            -F "text=API smoke test")
+            -X POST "https://api.paperoffice.ai/latest/translate/text" \
+            -d "text=Hello&target_language=de&source_language=en")
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          echo "HTTP Status: $HTTP_CODE"
+          if echo "$BODY" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d.get('status')=='success'" 2>/dev/null; then
+            echo "Translation endpoint OK"
+          elif [ "$HTTP_CODE" -lt 500 ]; then
+            echo "Translation endpoint reachable (non-5xx)"
+          else
+            echo "Translation endpoint server error"
+            exit 1
+          fi
+
+      - name: Fake Email endpoint smoke test
+        if: env.PAPEROFFICE_API_KEY != ''
+        run: |
+          echo "Testing Fake Email endpoint..."
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
+            -X POST "https://api.paperoffice.ai/latest/fakeemail/check" \
+            -d "email=test@mailinator.com")
           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
           echo "HTTP Status: $HTTP_CODE"
-          if [ "$HTTP_CODE" -lt 500 ]; then
-            echo "OCR endpoint reachable"
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "Fake Email endpoint OK"
           else
-            echo "OCR endpoint server error"
+            echo "Fake Email endpoint returned $HTTP_CODE"
             exit 1
           fi

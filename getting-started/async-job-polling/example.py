@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+"""PaperOffice AI — Async Job-Polling (Submit → Poll → Ergebnis)"""
+import os
+import sys
+import time
+import requests
+
+api_base = "https://api.paperoffice.ai/latest"
+api_key = os.environ.get("PAPEROFFICE_API_KEY")
+if not api_key:
+    sys.exit("Fehler: PAPEROFFICE_API_KEY nicht gesetzt")
+
+input_file = sys.argv[1] if len(sys.argv) > 1 else None
+if not input_file:
+    sys.exit("Fehler: Dateipfad als Argument übergeben")
+
+headers = {"Authorization": f"Bearer {api_key}"}
+
+# Schritt 1: Job einreichen (priority=500 → async)
+print(">>> Job einreichen...")
+with open(input_file, "rb") as f:
+    submit_response = requests.post(
+        f"{api_base}/job/add/paperoffice_aiocr___generate",
+        headers=headers,
+        files={"file_1": f},
+        data={"ocr_mode": "text", "priority": "500"},
+    )
+
+submit_data = submit_response.json()
+job_id = submit_data.get("job_id")
+if not job_id:
+    sys.exit(f"Fehler: Keine job_id erhalten — {submit_data}")
+
+print(f"Job eingereicht: {job_id}")
+
+# Schritt 2: Status pollen bis fertig
+print(">>> Warte auf Ergebnis...")
+max_attempts = 30
+
+for attempt in range(1, max_attempts + 1):
+    time.sleep(2)
+
+    poll_response = requests.get(
+        f"{api_base}/job/get/{job_id}",
+        headers=headers,
+    )
+    poll_data = poll_response.json()
+    status = poll_data.get("status", "unknown")
+
+    print(f"  Versuch {attempt}/{max_attempts}: {status}")
+
+    if status == "completed":
+        result = poll_data.get("result", {})
+        output = result.get("output", {})
+        summary = output.get("summary", {})
+        print()
+        print("--- Ergebnis ---")
+        print(f"Seiten: {summary.get('total_pages')}")
+        print(f"Zeilen: {summary.get('total_lines')}")
+        print(summary.get("poaiocr_extracted_fulltext", "Kein Text"))
+        sys.exit(0)
+
+    if status in ("failed", "error"):
+        sys.exit(f"Job fehlgeschlagen: {poll_data}")
+
+print(f"Timeout: Job nach {max_attempts} Versuchen nicht fertig")
+sys.exit(1)
