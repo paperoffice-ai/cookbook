@@ -21,7 +21,7 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `file_1` | file | **Yes** | — | PDF of the invoice |
-| `model` | string | **Yes** | — | `basic` (OCR+Vision), `premium` (+AI Thinking), `ultra` (+AI Reasoning) |
+| `model` | string | **Yes** | — | 9 variants: `basic`, `premium`, `ultra` + `-per`/`-per-max` for more pages (see [Model tiers](../invoice/#model-tiers-9-variants)) |
 | `idp_collection` | string | No | — | Must be `invoice` (or `invoice:de` for German output) |
 | `idp_fields` | string | No | — | Additional custom fields as JSON |
 | `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |

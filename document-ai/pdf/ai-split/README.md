@@ -12,12 +12,48 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 
 ## Parameters
 
-| Parameter             | Value             | Description                                     |
-|-----------------------|-------------------|-------------------------------------------------|
-| `file_1`              | File              | The PDF to split                                |
-| `template`            | `pdf_ai_split`    | Workflow template for AI split                  |
-| `naming_instruction`  | Text              | Instruction for naming sub-documents            |
-| `priority`            | `900`             | Synchronous processing (≥900 = immediate)       |
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `file` | file | **Yes** | — | The PDF to split |
+| `template` | string | **Yes** | — | Must be `pdf_ai_split` |
+| `naming_instruction` | string | No | auto | Instruction for naming sub-documents (see examples) |
+| `locale` | string | No | `de_DE` | Output language: `de_DE`, `en_US`, `es_ES`, `fr_FR`, `it_IT`, `pt_PT` — affects document_type, reasoning, and filenames |
+| `document_types` | string | No | auto-detect | Restrict to specific types, comma-separated: `invoice,letter,contract` |
+| `date_format` | string | No | `DD.MM.YYYY` | Date output format: `YYYY-MM-DD`, `DD.MM.YYYY`, `MM/DD/YYYY` |
+| `include_document_type` | bool | No | `false` | Include `document_type` in response |
+| `include_date` | bool | No | `false` | Include `date` in response |
+| `include_sender` | bool | No | `false` | Include `sender` in response |
+| `include_reasoning` | bool | No | `false` | Include AI reasoning for the classification |
+| `priority` | int | No | `900` | `≥ 900` = synchronous, `< 900` = async |
+
+### Controlling response detail
+
+By default, the response only contains `suggested_filename`, `page_range`, and download links. Enable additional fields explicitly:
+
+```bash
+curl -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
+  -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
+  -F "file=@stack.pdf" \
+  -F "template=pdf_ai_split" \
+  -F "naming_instruction=Name by sender, type and date" \
+  -F "locale=en_US" \
+  -F "date_format=YYYY-MM-DD" \
+  -F "include_document_type=true" \
+  -F "include_date=true" \
+  -F "include_sender=true" \
+  -F "include_reasoning=true" \
+  -F "priority=900"
+```
+
+### Restricting document types
+
+Limit detection to specific types (useful for known document stacks):
+
+```bash
+-F "document_types=invoice,credit_note,delivery_note"
+```
+
+When set, the AI only classifies into the provided types. Documents that don't match any type are classified as `unknown`.
 
 ## How to run
 

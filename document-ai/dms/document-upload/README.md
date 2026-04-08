@@ -5,19 +5,20 @@ Uploads a document to the PaperOffice DMS. Documents are automatically indexed a
 ## Endpoint
 
 ```
-POST https://api.paperoffice.ai/latest/documents/upload
+POST https://api.paperoffice.ai/latest/documents/document-put
 ```
 
 **Authentication:** Bearer Token (API key required)
 
 ## Parameters
 
-| Parameter        | Required | Description                                     |
-|------------------|----------|-------------------------------------------------|
-| `file_1`         | Yes      | File (PDF, DOCX, image, etc.)                   |
-| `workspace_name` | Yes      | Target workspace for the document                |
-| `tags`           | No       | Comma-separated tags (e.g. "invoice,2026,q1")   |
-| `description`    | No       | Optional description of the document             |
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `file` | file | **Yes** | File to upload (multipart/form-data) — **not** `file_1`! |
+| `workspace_id` | int | **Yes** | Target workspace ID |
+| `workspace_name` | string | No | Workspace name (alternative to `workspace_id`) |
+
+> **Important:** The file parameter is `file` (not `file_1`). The `workspace_id` is the numeric ID from the workspace-list endpoint.
 
 ## How to run
 

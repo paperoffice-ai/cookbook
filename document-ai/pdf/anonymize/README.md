@@ -63,7 +63,82 @@ node example.js document.pdf
 node example.js document.pdf "email,phone"
 ```
 
-## Response Structure
+## Two anonymization approaches
+
+### Approach 1: Single-Step (fully automatic)
+
+One call — the AI detects and redacts everything automatically:
+
+```bash
+curl -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
+  -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
+  -F "file=@document.pdf" \
+  -F "template=document_anonymize" \
+  -F "redact_categories=all" \
+  -F "priority=999"
+```
+
+### Approach 2: Preview + Apply (two-step with human review)
+
+**Step 1 — Preview:** AI detects PII, returns page images with highlighted redaction boxes for review:
+
+```bash
+curl -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
+  -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
+  -F "file=@document.pdf" \
+  -F "template=document_anonymize_preview" \
+  -F "redact_categories=contact" \
+  -F "whitelist=PaperOffice,ACME Corp" \
+  -F "priority=900"
+```
+
+The response contains per-page preview images and `redact_box_ids`:
+
+```json
+{
+  "result": {
+    "pages_images": {
+      "00001": "https://api.paperoffice.ai/latest/job/download/..."
+    },
+    "detected_pii": {
+      "redact_box_ids": [0, 1, 2, 3, 5, 7],
+      "audit_trail": [
+        { "box_id": 0, "category": "names", "text": "John Smith" },
+        { "box_id": 1, "category": "phone", "text": "+49 170 1234567" }
+      ]
+    }
+  }
+}
+```
+
+**Step 2 — Apply redaction:** Send back only the boxes you want to redact:
+
+```bash
+curl -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
+  -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "files": ["https://api.paperoffice.ai/latest/job/download/...PAGE_IMAGE_URL..."],
+    "boxes_by_page": {"00001": [0, 1, 5, 7]},
+    "redact_color": "#000000",
+    "output_pdf": true,
+    "priority": 999
+  }'
+```
+
+### Step 2 parameters
+
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `files` | array | **Yes** | — | JSON array of `pages_images` URLs from Step 1 |
+| `boxes_by_page` | object | No | all boxes | JSON object: `{"00001": [0, 1, 2]}` — page number (5 digits) → array of box IDs to redact |
+| `redact_color` | string | No | `#000000` | Redaction fill color (hex) |
+| `output_pdf` | bool | No | `true` | `true` = output PDF, `false` = output redacted images |
+| `priority` | int | No | `999` | Priority |
+
+> **When to use 2-step?** When you need human review before redacting, when you want to selectively remove only some detected PII, or when building a UI where users can approve/reject individual redactions.
+
+## Response Structure (Single-Step)
 
 ```json
 {
@@ -71,9 +146,9 @@ node example.js document.pdf "email,phone"
   "job_id": "poai-job_900_...",
   "operation": "document_anonymize",
   "result": {
-    "anonymized_pdf": [
-      "https://api.paperoffice.ai/latest/job/download/ZBVXGX9A..."
-    ],
+    "pages_images": {
+      "00001": "https://api.paperoffice.ai/latest/job/download/..."
+    },
     "detected_pii": {
       "redact_box_ids": [1, 6, 7],
       "audit_trail": [
@@ -92,10 +167,10 @@ node example.js document.pdf "email,phone"
 
 ## Downloading the result
 
-The download URL is in `result.anonymized_pdf[0]`:
+The download URL is in `result.pages_images` (per-page image URLs) or use the combined PDF:
 
 ```bash
-curl -s "https://api.paperoffice.ai/latest/job/download/ZBVXGX9A..." \
+curl -s "https://api.paperoffice.ai/latest/job/download/RESULT_TOKEN..." \
   -H "Authorization: Bearer ${PAPEROFFICE_API_KEY}" \
   -o "anonymized.pdf"
 ```

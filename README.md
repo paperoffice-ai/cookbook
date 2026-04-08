@@ -86,10 +86,10 @@ Native AI tool integration for Cursor, Claude, ChatGPT.
 
 | Recipe | What it does | Endpoint |
 |---|---|---|
-| [Workspace Setup](document-ai/dms/workspace-setup/) | Create/manage workspace | `/documents/workspace_*` |
-| [Document Upload](document-ai/dms/document-upload/) | Upload documents + tag | `/documents/upload` |
-| [Smart Search](document-ai/dms/smart-search/) | Semantic document search | `/documents/search` |
-| [Document Generation](document-ai/dms/document-generation/) | AI-based document generation | `/document_generation/generate` |
+| [Workspace Setup](document-ai/dms/workspace-setup/) | Create/manage workspace (tiers, WORM, BYOS) | `/documents/workspace-create` |
+| [Document Upload](document-ai/dms/document-upload/) | Upload documents to DMS | `/documents/document-put` |
+| [Smart Search](document-ai/dms/smart-search/) | 5 search modes (intelligent, semantic, hybrid, fulltext, RAG) | `/documents/list` |
+| [Document Generation](document-ai/dms/document-generation/) | Create PDFs from content or templates | `/document_generation/*` |
 | [Document Chat](document-ai/dms/document-chat/) | Chat with a document (RAG) | `/document_intelligence/chat` |
 
 ### Analysis AI
@@ -119,7 +119,7 @@ Native AI tool integration for Cursor, Claude, ChatGPT.
 
 | Recipe | What it does | Endpoint |
 |---|---|---|
-| [Device Fingerprint](security-ai/device-fingerprint/) | Verify device | `/fingerprint/verify` |
+| [Device Fingerprint](security-ai/device-fingerprint/) | Identify, verify, similar + linked devices | `/fingerprint/*` |
 | [IP Geolocation](security-ai/ip-geolocation/) | IP → Country, City, ISP, Device | `/ip2location/full` |
 | [VAT Validation](security-ai/vat-validation/) | Validate VAT ID + EU tax rates | `/vat/validate` |
 | [Fake Email Detection](security-ai/fake-email-detection/) | Detect fake/disposable emails | `/fakeemail/check` |
@@ -178,14 +178,23 @@ export PAPEROFFICE_API_KEY="po_sk_xxx"
 | `POST /translate/text` | Translation |
 | `POST /vat/validate` | VAT ID Validation |
 | `POST /fakeemail/check` | Fake Email Detection |
-| `POST /fingerprint/verify` | Device Fingerprint |
+| `POST /fingerprint/identify` | Device Fingerprint (v2) |
+| `POST /fingerprint/verify` | Device Verification |
+| `POST /fingerprint/similar` | Find Similar Devices |
 | `POST /geocoding/forward` | Geocoding |
 | `POST /ip2location/full` | IP Geolocation |
 | `POST /currency_exchange/get_rates` | Exchange Rates |
 | `POST /location2weather` | Weather |
 | `GET /webhooks/list` | Webhook Management |
 | `GET /knowledge/kb_list` | Knowledge Base |
-| `POST /documents/search` | DMS Search |
+| `POST /documents/list` | DMS Ultimate Search |
+| `POST /documents/semantic-search` | DMS Semantic Search |
+| `POST /documents/search-hybrid` | DMS Hybrid Search |
+| `POST /documents/search-fulltext` | DMS Fulltext Search |
+| `POST /documents/rag-search` | DMS RAG Search |
+| `POST /documents/ocr-get` | DMS OCR Text Retrieval |
+| `POST /document_generation/create-from-content` | Create Document from Content |
+| `POST /document_generation/create-from-template` | Create Document from Template |
 
 ---
 

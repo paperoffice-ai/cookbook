@@ -20,13 +20,41 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 | `idp_fields` | string | No | — | Additional custom fields as JSON (see [Custom Fields](../custom-fields/)) |
 | `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
 
-## Model tiers
+## Model tiers (9 variants)
 
-| Model | Description | Best for |
+The `model` parameter controls AI intelligence AND page limits. There are 3 intelligence levels × 3 page variants:
+
+### Intelligence levels
+
+| Level | Description | Best for |
 |---|---|---|
-| `basic` | OCR + Vision | Simple, clean invoices with few fields |
-| `premium` | + AI Thinking | Standard invoices, multi-page, line items |
-| `ultra` | + AI Reasoning | Complex invoices, handwritten notes, poor scans |
+| `basic` | OCR + Vision | Simple, clean documents with few fields |
+| `premium` | + AI Thinking | Standard documents, multi-page, line items |
+| `ultra` | + AI Reasoning | Complex documents, handwritten, poor scans |
+
+### Page variants
+
+| Suffix | Page limit | Credits | Description |
+|---|---|---|---|
+| *(none)* | ~1–3 pages | Standard | Single documents (invoice, receipt, ID) |
+| `-per` | ~5–10 pages | Higher | Multi-page documents (contracts, reports) |
+| `-per-max` | ~20–50+ pages | Highest | Large documents (legal files, manuals) |
+
+### All 9 model values
+
+| Model | Intelligence | Pages | Recommended for |
+|---|---|---|---|
+| `basic` | OCR+Vision | 1–3 | Single-page receipts, simple forms |
+| `basic-per` | OCR+Vision | 5–10 | Multi-page basic extraction |
+| `basic-per-max` | OCR+Vision | 20–50+ | Large batch basic extraction |
+| `premium` | +AI Thinking | 1–3 | **Standard invoices** (recommended default) |
+| `premium-per` | +AI Thinking | 5–10 | Multi-page invoices, short contracts |
+| `premium-per-max` | +AI Thinking | 20–50+ | Long contracts, reports |
+| `ultra` | +AI Reasoning | 1–3 | Complex single documents, handwritten |
+| `ultra-per` | +AI Reasoning | 5–10 | Complex multi-page contracts |
+| `ultra-per-max` | +AI Reasoning | 20–50+ | **Legal documents, insurance policies, technical manuals** |
+
+> **Important:** Using a model without sufficient page capacity for your document will only process the first N pages. Always use `-per` or `-per-max` variants for multi-page documents.
 
 ## Localized templates
 
@@ -36,6 +64,58 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 | `invoice:de` | German | German invoices, DATEV-compatible output |
 | `invoice:en` | English | English invoices |
 | `invoice:es` | Spanish | Spanish invoices |
+
+## All available IDP collections (29)
+
+The PaperOffice IDP engine supports these built-in extraction templates:
+
+### Financial documents
+
+| Collection | Document type |
+|---|---|
+| `invoice` | Invoices (international) |
+| `invoice:de` | Invoices (German, DATEV-optimized) |
+| `receipt` | Receipts and till slips |
+| `cash_receipt` | Cash receipts |
+| `hotel_invoice` | Hotel invoices |
+| `accounting_datev` | DATEV SKR03 export |
+| `statement_of_account` | Bank statements |
+| `bank_check` | Bank checks |
+| `bank_details` | Bank detail extraction |
+| `payroll` | Payroll / pay stubs |
+| `us_tax_forms` | US tax forms |
+
+### Business documents
+
+| Collection | Document type |
+|---|---|
+| `contract` | Contracts (all types) |
+| `order` | Purchase orders |
+| `delivery_note` | Delivery notes |
+| `shipping_waybill` | Shipping waybills |
+| `letter_mail` | Letters / mail |
+| `utility_bill` | Utility bills |
+
+### Identity & legal
+
+| Collection | Document type |
+|---|---|
+| `identity_document` | ID cards, passports, driver's licenses |
+| `vehicle_license` | Vehicle registrations |
+| `legal_document` | Legal documents |
+| `insurance_policy` | Insurance policies |
+| `government_forms` | Government forms |
+
+### Special types
+
+| Collection | Document type |
+|---|---|
+| `handwritten_document` | Handwritten documents |
+| `handwritten_customer_form` | Handwritten customer forms |
+| `construction_plan` | Construction plans / blueprints |
+| `variable_metadata` | Maximum metadata extraction |
+| `idp_light` | Basic field extraction (fast, fewer fields) |
+| `document_analysis` | General document analysis |
 
 ## How to run
 

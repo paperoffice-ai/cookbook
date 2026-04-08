@@ -73,6 +73,8 @@ node example.js /path/to/file.pdf
           "line_count": 12,
           "confidence_avg": 0.9871,
           "char_count": 456,
+          "original_image_width": 1632,
+          "original_image_height": 2304,
           "language": { "primary": "de", "confidence": 0.97 },
           "bounding_boxes": [
             {
@@ -137,20 +139,23 @@ Every recognized text region gets a bounding box with pixel coordinates:
 
 ### Coordinate system
 
+Coordinates are in **pixels** relative to the page's original image dimensions (`original_image_width` × `original_image_height`):
+
 ```
-(0,0) ─────────────────────── x →
+(0,0) ──────────────────────── x → (original_image_width)
   │
   │    ┌─────────────┐
-  │    │  x,y        │
+  │    │ (x,y)       │
   │    │    text      │ h
   │    │              │
   │    └─────────────┘
   │         w
   y
   ↓
+(original_image_height)
 ```
 
-> Coordinates are in **pixels** relative to the page image. For PDFs, the page is rendered at the OCR engine's internal resolution.
+> Use `original_image_width` / `original_image_height` from the page response to calculate relative positions (e.g., for PDF overlay or redaction).
 
 ## Table format
 
@@ -193,8 +198,17 @@ The bounding box IDs are directly usable for the [Anonymize](../../pdf/anonymize
 3. Call anonymize endpoint with redact_boxes=[1, 6, 7]
 ```
 
+## Post-processing
+
+After an OCR job completes, results can be retrieved in different formats. See the [Text-Mode README](../text-mode/#post-processing-endpoints) for full documentation of:
+
+- **Get structured JSON** — With locale, specific page, bounding boxes
+- **Get OCR details** — Format: `full`, `text_only`, `structured`
+- **Get plain text** — Format: `json` or `text` (raw)
+- **Get OCR for DMS documents** — By `pofid` via `GET /documents/ocr-get`
+
 ## See also
 
-- [Text-Mode](../text-mode/) — Plain text only (faster, no bounding boxes)
+- [Text-Mode](../text-mode/) — Complete OCR reference (all modes, post-processing)
 - [Searchable PDF](../searchable-pdf/) — Generate searchable PDF
 - [PDF Anonymize](../../pdf/anonymize/) — Use bounding boxes for GDPR redaction

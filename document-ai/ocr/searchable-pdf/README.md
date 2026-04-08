@@ -132,7 +132,12 @@ This returns:
 - **Tables** as structured data
 - **Downloadable searchable PDF**
 
+## Supported file formats
+
+See [Text-Mode — Supported file formats](../text-mode/#supported-file-formats) for the complete list (PDF, PNG, JPEG, TIFF, BMP, WEBP — up to 25 MB).
+
 ## See also
 
-- [Text-Mode](../text-mode/) — Plain text only (without PDF generation)
+- [Text-Mode](../text-mode/) — Complete OCR reference (all modes, post-processing)
 - [Complete-Mode](../complete-mode/) — Text + bounding boxes + tables
+- [IDP Invoice](../../idp/invoice/) — Structured invoice data (uses OCR internally)

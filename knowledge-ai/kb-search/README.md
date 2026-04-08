@@ -12,11 +12,14 @@ POST https://api.paperoffice.ai/latest/knowledge/search
 
 ## Parameters
 
-| Parameter | Type | Required | Description |
-|---|---|---|---|
-| `query` | string | ✅ | Search query in natural language |
-| `kb_id` | int | ❌ | Restrict search to a specific KB |
-| `limit` | int | ❌ | Max. number of results (default: 5) |
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `query` | string | **Yes** | — | Search query in natural language |
+| `kb_id` | int | No | all | Restrict search to a specific knowledge base |
+| `language` | string | No | all | Language filter (`de`, `en`, `es`, `fr`, `it`, `pt`) |
+| `limit` | int | No | `5` | Max number of results |
+| `min_similarity` | float | No | — | Minimum similarity score (0.0–1.0) — filters out low-relevance results |
+| `mode` | string | No | — | Search mode override |
 
 ## How to Run
 
