@@ -1,0 +1,80 @@
+name: Test Recipes
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday 06:00 UTC
+  workflow_dispatch:       # Manual trigger
+  push:
+    branches: [main]
+    paths:
+      - 'quick-wins/**'
+      - 'use-cases/**'
+
+env:
+  PAPEROFFICE_API_KEY: ${{ secrets.PAPEROFFICE_API_KEY }}
+
+jobs:
+  syntax-check:
+    name: Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python syntax check
+        run: |
+          find . -name "*.py" -exec python3 -m py_compile {} \;
+          echo "All Python files OK"
+
+      - name: Node.js syntax check
+        run: |
+          find . -name "*.js" -exec node --check {} \;
+          echo "All Node.js files OK"
+
+      - name: Shell syntax check
+        run: |
+          find . -name "*.sh" -exec bash -n {} \;
+          echo "All shell files OK"
+
+  api-smoke-test:
+    name: API Smoke Test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: API health check
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://api.paperoffice.ai/latest/health)
+          if [ "$STATUS" -eq 200 ]; then
+            echo "API reachable (HTTP $STATUS)"
+          else
+            echo "API unreachable (HTTP $STATUS)"
+            exit 1
+          fi
+
+      - name: OCR endpoint smoke test
+        if: env.PAPEROFFICE_API_KEY != ''
+        run: |
+          echo "Testing OCR endpoint..."
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
+            -X POST "https://api.paperoffice.ai/latest/job" \
+            -F "ocr_mode=text" \
+            -F "priority=900" \
+            -F "text=API smoke test")
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          echo "HTTP Status: $HTTP_CODE"
+          if [ "$HTTP_CODE" -lt 500 ]; then
+            echo "OCR endpoint reachable"
+          else
+            echo "OCR endpoint server error"
+            exit 1
+          fi
