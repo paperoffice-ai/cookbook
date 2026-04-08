@@ -19,6 +19,7 @@ API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 def text_to_speech(
     text: str,
     voice: str = "Nadja",
+    language: str = "de",
     output_format: str = "mp3",
     speed: float = 1.0,
     output: str = "url",
@@ -34,6 +35,7 @@ def text_to_speech(
         data={
             "text": text,
             "voice": voice,
+            "language": language,
             "output_format": output_format,
             "output": output,
             "speed": str(speed),
@@ -47,9 +49,10 @@ def text_to_speech(
 if __name__ == "__main__":
     text = sys.argv[1] if len(sys.argv) > 1 else "Hallo, das ist ein Test der PaperOffice Sprachsynthese."
     voice = sys.argv[2] if len(sys.argv) > 2 else "Nadja"
-    fmt = sys.argv[3] if len(sys.argv) > 3 else "mp3"
+    language = sys.argv[3] if len(sys.argv) > 3 else "de"
+    fmt = sys.argv[4] if len(sys.argv) > 4 else "mp3"
 
-    data = text_to_speech(text, voice, output_format=fmt)
+    data = text_to_speech(text, voice, language=language, output_format=fmt)
 
     result = data.get("result", {})
     print(f"Status:   {data.get('status', 'N/A')}")

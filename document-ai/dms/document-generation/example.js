@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /** PaperOffice AI — AI-powered document generation (Create from Content) */
-const fs = require("fs");
+import { writeFileSync } from "node:fs";
 
 const api_base = "https://api.paperoffice.ai/latest";
 const api_key = process.env.PAPEROFFICE_API_KEY || "";
@@ -35,7 +35,7 @@ async function download_document(url, output_path, token = api_key) {
   if (!response.ok) throw new Error(`Download failed: HTTP ${response.status}`);
 
   const buffer = Buffer.from(await response.arrayBuffer());
-  fs.writeFileSync(output_path, buffer);
+  writeFileSync(output_path, buffer);
   console.log(`  Saved: ${output_path}`);
 }
 

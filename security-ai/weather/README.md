@@ -18,7 +18,7 @@ POST https://api.paperoffice.ai/latest/location2weather
 |---|---|---|---|
 | `lat` | float | ✅ | Latitude (e.g. `52.52` for Berlin) |
 | `lon` | float | ✅ | Longitude (e.g. `13.41` for Berlin) |
-| `locale` | string | ❌ | Response language (default: `de`) |
+| `lang` | string | ❌ | Response language (default: `de`) |
 
 ## How to run
 

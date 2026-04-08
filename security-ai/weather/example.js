@@ -4,10 +4,10 @@
 const API_URL = "https://api.paperoffice.ai/latest/location2weather";
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
-async function get_weather(lat, lon, locale = "de", token = API_KEY) {
+async function get_weather(lat, lon, lang = "de", token = API_KEY) {
   if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
-  const params = new URLSearchParams({ lat, lon, locale });
+  const params = new URLSearchParams({ lat, lon, lang });
   const response = await fetch(API_URL, {
     method: "POST",
     headers: { "Authorization": `Bearer ${token}` },

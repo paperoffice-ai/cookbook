@@ -11,15 +11,17 @@ BASE_URL="https://api.paperoffice.ai/latest"
 
 TEXT="${1:-Hallo, das ist ein Test der PaperOffice Sprachsynthese.}"
 VOICE="${2:-Nadja}"
-FORMAT="${3:-mp3}"
+LANGUAGE="${3:-de}"
+FORMAT="${4:-mp3}"
 
-echo "→ TTS: Voice '${VOICE}', Format '${FORMAT}'"
+echo "→ TTS: Voice '${VOICE}', Language '${LANGUAGE}', Format '${FORMAT}'"
 echo "  Text: ${TEXT}"
 
 curl -s -X POST "${BASE_URL}/job/add/paperoffice_voice___tts" \
   -H "Authorization: Bearer ${API_KEY}" \
   -F "text=${TEXT}" \
   -F "voice=${VOICE}" \
+  -F "language=${LANGUAGE}" \
   -F "output_format=${FORMAT}" \
   -F "output=url" \
   -F "speed=1.0" \

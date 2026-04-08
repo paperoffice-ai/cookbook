@@ -15,15 +15,15 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_voice___tts
 ```bash
 export PAPEROFFICE_API_KEY="your_api_key"
 
-# Bash
-chmod +x example.sh && ./example.sh "Hello world" Nadja mp3
+# Bash — text, voice, language, format
+chmod +x example.sh && ./example.sh "Hello world" Joanna en mp3
 
 # Python
 pip install requests
-python3 example.py "Hello world" Nadja mp3
+python3 example.py "Hello world" Joanna en mp3
 
 # Node.js (v18+)
-node example.js "Hello world" Nadja mp3
+node example.js "Hello world" Joanna en mp3
 ```
 
 ## Parameters

@@ -143,14 +143,14 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_imagestudio___remove_
 
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `file_1` | file | **Yes** | — | Image file (PNG, JPG, WEBP) |
+| `file` | file | **Yes** | — | Image file (PNG, JPG, WEBP) — **note: `file`, not `file_1`!** |
 | `output` | string | No | `url` | `url`, `base64`, `inline` |
 | `priority` | int | No | — | `≥ 900` for synchronous processing |
 
 ```bash
 curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_imagestudio___remove_bg" \
   -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
-  -F "file_1=@photo.png" \
+  -F "file=@photo.png" \
   -F "output=url" \
   -F "priority=999"
 ```

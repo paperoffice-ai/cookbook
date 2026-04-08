@@ -26,7 +26,7 @@ def extract_contract(pdf_path: str, token: str = api_key) -> dict:
             headers={"Authorization": f"Bearer {token}"},
             files={"file_1": f},
             data={
-                "model": "premium",
+                "model": "ultra",
                 "idp_collection": "legal_document",
                 "priority": 900,
             },

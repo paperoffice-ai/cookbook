@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /** PaperOffice AI — Identity Document Extraction (IDP Identity) */
-const fs = require("fs");
+import { readFileSync } from "node:fs";
+import { basename } from "node:path";
 
 const api_url = "https://api.paperoffice.ai/latest/job/add/workflow";
 const api_key = process.env.PAPEROFFICE_API_KEY || "";
@@ -8,16 +9,16 @@ const api_key = process.env.PAPEROFFICE_API_KEY || "";
 async function extract_identity(file_path, token = api_key) {
   if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
-  const FormData = (await import("form-data")).default;
+  const buffer = readFileSync(file_path);
   const form = new FormData();
-  form.append("file_1", fs.createReadStream(file_path));
+  form.append("file_1", new Blob([buffer]), basename(file_path));
   form.append("model", "premium");
   form.append("idp_collection", "identity_document");
   form.append("priority", "900");
 
   const response = await fetch(api_url, {
     method: "POST",
-    headers: { Authorization: `Bearer ${token}`, ...form.getHeaders() },
+    headers: { Authorization: `Bearer ${token}` },
     body: form,
   });
 

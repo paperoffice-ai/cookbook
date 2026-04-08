@@ -14,6 +14,7 @@ const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 async function text_to_speech(
   text,
   voice = "Nadja",
+  language = "de",
   output_format = "mp3",
   speed = 1.0,
   token = API_KEY
@@ -23,6 +24,7 @@ async function text_to_speech(
   const form = new FormData();
   form.append("text", text);
   form.append("voice", voice);
+  form.append("language", language);
   form.append("output_format", output_format);
   form.append("output", "url");
   form.append("speed", String(speed));
@@ -44,9 +46,10 @@ async function text_to_speech(
 (async () => {
   const text = process.argv[2] || "Hallo, das ist ein Test der PaperOffice Sprachsynthese.";
   const voice = process.argv[3] || "Nadja";
-  const fmt = process.argv[4] || "mp3";
+  const language = process.argv[4] || "de";
+  const fmt = process.argv[5] || "mp3";
 
-  const data = await text_to_speech(text, voice, fmt);
+  const data = await text_to_speech(text, voice, language, fmt);
   const result = data.result || {};
 
   console.log(`Status:   ${data.status || "N/A"}`);

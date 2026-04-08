@@ -1,0 +1,9 @@
+{
+  "name": "paperoffice-ai-cookbook",
+  "private": true,
+  "type": "module",
+  "description": "PaperOffice AI API Cookbook — runnable code examples",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

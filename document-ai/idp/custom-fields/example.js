@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /** PaperOffice AI — IDP with Custom Extraction Fields (Custom Fields) */
-const fs = require("fs");
+import { readFileSync } from "node:fs";
+import { basename } from "node:path";
 
 const api_url = "https://api.paperoffice.ai/latest/job/add/workflow";
 const api_key = process.env.PAPEROFFICE_API_KEY || "";
@@ -15,16 +16,16 @@ const custom_fields = [
 async function extract_custom_fields(pdf_path, fields, token = api_key) {
   if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
-  const FormData = (await import("form-data")).default;
+  const buffer = readFileSync(pdf_path);
   const form = new FormData();
-  form.append("file_1", fs.createReadStream(pdf_path));
+  form.append("file_1", new Blob([buffer]), basename(pdf_path));
   form.append("model", "premium");
   form.append("idp_fields", JSON.stringify(fields));
   form.append("priority", "900");
 
   const response = await fetch(api_url, {
     method: "POST",
-    headers: { Authorization: `Bearer ${token}`, ...form.getHeaders() },
+    headers: { Authorization: `Bearer ${token}` },
     body: form,
   });
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /** PaperOffice AI — Upload document to DMS */
-const fs = require("fs");
-const path = require("path");
+import { readFileSync } from "node:fs";
+import { basename } from "node:path";
 
 const api_base = "https://api.paperoffice.ai/latest";
 const api_key = process.env.PAPEROFFICE_API_KEY || "";
@@ -9,15 +9,15 @@ const api_key = process.env.PAPEROFFICE_API_KEY || "";
 async function document_upload(file_path, workspace_name, tags = "", token = api_key) {
   if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
-  const FormData = (await import("form-data")).default;
+  const buffer = readFileSync(file_path);
   const form = new FormData();
-  form.append("file", fs.createReadStream(file_path));
+  form.append("file", new Blob([buffer]), basename(file_path));
   form.append("workspace_name", workspace_name);
   if (tags) form.append("tags", tags);
 
   const response = await fetch(`${api_base}/documents/document-put`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${token}`, ...form.getHeaders() },
+    headers: { Authorization: `Bearer ${token}` },
     body: form,
   });
 
