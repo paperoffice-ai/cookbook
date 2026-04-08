@@ -12,11 +12,23 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate
 
 ## Parameters
 
-| Parameter  | Value    | Description                           |
-|-----------|----------|---------------------------------------|
-| `file_1`  | File     | The document to process               |
-| `ocr_mode`| `text`   | Extract plain text only               |
-| `priority`| `900`    | Synchronous processing (immediate)    |
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `file_1` | file | **Yes** | — | Document to process (see supported formats below) |
+| `ocr_mode` | string | No | `text` | OCR mode: `text` (this recipe), `grid`, `complete` |
+| `output_searchable_pdf` | bool | No | `false` | Generate searchable PDF alongside text |
+| `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
+
+## Supported file formats
+
+| Format | Extensions | Note |
+|---|---|---|
+| PDF | `.pdf` | Single and multi-page |
+| PNG | `.png` | Raster image |
+| JPEG | `.jpg`, `.jpeg` | Raster image |
+| TIFF | `.tiff`, `.tif` | Multi-page supported |
+| BMP | `.bmp` | Bitmap |
+| WEBP | `.webp` | Modern web format |
 
 ## How to run
 

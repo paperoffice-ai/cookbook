@@ -12,27 +12,35 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 
 ## Parameters
 
-| Parameter            | Value                  | Description                                     |
-|----------------------|------------------------|-------------------------------------------------|
-| `template`           | `document_anonymize`   | Workflow template for anonymization             |
-| `file`               | File                   | The PDF or image to anonymize (**not** `file_1`)|
-| `redact_categories`  | `all`                  | Categories to redact (see below)                |
-| `whitelist`          | Text (optional)        | Comma-separated terms to NEVER redact           |
-| `custom_redact`      | Text (optional)        | Additional terms to ALWAYS redact               |
-| `custom_instructions`| Text (optional)        | Free-text AI instructions                       |
-| `priority`           | `900`                  | Synchronous processing (≥900 = immediate)       |
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `file` | file | **Yes** | — | PDF or image to anonymize (**not** `file_1`!) |
+| `template` | string | No | `document_anonymize` | Workflow template |
+| `redact_categories` | string | No | `all` | Comma-separated categories (see below) |
+| `whitelist` | string | No | — | Comma-separated terms to NEVER redact |
+| `custom_redact` | string | No | — | Additional terms to ALWAYS redact |
+| `custom_instructions` | string | No | — | Free-text AI instructions (e.g. "Also redact all prices") |
+| `pofid` | string | No | — | Alternative to `file`: use existing DMS document by POFID |
+| `priority` | int | No | `999` | `≥ 900` = synchronous (result inline) |
 
-## Redaction Categories
+> **Important:** The file parameter is `file`, **not** `file_1`!
 
-| Category       | What gets redacted                                   |
-|----------------|------------------------------------------------------|
-| `all`          | Everything below (default)                           |
-| `names`        | First and last names, company contacts               |
-| `addresses`    | Street, postal code, city, country                   |
-| `phone`        | Phone numbers, fax                                   |
-| `email`        | Email addresses                                      |
-| `iban`         | IBAN, BIC, account numbers                           |
-| `tax_id`       | Tax IDs, VAT numbers                                 |
+## Redaction categories
+
+| Category | What gets redacted |
+|---|---|
+| `all` | Everything below (default) |
+| `names` | First and last names, company contacts |
+| `addresses` | Street, postal code, city, country |
+| `phone` | Phone numbers, fax |
+| `email` | Email addresses |
+| `iban` | IBAN, BIC, account numbers |
+| `tax_ids` | Tax IDs, VAT numbers |
+| `dates` | Dates of birth, contract dates |
+| `financial` | Amounts, prices, salaries |
+| `contact` | All contact information (phone, email, fax) |
+| `identity` | ID numbers, passport numbers, social security |
+| `none` | Disable auto-detection (use `custom_redact` only) |
 
 ## How to run
 

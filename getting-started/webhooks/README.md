@@ -4,44 +4,69 @@ Instead of constantly polling the job status, you can register webhooks and get 
 
 ## Endpoints
 
-| Action    | Method | Endpoint              |
-|-----------|--------|-----------------------|
-| Subscribe | POST   | `/webhooks/subscribe` |
-| List      | GET    | `/webhooks/list`      |
-| Test      | POST   | `/webhooks/test`      |
+| Action | Method | Endpoint |
+|---|---|---|
+| Subscribe | POST | `/webhooks/subscribe` |
+| List | GET | `/webhooks/list` |
+| Update | PUT | `/webhooks/update` |
+| Delete | DELETE | `/webhooks/delete` |
+| Test | POST | `/webhooks/test` |
 
 **Authentication:** Bearer Token for all endpoints
 
 ## Subscribe parameters
 
-```json
-{
-  "name": "my_first_webhook",
-  "url": "https://my-server.com/webhook",
-  "events": ["job.completed", "job.failed"],
-  "secret": "my_secret_key"
-}
-```
-
-| Parameter | Required | Description                              |
-|----------|----------|------------------------------------------|
-| `name`   | Yes      | Unique name for the webhook              |
-| `url`    | Yes      | HTTPS URL to be called                   |
-| `events` | Yes      | Array of event types                     |
-| `secret` | No       | Shared secret for signature verification |
-| `filters`| No       | Additional filters (e.g. by tool ID)     |
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `name` | string | **Yes** | — | Unique name for the webhook |
+| `url` | string | **Yes** | — | HTTPS URL to be called |
+| `events` | array | **Yes** | — | Array of event types (or `["*"]` for all) |
+| `secret` | string | No | auto-generated | Shared secret for HMAC signature verification |
+| `filters` | object | No | — | Filter by `workspace_id`, `pofid`, etc. |
+| `headers` | object | No | — | Additional HTTP headers as key-value pairs |
+| `retry_policy` | string | No | `exponential` | `none`, `linear`, `exponential` |
+| `max_retries` | int | No | `5` | Maximum retries (0–10) |
+| `timeout_ms` | int | No | `10000` | Request timeout in ms (1000–30000) |
 
 ## Available events
 
-| Event            | Description                     |
-|-----------------|---------------------------------|
-| `job.completed` | Job completed successfully      |
-| `job.failed`    | Job failed                      |
-| `job.queued`    | Job added to the queue          |
+| Event | Description |
+|---|---|
+| `job.completed` | Job completed successfully |
+| `job.failed` | Job failed |
+| `job.queued` | Job added to the queue |
+| `document.created` | Document created in DMS |
+| `*` | All events |
+
+## Webhook delivery payload
+
+When an event occurs, PaperOffice sends an HTTP POST to your URL:
+
+```json
+{
+  "event": "job.completed",
+  "timestamp": "2026-04-08T12:00:00.000Z",
+  "subscription_id": 42,
+  "data": {
+    "job_id": "poai-job_500_abc123",
+    "pipeline": "paperoffice_aiocr___generate",
+    "status": "completed",
+    "result": { }
+  }
+}
+```
+
+### Headers sent with each delivery
+
+| Header | Description |
+|---|---|
+| `X-PaperOffice-Signature` | HMAC-SHA256 signature of the body |
+| `X-PaperOffice-Event` | Event type (e.g. `job.completed`) |
+| `Content-Type` | `application/json` |
 
 ## Signature verification
 
-Every webhook call includes an `X-PaperOffice-Signature` header. Use it to verify that the call actually comes from PaperOffice:
+Verify that webhook calls actually come from PaperOffice:
 
 ```python
 import hmac, hashlib
@@ -66,18 +91,34 @@ chmod +x example.sh && ./example.sh https://my-server.com/webhook
 # Python — Register + start receiver
 pip install requests flask
 python3 example.py https://my-server.com/webhook   # Register only
-python3 example.py serve                              # Start receiver
+python3 example.py serve                            # Start receiver
 
 # Node.js (v18+)
 node example.js https://my-server.com/webhook   # Register only
-node example.js serve                             # Start receiver
+node example.js serve                           # Start receiver
+```
+
+## Test endpoint
+
+Send a test event to verify your webhook is receiving correctly:
+
+```bash
+curl -X POST "https://api.paperoffice.ai/latest/webhooks/test" \
+  -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"subscription_id": 42}'
 ```
 
 ## Webhook vs. Polling
 
-| Aspect      | Polling                      | Webhooks                       |
-|-------------|------------------------------|--------------------------------|
-| Latency     | Depends on interval          | Near real-time                 |
-| Traffic     | Many unnecessary requests    | Only on actual events          |
-| Complexity  | Easier to implement          | Requires public endpoint       |
-| Reliability | Always (pull-based)          | Retry logic required           |
+| Aspect | Polling | Webhooks |
+|---|---|---|
+| Latency | Depends on interval | Near real-time |
+| Traffic | Many unnecessary requests | Only on actual events |
+| Complexity | Easier to implement | Requires public endpoint |
+| Reliability | Always (pull-based) | Retry logic built-in |
+| Best for | Dev/testing, simple scripts | Production, event-driven |
+
+## See also
+
+- [Async Job Polling](../async-job-polling/) — Alternative: poll instead of webhook

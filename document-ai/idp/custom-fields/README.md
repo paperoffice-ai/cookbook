@@ -12,12 +12,13 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 
 ## Parameters
 
-| Parameter    | Value               | Description                               |
-|--------------|---------------------|-------------------------------------------|
-| `file_1`     | File                | The document to process                   |
-| `model`      | `premium`           | Recommended for custom fields             |
-| `idp_fields` | JSON string         | Array of field definitions (see below)    |
-| `priority`   | `900`               | Synchronous processing (≥900)             |
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `file_1` | file | **Yes** | — | The document to process |
+| `model` | string | **Yes** | — | `basic` (OCR+Vision), `premium` (+AI Thinking, recommended), `ultra` (+AI Reasoning) |
+| `idp_fields` | string | **Yes** | — | JSON array of field definitions (see below) |
+| `idp_collection` | string | No | — | Optional: combine with a template (e.g. `invoice`) + custom fields |
+| `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
 
 ## idp_fields syntax
 

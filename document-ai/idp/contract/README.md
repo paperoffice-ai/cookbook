@@ -12,12 +12,13 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 
 ## Parameters
 
-| Parameter         | Value      | Description                          |
-|-------------------|------------|--------------------------------------|
-| `file_1`          | File       | PDF of the contract                  |
-| `model`           | `premium`  | Extraction quality                   |
-| `idp_collection`  | `contract` | Enable contract analysis             |
-| `priority`        | `900`      | Synchronous processing (≥900)        |
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `file_1` | file | **Yes** | — | PDF of the contract |
+| `model` | string | **Yes** | — | `basic` (OCR+Vision), `premium` (+AI Thinking), `ultra` (+AI Reasoning) |
+| `idp_collection` | string | No | — | Must be `contract` for this recipe |
+| `idp_fields` | string | No | — | Additional custom fields as JSON (see [Custom Fields](../custom-fields/)) |
+| `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
 
 ## How to run
 

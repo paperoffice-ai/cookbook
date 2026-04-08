@@ -1,28 +1,6 @@
 # Text Translation
 
-Translates text between over 100 languages. Three quality tiers available: `basic` (fast), `premium` (balanced) and `ultra` (highest quality). Automatic source language detection.
-
-## Prerequisites
-
-```bash
-export PAPEROFFICE_API_KEY=po_sk_xxx
-```
-
-## Quick Start
-
-```bash
-# cURL
-bash example.sh "Hello World" de
-bash example.sh "Bonjour le monde" de fr premium
-
-# Python (requires: pip install requests)
-python example.py "Hello World" de
-python example.py "Hello World" de auto ultra
-
-# Node.js 18+
-node example.js "Hello World" de
-node example.js "Hello World" de auto ultra
-```
+Translates text between 37 languages. Three quality tiers: `basic` (fast), `premium` (balanced), `ultra` (highest quality). Automatic source language detection.
 
 ## Endpoints
 
@@ -38,24 +16,87 @@ POST https://api.paperoffice.ai/latest/translate/text
 GET https://api.paperoffice.ai/latest/translate/languages
 ```
 
+**Authentication:** Bearer Token required
+
+## How to run
+
+```bash
+export PAPEROFFICE_API_KEY="your_api_key"
+
+# Bash
+chmod +x example.sh && ./example.sh "Hello World" de
+./example.sh "Bonjour le monde" de fr premium
+
+# Python
+pip install requests
+python3 example.py "Hello World" de
+python3 example.py "Hello World" de auto ultra
+
+# Node.js (v18+)
+node example.js "Hello World" de
+node example.js "Hello World" de auto ultra
+```
+
 ## Parameters (Text Translation)
 
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `text` | string | ✅ | — | Text to translate |
-| `target_language` | string | ✅ | — | Target language (e.g. `de`, `en`, `fr`, `es`) |
-| `source_language` | string | — | `auto` | Source language (`auto` = automatic detection) |
-| `tier` | string | — | `premium` | Quality tier: `basic`, `premium` or `ultra` |
+| `text` | string | **Yes** | — | Text to translate |
+| `target_language` | string | **Yes** | — | Target language code (see table below) |
+| `source_language` | string | No | `auto` | Source language (`auto` = automatic detection) |
+| `tier` | string | No | `premium` | Quality tier: `basic`, `premium`, `ultra` |
 
-## Quality Tiers
+## Quality tiers
 
-| Tier | Speed | Quality | Recommendation |
-|---|---|---|---|
-| `basic` | ⚡ Fast | Good | Bulk translations, preview |
-| `premium` | ⚡ Fast | Very good | Standard for most use cases |
-| `ultra` | 🐢 Slower | Excellent | Publications, legal texts |
+| Tier | Speed | Quality | Cost | Best for |
+|---|---|---|---|---|
+| `basic` | Fastest | Good | Lowest | Bulk translations, internal previews |
+| `premium` | Fast | Very good | Medium | Standard production use |
+| `ultra` | Slower | Excellent | Highest | Publications, legal texts, marketing copy |
 
-## Response Example
+## Supported languages (37)
+
+| Code | Language | Native name |
+|---|---|---|
+| `ar` | Arabic | العربية |
+| `bg` | Bulgarian | Български |
+| `cs` | Czech | Čeština |
+| `da` | Danish | Dansk |
+| `de` | German | Deutsch |
+| `el` | Greek | Ελληνικά |
+| `en` | English | English |
+| `es` | Spanish | Español |
+| `et` | Estonian | Eesti |
+| `fi` | Finnish | Suomi |
+| `fr` | French | Français |
+| `he` | Hebrew | עברית |
+| `hi` | Hindi | हिन्दी |
+| `hr` | Croatian | Hrvatski |
+| `hu` | Hungarian | Magyar |
+| `id` | Indonesian | Bahasa Indonesia |
+| `it` | Italian | Italiano |
+| `ja` | Japanese | 日本語 |
+| `ko` | Korean | 한국어 |
+| `lt` | Lithuanian | Lietuvių |
+| `lv` | Latvian | Latviešu |
+| `ms` | Malay | Bahasa Melayu |
+| `nl` | Dutch | Nederlands |
+| `no` | Norwegian | Norsk |
+| `pl` | Polish | Polski |
+| `pt` | Portuguese | Português |
+| `ro` | Romanian | Română |
+| `ru` | Russian | Русский |
+| `sk` | Slovak | Slovenčina |
+| `sl` | Slovenian | Slovenščina |
+| `sr` | Serbian | Српски |
+| `sv` | Swedish | Svenska |
+| `th` | Thai | ไทย |
+| `tr` | Turkish | Türkçe |
+| `uk` | Ukrainian | Українська |
+| `vi` | Vietnamese | Tiếng Việt |
+| `zh` | Chinese | 中文 |
+
+## Response example
 
 ```json
 {
@@ -73,5 +114,12 @@ GET https://api.paperoffice.ai/latest/translate/languages
 ## Tips
 
 - **Automatic detection:** `source_language=auto` reliably detects the source language
-- **Cost:** `basic` is the cheapest, `ultra` the most expensive — choose according to use case
-- **Language list:** `GET /translate/languages` returns all supported language codes
+- **Cost optimization:** `basic` is the cheapest; use it for internal/preview translations
+- **Best quality:** `ultra` is recommended for customer-facing, legal, or marketing content
+- **Character count:** The `characters` field in the response shows billed characters
+- **Language list:** `GET /translate/languages` returns the live list with flags and native names
+
+## See also
+
+- [Text-to-Speech](../tts/) — Convert translated text to speech
+- [Speech-to-Text](../stt/) — Transcribe audio, then translate

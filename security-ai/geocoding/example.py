@@ -9,7 +9,7 @@ REVERSE_URL = "https://api.paperoffice.ai/latest/geocoding/reverse"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
-def geocode_forward(address: str, lang: str = "de", token: str = API_KEY) -> dict:
+def geocode_forward(address: str, lang: str = "en", token: str = API_KEY) -> dict:
     """Converts an address into coordinates."""
     if not token:
         raise ValueError("PAPEROFFICE_API_KEY not set")
@@ -23,7 +23,7 @@ def geocode_forward(address: str, lang: str = "de", token: str = API_KEY) -> dic
     return response.json()
 
 
-def geocode_reverse(lat: float, lng: float, lang: str = "de", token: str = API_KEY) -> dict:
+def geocode_reverse(lat: float, lng: float, lang: str = "en", token: str = API_KEY) -> dict:
     """Converts coordinates into an address."""
     if not token:
         raise ValueError("PAPEROFFICE_API_KEY not set")
@@ -38,7 +38,7 @@ def geocode_reverse(lat: float, lng: float, lang: str = "de", token: str = API_K
 
 
 if __name__ == "__main__":
-    address = sys.argv[1] if len(sys.argv) > 1 else "Times Square, New York"
+    address = sys.argv[1] if len(sys.argv) > 1 else "Berlin, Germany"
 
     print(f"=== Forward: {address} ===")
     fwd = geocode_forward(address)
@@ -47,7 +47,7 @@ if __name__ == "__main__":
         print(f"Lng:     {fwd.get('lng')}")
         print(f"Address: {fwd.get('display_name')}")
 
-    print(f"\n=== Reverse: 52.52, 13.41 ===")
-    rev = geocode_reverse(52.52, 13.41)
+    print(f"\n=== Reverse: 52.5174, 13.3951 ===")
+    rev = geocode_reverse(52.5174, 13.3951)
     if rev.get("found"):
         print(f"Address: {rev.get('display_name')}")

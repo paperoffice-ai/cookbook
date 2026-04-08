@@ -12,11 +12,12 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate
 
 ## Parameters
 
-| Parameter  | Value      | Description                                  |
-|-----------|------------|----------------------------------------------|
-| `file_1`  | File       | The document to process                      |
-| `ocr_mode`| `complete` | Full analysis with layout + tables           |
-| `priority`| `900`      | Synchronous processing (immediate)           |
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `file_1` | file | **Yes** | — | Document to process (PNG, JPG, TIFF, BMP, WEBP, PDF) |
+| `ocr_mode` | string | No | `text` | Must be `complete` for this recipe |
+| `output_searchable_pdf` | bool | No | `false` | Generate searchable PDF alongside analysis |
+| `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
 
 ## How to run
 

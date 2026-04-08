@@ -12,12 +12,30 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 
 ## Parameters
 
-| Parameter         | Value      | Description                          |
-|-------------------|------------|--------------------------------------|
-| `file_1`          | File       | PDF or image of the invoice          |
-| `model`           | `premium`  | Extraction quality (basic/premium/ultra) |
-| `idp_collection`  | `invoice`  | Enable invoice extraction            |
-| `priority`        | `900`      | Synchronous processing (≥900)        |
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `file_1` | file | **Yes** | — | PDF or image of the invoice |
+| `model` | string | **Yes** | — | AI tier (see model tiers below) |
+| `idp_collection` | string | No | `invoice` | Template: `invoice` (English), `invoice:de` (German/DATEV), `invoice:en`, `invoice:es` |
+| `idp_fields` | string | No | — | Additional custom fields as JSON (see [Custom Fields](../custom-fields/)) |
+| `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
+
+## Model tiers
+
+| Model | Description | Best for |
+|---|---|---|
+| `basic` | OCR + Vision | Simple, clean invoices with few fields |
+| `premium` | + AI Thinking | Standard invoices, multi-page, line items |
+| `ultra` | + AI Reasoning | Complex invoices, handwritten notes, poor scans |
+
+## Localized templates
+
+| Collection | Output language | Optimized for |
+|---|---|---|
+| `invoice` | English | International invoices |
+| `invoice:de` | German | German invoices, DATEV-compatible output |
+| `invoice:en` | English | English invoices |
+| `invoice:es` | Spanish | Spanish invoices |
 
 ## How to run
 
