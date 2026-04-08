@@ -4,7 +4,7 @@ Production-ready Recipes for the [PaperOffice AI API](https://paperoffice.ai) �
 
 **Copy. Paste. Ship.**
 
-> 42 Recipes · 3 Languages (Bash, Python, Node.js) · All live tested
+> 44 Recipes · 3 Languages (Bash, Python, Node.js) · All live tested
 
 ---
 
@@ -75,10 +75,12 @@ Native AI tool integration for Cursor, Claude, ChatGPT.
 
 ### Document AI — PDF
 
-| Recipe | What it does | Template |
+| Recipe | What it does | Pipeline / Template |
 |---|---|---|
 | [AI Split](document-ai/pdf/ai-split/) | Intelligently split bulk PDFs | `pdf_ai_split` |
 | [Anonymize](document-ai/pdf/anonymize/) | GDPR-compliant PII redaction | `document_anonymize` |
+| [Office to PDF](document-ai/pdf/office-to-pdf/) | DOCX/XLSX/PPTX → PDF (native MS Office) | `paperoffice_dataripper___office2pdf` |
+| [PDF to Office](document-ai/pdf/pdf-to-office/) | PDF → DOCX/XLSX/PPTX | `paperoffice_dataripper___pdf2office` |
 
 ### Document AI — DMS (Headless Document Management)
 
@@ -167,6 +169,8 @@ export PAPEROFFICE_API_KEY="po_sk_xxx"
 | Endpoint | Purpose |
 |---|---|
 | `POST /job/add/workflow` | IDP, PDF AI Split, Anonymize |
+| `POST /job/add/paperoffice_dataripper___office2pdf` | Office → PDF (native MS Office) |
+| `POST /job/add/paperoffice_dataripper___pdf2office` | PDF → Office (DOCX/XLSX/PPTX) |
 | `POST /job/add/paperoffice_aiocr___generate` | AI-OCR |
 | `POST /job/add/paperoffice_voice___tts` | Text-to-Speech |
 | `POST /job/add/paperoffice_voice___stt` | Speech-to-Text |

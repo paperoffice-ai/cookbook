@@ -12,12 +12,14 @@ POST https://api.paperoffice.ai/latest/job/add/{pipeline}
 
 | Pipeline | Purpose |
 |---|---|
-| `workflow` | IDP, PDF Split/Merge/Convert/Anonymize |
+| `workflow` | IDP, PDF AI Split, Document Anonymize |
 | `paperoffice_aiocr___generate` | AI-OCR |
 | `paperoffice_voice___tts` | Text-to-Speech |
 | `paperoffice_voice___stt` | Speech-to-Text |
 | `paperoffice_imagestudio___generate` | Image Generation |
 | `paperoffice_imagestudio___remove_bg` | Background Removal |
+| `paperoffice_dataripper___office2pdf` | Office → PDF (native MS Office) |
+| `paperoffice_dataripper___pdf2office` | PDF → Office (DOCX/XLSX/PPTX) |
 
 ### 2. Dedicated REST Endpoints
 

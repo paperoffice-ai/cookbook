@@ -109,3 +109,5 @@ curl -s "https://api.paperoffice.ai/latest/job/download/ZBVXGX9A..." \
 ## See also
 
 - [PDF AI Split](../ai-split/) — Intelligently split PDF into parts
+- [Office to PDF](../office-to-pdf/) — Convert DOCX/XLSX/PPTX to PDF
+- [PDF to Office](../pdf-to-office/) — Convert PDF back to DOCX/XLSX
