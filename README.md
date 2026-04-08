@@ -4,7 +4,7 @@
 
 > **MCP-First · API-First · Vibe Coding First**
 >
-> 409 AI Tools · 38 Recipes · 6 AI Prompts · 5 MCP Configs
+> 357+ AI Tools · 38 Recipes · 8 AI Prompts · 4 MCP Configs
 
 ---
 
@@ -16,7 +16,7 @@ Forget reading docs. Paste one URL into your AI IDE and start building:
 https://api.paperoffice.ai/latest/docs/postman
 ```
 
-**That's it.** Your AI reads the entire API spec — 409 tools, all parameters, all response formats — and generates production code for you.
+**That's it.** Your AI reads the entire API spec — 357+ tools, all parameters, all response formats — and generates production code for you.
 
 ### Try it now
 
@@ -36,7 +36,7 @@ Your AI generates a working script. No docs to read. No boilerplate to write.
 
 ## 🔗 MCP Integration — AI-Native Access
 
-Connect your AI IDE **directly** to PaperOffice. All 409 tools become native AI actions — no REST calls, no boilerplate, no context switching.
+Connect your AI IDE **directly** to PaperOffice. All 357+ tools become native AI actions — no REST calls, no boilerplate, no context switching.
 
 ### One-Click Setup
 
@@ -128,7 +128,7 @@ Connect your AI IDE **directly** to PaperOffice. All 409 tools become native AI 
 | Standard MCP | `https://mcp.paperoffice.ai/mcp` |
 | Universal | `https://mcp.paperoffice.ai/` |
 
-→ [Tool Discovery Guide](mcp/tool-discovery/) — explore all 409 tools via `tools/list`
+→ [Tool Discovery Guide](mcp/tool-discovery/) — explore all 357+ tools via `tools/list`
 
 ---
 
@@ -266,7 +266,7 @@ export PAPEROFFICE_API_KEY="po_sk_xxx"
 | System Key | `po_sk_` | Server-to-server, full access |
 | User Token | `po_ut_` | User-scoped, depends on license |
 
-> **VISITOR Mode** (no token): Only `GET /health`, `GET /ip2location/*`, `GET /currency_exchange/*`, `GET /vat/rates`. All other endpoints require Bearer token.
+> **VISITOR Mode** (no token): Only `GET /health`, `POST /ip2location/*`, `POST /currency_exchange/get_rates`, `GET /vat/rates` (rate-limited). All other endpoints require Bearer token.
 
 ---
 
@@ -314,6 +314,7 @@ export PAPEROFFICE_API_KEY="po_sk_xxx"
 | `POST /documents/document-search` | Semantic / Hybrid / Fulltext / RAG Search |
 | `POST /documents/document-put` | DMS Upload |
 | `POST /documents/workspace-create` | Create Workspace |
+| `GET /documents/workspaces-list` | List Workspaces |
 | `POST /document_generation/create-from-content` | Document from Content |
 | `POST /document_generation/create-from-template` | Document from Template |
 | `POST /knowledge_graph/universe` | GraphRAG Q&A |

@@ -18,7 +18,7 @@ Create a Node.js (ESM) script that:
    - Full text: result.output.summary.poaiocr_extracted_fulltext
    - Per-page text: result.output.pages["00001"].ocr_text
    - Per-page confidence: result.output.pages["00001"].confidence_avg
-   - Bounding boxes: result.output.pages["00001"].boxes (array of word-level boxes with coordinates)
+   - Bounding boxes: result.output.pages["00001"].bounding_boxes (array of word-level boxes with coordinates)
    - Tables: result.output.pages["00001"].tables (if present)
    - Language: result.output.pages["00001"].language.primary
 4. Outputs a structured JSON with all extracted data

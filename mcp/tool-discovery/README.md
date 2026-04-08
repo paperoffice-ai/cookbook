@@ -1,6 +1,6 @@
 # Tool Discovery — Available PaperOffice Tools via MCP
 
-This guide describes how to **find available tools** on the PaperOffice MCP server, what **metadata** each tool has, and how to access them via the **MCP standard**. The PaperOffice platform currently bundles **357 API tools** (as of: API/MCP landscape documentation); the exact list is provided live by the system.
+This guide describes how to **find available tools** on the PaperOffice MCP server, what **metadata** each tool has, and how to access them via the **MCP standard**. The PaperOffice platform currently bundles **357+ API tools** (the exact list is provided live by the server and grows over time).
 
 ## Getting Started: Universal Root
 
@@ -25,7 +25,7 @@ For each tool you should find (via MCP or the provided metadata) the following:
 | **Parameter Schema** | Input parameters in structured form (e.g. JSON Schema). |
 | **Examples** | Example calls or example payloads, where provided. |
 
-This lets you check in advance which tools fit your use case without manually sifting through all 357 entries in the REST documentation.
+This lets you check in advance which tools fit your use case without manually sifting through the full REST documentation.
 
 ## MCP Standard: `tools/list` and `tools/call`
 
@@ -38,7 +38,7 @@ Specific message formats and fields follow the MCP specification and the PaperOf
 
 ## Relation to the REST API
 
-The **357 tools** mirror the **API tool landscape** of the PaperOffice platform (endpoints from the central source). MCP is an **additional access layer** for AI clients; the functional meaning of the tools (OCR, IDP, …) is the same as with direct API calls.
+The **357+ tools** mirror the **API tool landscape** of the PaperOffice platform (endpoints from the central source). MCP is an **additional access layer** for AI clients; the functional meaning of the tools (OCR, IDP, …) is the same as with direct API calls.
 
 For deeper REST details (individual paths, rate limits), refer to the **current API documentation** at `https://api.paperoffice.ai/latest/docs/postman` — the collection is dynamically generated and is the canonical reference.
 

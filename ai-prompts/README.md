@@ -17,7 +17,7 @@ https://api.paperoffice.ai/latest/docs/postman
 [Your goal here]
 ```
 
-The AI reads the full PaperOffice API spec (409 tools, all parameters, all response formats) and generates a complete, working solution — no manual coding required.
+The AI reads the full PaperOffice API spec (357+ tools, all parameters, all response formats) and generates a complete, working solution — no manual coding required.
 
 ---
 
@@ -26,13 +26,13 @@ The AI reads the full PaperOffice API spec (409 tools, all parameters, all respo
 | Prompt | Best Tool | What you get |
 |--------|-----------|-------------|
 | [Invoice Processing Pipeline](claude-invoice-pipeline.md) | Claude | Batch invoice extraction → CSV with bounding box verification |
-| [Cursor MCP Setup](cursor-mcp-setup.md) | Cursor IDE | Complete MCP config + IDE-native Document AI |
+| [Cursor MCP Setup](cursor-mcp-setup.md) | Cursor | Complete MCP config + IDE-native Document AI |
 | [Voice Agent Builder](voice-agent-builder.md) | Any | TTS + STT voice agent with natural speech |
 | [Fraud Detection System](fraud-detection-system.md) | Any | Device Fingerprint + IP Geolocation risk scoring |
-| [Batch PDF Splitter](batch-split-3000.md) | Any | AI-powered bulk PDF splitting with smart filenames |
+| [Batch PDF Splitter (3000 pages)](batch-split-3000.md) | Any | AI-powered bulk PDF splitting with smart filenames |
 | [Auto-Classification System](windsurf-classifier.md) | Windsurf | Folder watcher → OCR → classify → sort documents |
 | [DMS Upload + Search Pipeline](dms-pipeline.md) | Any | Upload documents → Workspace → Smart Search |
-| [OCR Data Extraction](ocr-data-extraction.md) | Any | Tables + bounding boxes + structured data from scans |
+| [OCR Data Extraction](ocr-data-extraction.md) | Any | Extract tables + structured data from scanned documents |
 
 ---
 

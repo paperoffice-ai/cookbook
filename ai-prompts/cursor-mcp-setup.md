@@ -48,5 +48,5 @@ Add this to your `.cursor/mcp.json`:
 ## What you get
 
 - Complete MCP configuration for Cursor
-- List of all available Document AI tools (~409 tools)
+- List of all available Document AI tools (357+ tools)
 - Examples of how to process documents directly from the workspace

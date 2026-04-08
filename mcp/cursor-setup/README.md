@@ -32,7 +32,7 @@ Replace `your_api_key` with your valid PaperOffice API key.
 ## What happens next?
 
 - Cursor uses **SSE transport** for the connection to the MCP server.
-- **All 357 PaperOffice tools** (as of current platform) are available in the AI context — the same tool palette as via the REST API, bundled through MCP.
+- **All 357+ PaperOffice tools** (as of current platform) are available in the AI context — the same tool palette as via the REST API, bundled through MCP.
 - You don't need to manually reference individual endpoints in the chat; the model can select and invoke matching tools.
 
 ## Benefits in daily use

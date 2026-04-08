@@ -11,9 +11,12 @@ https://api.paperoffice.ai/latest/docs/postman
 Build a Python DMS pipeline that:
 1. Creates a workspace via POST /documents/workspace-create (name, workspace_tier=standard)
 2. Uploads PDF documents via POST /documents/document-put (file parameter, workspace_id)
-3. Searches across all uploaded documents using POST /documents/document-search
-   with mode=intelligent (auto-selects best search strategy)
-4. Also supports mode=semantic, mode=hybrid, mode=fulltext, mode=rag
+3. Searches using POST /documents/documents-list with:
+   - global_search = search term (string)
+   - search_mode = intelligent (auto-selects best strategy, recommended)
+   - Also supports search_mode=semantic, search_mode=hybrid, search_mode=fulltext
+   - search_scope=all to search across all workspaces
+4. For semantic/RAG search use POST /documents/document-search with query parameter
 5. Returns results with relevance scores
 
 Include:
@@ -33,6 +36,6 @@ A complete DMS pipeline that:
 ## Tips
 
 - `workspace_tier=compliance` enables WORM (Write Once, Read Many) for regulated industries
-- `mode=intelligent` auto-selects the best search strategy based on the query
-- `mode=rag` returns AI-generated answers based on document content
-- Use `global_search=true` to search across all workspaces
+- `search_mode=intelligent` on `/documents/documents-list` auto-selects the best strategy
+- For RAG context retrieval, use `/documents/document-search` with `query` parameter
+- Use `search_scope=all` to search across all workspaces
