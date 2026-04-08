@@ -1,6 +1,6 @@
 # Fraud Detection System
 
-**Tool:** Beliebiges AI-Tool | **Output:** Fraud Detection mit Device Fingerprint
+**Tool:** Any AI Tool | **Output:** Fraud Detection with Device Fingerprint
 
 ## Prompt
 
@@ -17,16 +17,16 @@ Use the Security & Data AI endpoints.
 These are instant APIs (no polling needed).
 ```
 
-## Was du bekommst
+## What you get
 
-Ein Betrugserkennungssystem das:
-- Device Fingerprints analysiert (Browser, OS, Hardware)
-- IP-Geolocation validiert (Land, Stadt, ISP)
-- Verdächtige Muster erkennt (VPN, Tor, Datacenter-IPs)
-- Instant-Responses liefert (kein Polling nötig)
+A fraud detection system that:
+- Analyzes device fingerprints (browser, OS, hardware)
+- Validates IP geolocation (country, city, ISP)
+- Detects suspicious patterns (VPN, Tor, datacenter IPs)
+- Delivers instant responses (no polling needed)
 
-## Tipps
+## Tips
 
-- Security-Endpoints sind Instant-APIs — kein Job-Polling nötig
-- Kombiniere Device Fingerprint + IP-Location für Risiko-Scoring
-- Ideal für Login-Flows, Payment-Gateways, Registrierungen
+- Security endpoints are instant APIs — no job polling needed
+- Combine Device Fingerprint + IP Location for risk scoring
+- Ideal for login flows, payment gateways, registrations

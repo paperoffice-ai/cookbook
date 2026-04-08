@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-/** PaperOffice AI — VPN/Proxy/Tor-Erkennung */
+/** PaperOffice AI — VPN/Proxy/Tor detection */
 
 const API_URL = "https://api.paperoffice.ai/latest/ip2location/vpn";
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
 async function detect_anonymity(ip = null, token = API_KEY) {
-  if (!token) throw new Error("PAPEROFFICE_API_KEY nicht gesetzt");
+  if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
   const payload = {};
   if (ip) payload.ip = ip;

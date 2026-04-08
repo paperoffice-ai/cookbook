@@ -1,27 +1,27 @@
-# USt-ID Validierung — VAT Check
+# VAT ID Validation — VAT Check
 
-Validiert europäische Umsatzsteuer-Identifikationsnummern in mehreren Schichten: Format-Prüfung, Prüfziffer und VIES-Abfrage. Zusätzlich können EU-Steuersätze kostenlos abgerufen werden.
+Validates European VAT identification numbers in multiple layers: format check, check digit, and VIES query. Additionally, EU tax rates can be fetched for free.
 
 ## Endpoints
 
 ```
 POST https://api.paperoffice.ai/latest/vat/validate
-GET  https://api.paperoffice.ai/latest/vat/rates    (GRATIS)
+GET  https://api.paperoffice.ai/latest/vat/rates    (FREE)
 ```
 
-**Authentifizierung:** Bearer Token für `/vat/validate`. `/vat/rates` ist kostenlos ohne Token.
+**Authentication:** Bearer token for `/vat/validate`. `/vat/rates` is free without token.
 
 ## Parameter (validate)
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `vat_id` | string | ✅ | USt-ID inkl. Länderkennung (z.B. `DE123456789`) |
-| `ip` | string | ❌ | IP für zusätzliche Geo-Prüfung |
-| `email` | string | ❌ | E-Mail für zusätzliche Plausibilitätsprüfung |
-| `force_recheck` | bool | ❌ | Cache umgehen, direkt bei VIES prüfen |
-| `geocoding` | bool | ❌ | Adress-Geocoding aktivieren |
+| `vat_id` | string | ✅ | VAT ID including country code (e.g. `DE123456789`) |
+| `ip` | string | ❌ | IP for additional geo check |
+| `email` | string | ❌ | Email for additional plausibility check |
+| `force_recheck` | bool | ❌ | Bypass cache, check directly with VIES |
+| `geocoding` | bool | ❌ | Enable address geocoding |
 
-## Ausführen
+## How to run
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
@@ -37,7 +37,7 @@ python3 example.py "DE123456789"
 node example.js "DE123456789"
 ```
 
-## Erwartete Antwort (validate)
+## Expected response (validate)
 
 ```json
 {
@@ -50,7 +50,7 @@ node example.js "DE123456789"
 }
 ```
 
-## Erwartete Antwort (rates)
+## Expected response (rates)
 
 ```json
 {
@@ -60,16 +60,16 @@ node example.js "DE123456789"
 }
 ```
 
-## Validierungs-Schichten
+## Validation layers
 
-| Layer | Beschreibung |
+| Layer | Description |
 |---|---|
-| `L1_format` | Format- und Prüfziffervalidierung |
-| `L2_vies` | VIES-Datenbankabfrage (EU-Kommission) |
-| `L3_enrichment` | Adress-Abgleich, Geo-Prüfung |
+| `L1_format` | Format and check digit validation |
+| `L2_vies` | VIES database query (EU Commission) |
+| `L3_enrichment` | Address matching, geo check |
 
-## Anwendungsfälle
+## Common use cases
 
-- **E-Commerce:** USt-ID bei Checkout validieren, korrekte Steuersätze anwenden
-- **Rechnungserstellung:** Reverse-Charge-Verfahren automatisch anwenden
-- **Compliance:** USt-ID-Prüfungen für Betriebsprüfung dokumentieren
+- **E-commerce:** Validate VAT ID at checkout, apply correct tax rates
+- **Invoicing:** Automatically apply reverse charge procedure
+- **Compliance:** Document VAT ID checks for tax audits

@@ -1,10 +1,10 @@
 # Windsurf — Auto-Classification System
 
-**Tool:** Windsurf IDE | **Output:** Auto-Classification System mit Folder Watch
+**Tool:** Windsurf IDE | **Output:** Auto-Classification System with Folder Watch
 
 ## Prompt
 
-Kopiere diesen Prompt direkt in Windsurf:
+Copy this prompt directly into Windsurf:
 
 ```
 Read this API documentation:
@@ -21,18 +21,18 @@ Use Bearer token for authentication.
 Priority=900 for sync response.
 ```
 
-## Was du bekommst
+## What you get
 
-Ein Klassifikationssystem das:
-- Einen Ordner auf neue PDFs überwacht (Watchdog)
-- Text via OCR extrahiert
-- Dokumente automatisch klassifiziert (Rechnung, Vertrag, Beleg, Korrespondenz)
-- Dateien in Kategorie-Unterordner verschiebt
-- Ein CSV-Log führt
+A classification system that:
+- Watches a folder for new PDFs (Watchdog)
+- Extracts text via OCR
+- Automatically classifies documents (invoice, contract, receipt, correspondence)
+- Moves files to category subfolders
+- Maintains a CSV log
 
-## Tipps
+## Tips
 
-- Bearer Token erforderlich (`export PAPEROFFICE_API_KEY=po_sk_xxx`)
-- `ocr_mode=complete` für Text + Tabellen
-- `priority=900` für synchrone Antwort
-- Klassifikation kann regelbasiert (Keywords) oder AI-basiert erfolgen
+- Bearer token required (`export PAPEROFFICE_API_KEY=po_sk_xxx`)
+- `ocr_mode=complete` for text + tables
+- `priority=900` for synchronous response
+- Classification can be rule-based (keywords) or AI-based

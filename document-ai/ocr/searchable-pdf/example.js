@@ -1,18 +1,18 @@
 #!/usr/bin/env node
-/** PaperOffice AI — Durchsuchbare PDF erzeugen (OCR + Searchable PDF) */
+/** PaperOffice AI — Generate searchable PDF (OCR + Searchable PDF) */
 import { readFileSync, writeFileSync } from "node:fs";
 import { basename } from "node:path";
 
 const api_base = "https://api.paperoffice.ai/latest";
 const api_key = process.env.PAPEROFFICE_API_KEY;
 if (!api_key) {
-  console.error("Fehler: PAPEROFFICE_API_KEY nicht gesetzt");
+  console.error("Error: PAPEROFFICE_API_KEY not set");
   process.exit(1);
 }
 
 const input_file = process.argv[2];
 if (!input_file) {
-  console.error("Fehler: Dateipfad als Argument übergeben");
+  console.error("Error: Please provide file path as argument");
   process.exit(1);
 }
 
@@ -40,31 +40,31 @@ const data = await response.json();
 const output = data?.result?.output ?? {};
 const summary = output.summary ?? {};
 
-console.log(`Status:    ${data?.status}`);
-console.log(`Seiten:    ${summary.total_pages}`);
-console.log(`Konfidenz: ${summary.avg_confidence}`);
-console.log(`Dauer:     ${data?.result?.duration_ms} ms`);
+console.log(`Status:     ${data?.status}`);
+console.log(`Pages:      ${summary.total_pages}`);
+console.log(`Confidence: ${summary.avg_confidence}`);
+console.log(`Duration:   ${data?.result?.duration_ms} ms`);
 
 const pdf_url = output.searchable_pdf_url ?? output.download_url;
 const download_token = output.download_token;
 
 if (pdf_url) {
-  console.log(`PDF-Download: ${pdf_url}`);
+  console.log(`PDF download: ${pdf_url}`);
   const pdf_response = await fetch(pdf_url, { headers: auth_headers });
   const pdf_buffer = Buffer.from(await pdf_response.arrayBuffer());
   writeFileSync(output_file, pdf_buffer);
-  console.log(`Gespeichert: ${output_file} (${pdf_buffer.length} Bytes)`);
+  console.log(`Saved: ${output_file} (${pdf_buffer.length} bytes)`);
 } else if (download_token) {
-  console.log(`Download-Token: ${download_token}`);
+  console.log(`Download token: ${download_token}`);
   const pdf_response = await fetch(
     `${api_base}/job/download/${download_token}`,
     { headers: auth_headers }
   );
   const pdf_buffer = Buffer.from(await pdf_response.arrayBuffer());
   writeFileSync(output_file, pdf_buffer);
-  console.log(`Gespeichert: ${output_file} (${pdf_buffer.length} Bytes)`);
+  console.log(`Saved: ${output_file} (${pdf_buffer.length} bytes)`);
 } else {
-  console.log("Kein PDF-Download in der Response gefunden.");
-  console.log("Vollständige Response:");
+  console.log("No PDF download found in the response.");
+  console.log("Full response:");
   console.log(JSON.stringify(data, null, 2));
 }

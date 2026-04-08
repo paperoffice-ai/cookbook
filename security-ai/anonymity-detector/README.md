@@ -1,6 +1,6 @@
-# Anonymitäts-Detektor — VPN/Proxy/Tor-Erkennung
+# Anonymity Detector — VPN/Proxy/Tor Detection
 
-Erkennt ob eine IP-Adresse über VPN, Proxy, Tor, Datacenter oder Relay verschleiert wird. Liefert einen Anonymitäts-Score von 0–100%.
+Detects whether an IP address is concealed via VPN, proxy, Tor, datacenter, or relay. Returns an anonymity score from 0–100%.
 
 ## Endpoint
 
@@ -8,23 +8,23 @@ Erkennt ob eine IP-Adresse über VPN, Proxy, Tor, Datacenter oder Relay verschle
 POST https://api.paperoffice.ai/latest/ip2location/vpn
 ```
 
-**Authentifizierung:** VISITOR-fähig (IP-Ratelimit), empfohlen mit Bearer Token.
+**Authentication:** VISITOR-capable (IP rate limit), recommended with Bearer token.
 
 ## Parameter
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `ip` | string | ❌ | IP-Adresse (Standard: eigene IP des Aufrufers) |
+| `ip` | string | ❌ | IP address (default: caller's own IP) |
 
-## Ausführen
+## How to run
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
 
-# Bash — eigene IP prüfen
+# Bash — check own IP
 bash example.sh
 
-# Bash — bestimmte IP prüfen
+# Bash — check specific IP
 bash example.sh "1.2.3.4"
 
 # Python
@@ -35,7 +35,7 @@ python3 example.py "1.2.3.4"
 node example.js "1.2.3.4"
 ```
 
-## Erwartete Antwort
+## Expected response
 
 ```json
 {
@@ -48,16 +48,16 @@ node example.js "1.2.3.4"
 }
 ```
 
-## Score-Interpretation
+## Score interpretation
 
-| Score | Bedeutung |
+| Score | Meaning |
 |---|---|
-| 0–20 | Normaler Nutzer, keine Verschleierung erkannt |
-| 21–60 | Verdächtig — möglicherweise VPN oder Corporate-Proxy |
-| 61–100 | Hohe Anonymität — wahrscheinlich VPN, Tor oder Datacenter |
+| 0–20 | Normal user, no concealment detected |
+| 21–60 | Suspicious — possibly VPN or corporate proxy |
+| 61–100 | High anonymity — likely VPN, Tor, or datacenter |
 
-## Anwendungsfälle
+## Common use cases
 
-- **Zahlungssicherheit:** VPN-Nutzer bei Hochrisiko-Transaktionen zusätzlich verifizieren
-- **Content-Schutz:** Tor-Nutzer von sensiblen Bereichen ausschließen
-- **Risikoanalyse:** Anonymitäts-Score in Fraud-Scoring-Modelle einbeziehen
+- **Payment security:** Additionally verify VPN users during high-risk transactions
+- **Content protection:** Exclude Tor users from sensitive areas
+- **Risk analysis:** Incorporate anonymity score into fraud scoring models

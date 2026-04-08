@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# PaperOffice AI — Device Fingerprint verifizieren
+# PaperOffice AI — Verify device fingerprint
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Bitte PAPEROFFICE_API_KEY setzen (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
 VISITOR_ID="${1:-test_visitor_abc123}"
 
-echo "→ Verifiziere Gerät: $VISITOR_ID"
+echo "→ Verifying device: $VISITOR_ID"
 
 curl -s -X POST "https://api.paperoffice.ai/latest/fingerprint/verify" \
   -H "Authorization: Bearer ${API_KEY}" \

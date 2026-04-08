@@ -4,7 +4,7 @@
 
 ## Prompt
 
-Kopiere diesen Prompt direkt in Cursor:
+Copy this prompt directly into Cursor:
 
 ```
 Read this API documentation:
@@ -19,9 +19,9 @@ Show me:
 3. How to process documents from my workspace
 ```
 
-## MCP-Konfiguration
+## MCP Configuration
 
-Füge dies in deine `.cursor/mcp.json` ein:
+Add this to your `.cursor/mcp.json`:
 
 ```json
 {
@@ -36,7 +36,7 @@ Füge dies in deine `.cursor/mcp.json` ein:
 }
 ```
 
-### MCP-URLs nach Client
+### MCP URLs by Client
 
 | Client | URL |
 |---|---|
@@ -45,8 +45,8 @@ Füge dies in deine `.cursor/mcp.json` ein:
 | **Standard MCP** | `https://mcp.paperoffice.ai/mcp` |
 | **OpenAI / ChatGPT** | `https://mcp.paperoffice.ai/openai` |
 
-## Was du bekommst
+## What you get
 
-- Vollständige MCP-Konfiguration für Cursor
-- Liste aller verfügbaren Document-AI-Tools (~409 Tools)
-- Beispiele wie du Dokumente direkt aus dem Workspace verarbeitest
+- Complete MCP configuration for Cursor
+- List of all available Document AI tools (~409 tools)
+- Examples of how to process documents directly from the workspace

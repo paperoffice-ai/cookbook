@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-PaperOffice AI — Bildgenerierung
-Erzeugt Bilder aus Text-Prompts (bis 2048×2048)
+PaperOffice AI — Image Generation
+Generates images from text prompts (up to 2048×2048)
 
-Verwendung:
+Usage:
     export PAPEROFFICE_API_KEY=po_sk_xxx
     python example.py "A sunset over mountains"
     python example.py "A sunset over mountains" premium 2
@@ -29,9 +29,9 @@ def generate_image(
     output: str = "url",
     token: str = API_KEY,
 ) -> dict:
-    """Erzeugt Bilder aus einem Text-Prompt über die PaperOffice ImageStudio-API."""
+    """Generates images from a text prompt via the PaperOffice ImageStudio API."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     data = {
         "prompt": prompt,
@@ -69,9 +69,9 @@ if __name__ == "__main__":
     image_urls = result.get("image_urls", [])
     if image_urls:
         for i, url in enumerate(image_urls, 1):
-            print(f"Bild {i}:  {url}")
+            print(f"Image {i}: {url}")
     else:
-        print("Keine Bild-URLs in der Antwort")
+        print("No image URLs in the response")
 
     print()
     print(json.dumps(data, indent=2, ensure_ascii=False))

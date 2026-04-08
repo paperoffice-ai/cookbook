@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# PaperOffice AI — Knowledge Base semantische Suche
+# PaperOffice AI — Knowledge Base semantic search
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Bitte PAPEROFFICE_API_KEY setzen (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
-QUERY="${1:-Wie funktioniert die API-Authentifizierung?}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+QUERY="${1:-How does API authentication work?}"
 KB_ID="${2:-}"
 LIMIT="${3:-5}"
 
-echo "=== Knowledge Base Suche ==="
-echo "Frage: ${QUERY}"
-[ -n "${KB_ID}" ] && echo "KB-ID: ${KB_ID}"
+echo "=== Knowledge Base Search ==="
+echo "Query: ${QUERY}"
+[ -n "${KB_ID}" ] && echo "KB ID: ${KB_ID}"
 echo "Limit: ${LIMIT}"
 echo ""
 

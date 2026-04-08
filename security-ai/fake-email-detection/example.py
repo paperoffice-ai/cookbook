@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Fake-E-Mail erkennen"""
+"""PaperOffice AI — Detect fake email"""
 import os
 import sys
 import requests
@@ -10,9 +10,9 @@ API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
 def check_email(email: str, token: str = API_KEY) -> dict:
-    """Prüft eine einzelne E-Mail-Adresse auf Fake/Wegwerf-Charakter."""
+    """Checks a single email address for fake/disposable characteristics."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.post(
         API_URL,
@@ -24,9 +24,9 @@ def check_email(email: str, token: str = API_KEY) -> dict:
 
 
 def check_emails_bulk(emails: list, token: str = API_KEY) -> dict:
-    """Prüft bis zu 100 E-Mail-Adressen gleichzeitig."""
+    """Checks up to 100 email addresses at once."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.post(
         BULK_URL,
@@ -42,9 +42,9 @@ if __name__ == "__main__":
     data = check_email(email)
 
     result = data.get("result", {})
-    print(f"E-Mail:      {result.get('email')}")
-    print(f"Ist Fake:    {result.get('is_fake')}")
-    print(f"Risiko-Score:{result.get('risk_score')}")
-    print(f"Risiko-Level:{result.get('risk_level')}")
-    print(f"Empfehlung:  {result.get('recommendation')}")
-    print(f"Methode:     {result.get('detection_method')}")
+    print(f"Email:       {result.get('email')}")
+    print(f"Is fake:     {result.get('is_fake')}")
+    print(f"Risk score:  {result.get('risk_score')}")
+    print(f"Risk level:  {result.get('risk_level')}")
+    print(f"Recommendation:{result.get('recommendation')}")
+    print(f"Method:      {result.get('detection_method')}")

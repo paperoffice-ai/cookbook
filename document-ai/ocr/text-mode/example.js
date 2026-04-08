@@ -1,18 +1,18 @@
 #!/usr/bin/env node
-/** PaperOffice AI — OCR Text-Mode (nur reiner Text, schnellster Modus) */
+/** PaperOffice AI — OCR Text-Mode (plain text only, fastest mode) */
 import { readFileSync } from "node:fs";
 import { basename } from "node:path";
 
 const api_base = "https://api.paperoffice.ai/latest";
 const api_key = process.env.PAPEROFFICE_API_KEY;
 if (!api_key) {
-  console.error("Fehler: PAPEROFFICE_API_KEY nicht gesetzt");
+  console.error("Error: PAPEROFFICE_API_KEY not set");
   process.exit(1);
 }
 
 const input_file = process.argv[2];
 if (!input_file) {
-  console.error("Fehler: Dateipfad als Argument übergeben");
+  console.error("Error: Please provide file path as argument");
   process.exit(1);
 }
 
@@ -35,11 +35,11 @@ const response = await fetch(
 const data = await response.json();
 const summary = data?.result?.output?.summary ?? {};
 
-console.log(`Status:    ${data?.status}`);
-console.log(`Seiten:    ${summary.total_pages}`);
-console.log(`Zeilen:    ${summary.total_lines}`);
-console.log(`Zeichen:   ${summary.total_chars}`);
-console.log(`Konfidenz: ${summary.avg_confidence}`);
+console.log(`Status:     ${data?.status}`);
+console.log(`Pages:      ${summary.total_pages}`);
+console.log(`Lines:      ${summary.total_lines}`);
+console.log(`Characters: ${summary.total_chars}`);
+console.log(`Confidence: ${summary.avg_confidence}`);
 console.log();
-console.log("--- Extrahierter Text ---");
-console.log(summary.poaiocr_extracted_fulltext ?? "Kein Text extrahiert");
+console.log("--- Extracted text ---");
+console.log(summary.poaiocr_extracted_fulltext ?? "No text extracted");

@@ -1,6 +1,6 @@
-# Währungsumrechnung — Currency Exchange
+# Currency Exchange — Exchange Rates
 
-Ruft aktuelle Wechselkurse für 172+ Währungen ab. Unterstützt Umrechnung von und zu beliebigen ISO-4217-Währungen mit optionalem Betrag.
+Fetches current exchange rates for 172+ currencies. Supports conversion from and to any ISO 4217 currency with an optional amount.
 
 ## Endpoint
 
@@ -8,25 +8,25 @@ Ruft aktuelle Wechselkurse für 172+ Währungen ab. Unterstützt Umrechnung von 
 POST https://api.paperoffice.ai/latest/currency_exchange/get_rates
 ```
 
-**Authentifizierung:** VISITOR-fähig (kein Token nötig, aber IP-Ratelimit). Mit Bearer Token kein Limit.
+**Authentication:** VISITOR-capable (no token required, but IP rate limit). No limit with Bearer token.
 
 ## Parameter
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `from` | string | ✅ | Ausgangswährung (ISO 4217, z.B. `EUR`) |
-| `to` | string | ❌ | Zielwährung (ohne = alle 172+ Währungen) |
-| `amount` | float | ❌ | Umzurechnender Betrag (Standard: `1`) |
+| `from` | string | ✅ | Source currency (ISO 4217, e.g. `EUR`) |
+| `to` | string | ❌ | Target currency (without = all 172+ currencies) |
+| `amount` | float | ❌ | Amount to convert (default: `1`) |
 
-## Ausführen
+## How to run
 
 ```bash
-# Kein Token nötig!
+# No token required!
 
-# Bash — 100 EUR in alle Währungen
+# Bash — 100 EUR to all currencies
 bash example.sh EUR "" 100
 
-# Bash — EUR nach USD
+# Bash — EUR to USD
 bash example.sh EUR USD 250
 
 # Python
@@ -37,7 +37,7 @@ python3 example.py EUR USD 100
 node example.js EUR USD 100
 ```
 
-## Erwartete Antwort
+## Expected response
 
 ```json
 {
@@ -53,9 +53,9 @@ node example.js EUR USD 100
 }
 ```
 
-## Anwendungsfälle
+## Common use cases
 
-- **E-Commerce:** Preise in lokaler Währung des Kunden anzeigen
-- **Rechnungsstellung:** Internationale Rechnungen automatisch umrechnen
-- **Finanz-Dashboards:** Live-Wechselkurse in Übersichten einbetten
-- **Reisekosten:** Spesenabrechnungen in Heimatwährung konvertieren
+- **E-commerce:** Display prices in the customer's local currency
+- **Invoicing:** Automatically convert international invoices
+- **Financial dashboards:** Embed live exchange rates in overviews
+- **Travel expenses:** Convert expense reports to home currency

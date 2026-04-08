@@ -1,6 +1,6 @@
-# KI-basierte Dokumentenerstellung (Document Generation)
+# AI-powered document generation (Document Generation)
 
-Erstellt Dokumente aus **Templates mit Variablen** — Rechnungen, Verträge, Berichte und mehr. Die KI füllt Platzhalter automatisch und generiert formatierte PDF- oder DOCX-Dateien.
+Creates documents from **templates with variables** — invoices, contracts, reports and more. The AI fills placeholders automatically and generates formatted PDF or DOCX files.
 
 ## Endpoint
 
@@ -8,20 +8,20 @@ Erstellt Dokumente aus **Templates mit Variablen** — Rechnungen, Verträge, Be
 POST https://api.paperoffice.ai/latest/document_generation/generate
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter       | Pflicht | Beschreibung                                    |
-|-----------------|---------|-------------------------------------------------|
-| `template`      | Ja      | Name des Templates (z.B. "invoice_standard")    |
-| `variables`     | Nein    | JSON-Objekt mit Template-Variablen              |
-| `output_format` | Nein    | Ausgabeformat: `pdf` (Standard) oder `docx`     |
+| Parameter       | Required | Description                                     |
+|-----------------|----------|-------------------------------------------------|
+| `template`      | Yes      | Name of the template (e.g. "invoice_standard")  |
+| `variables`     | No       | JSON object with template variables              |
+| `output_format` | No       | Output format: `pdf` (default) or `docx`         |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
 bash example.sh "invoice_standard" pdf
@@ -34,7 +34,7 @@ python3 example.py "invoice_standard" pdf
 node example.js "invoice_standard" pdf
 ```
 
-## Response-Struktur
+## Response structure
 
 ```json
 {
@@ -47,24 +47,24 @@ node example.js "invoice_standard" pdf
 }
 ```
 
-## Template-System
+## Template system
 
-Templates verwenden Platzhalter im Format `{{variable}}`:
+Templates use placeholders in the format `{{variable}}`:
 
 ```
-Sehr geehrte Damen und Herren,
+Dear Sir or Madam,
 
-hiermit stellen wir Ihnen für unsere Leistungen folgenden Betrag in Rechnung:
+we hereby invoice you for our services the following amount:
 
-Rechnungsnummer: {{rechnungsnummer}}
-Datum:           {{datum}}
-Firma:           {{firma}}
-Betrag:          {{betrag}} EUR
+Invoice number: {{rechnungsnummer}}
+Date:           {{datum}}
+Company:        {{firma}}
+Amount:         {{betrag}} EUR
 ```
 
-## Variablen
+## Variables
 
-Variablen werden als JSON-Objekt übergeben:
+Variables are passed as a JSON object:
 
 ```json
 {
@@ -75,16 +75,16 @@ Variablen werden als JSON-Objekt übergeben:
 }
 ```
 
-## Ausgabeformate
+## Output formats
 
-| Format | Beschreibung                                |
+| Format | Description                                 |
 |--------|---------------------------------------------|
-| `pdf`  | PDF-Datei (Standard) — ideal für Versand    |
-| `docx` | Word-Dokument — ideal für Nachbearbeitung   |
+| `pdf`  | PDF file (default) — ideal for sending      |
+| `docx` | Word document — ideal for post-editing      |
 
-## Tipps
+## Tips
 
-- **Templates vorab definieren** — wiederverwendbare Vorlagen für häufige Dokumente
-- **Variablen validieren** — fehlende Platzhalter werden leer gelassen
-- **Download-URL** ist zeitlich begrenzt — direkt nach Generierung herunterladen
-- Kombinierbar mit `document-upload/` um generierte Dokumente im DMS zu archivieren
+- **Define templates in advance** — reusable templates for frequently created documents
+- **Validate variables** — missing placeholders will be left empty
+- **Download URL** is time-limited — download immediately after generation
+- Can be combined with `document-upload/` to archive generated documents in the DMS

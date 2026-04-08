@@ -1,6 +1,6 @@
-# Fake-E-Mail Erkennung
+# Fake Email Detection
 
-Erkennt Wegwerf-E-Mail-Adressen (Mailinator, Guerrilla Mail etc.), temporäre Domains und verdächtige Muster. Unterstützt Einzel- und Massenprüfung (bis 100 E-Mails).
+Detects disposable email addresses (Mailinator, Guerrilla Mail, etc.), temporary domains, and suspicious patterns. Supports single and bulk checks (up to 100 emails).
 
 ## Endpoints
 
@@ -9,16 +9,16 @@ POST https://api.paperoffice.ai/latest/fakeemail/check
 POST https://api.paperoffice.ai/latest/fakeemail/check_bulk
 ```
 
-**Authentifizierung:** Bearer Token erforderlich.
+**Authentication:** Bearer token required.
 
 ## Parameter
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `email` | string | ✅ | Zu prüfende E-Mail-Adresse (Einzel) |
-| `emails` | array | ✅ | Bis zu 100 E-Mail-Adressen (Bulk) |
+| `email` | string | ✅ | Email address to check (single) |
+| `emails` | array | ✅ | Up to 100 email addresses (bulk) |
 
-## Ausführen
+## How to run
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
@@ -34,7 +34,7 @@ python3 example.py "test@mailinator.com"
 node example.js "test@mailinator.com"
 ```
 
-## Erwartete Antwort
+## Expected response
 
 ```json
 {
@@ -50,16 +50,16 @@ node example.js "test@mailinator.com"
 }
 ```
 
-## Risiko-Level
+## Risk levels
 
-| Level | Score | Beschreibung |
+| Level | Score | Description |
 |---|---|---|
-| `LOW` | 0–30 | Wahrscheinlich legitim |
-| `MEDIUM` | 31–60 | Verdächtig, manuelle Prüfung empfohlen |
-| `HIGH` | 61–100 | Sehr wahrscheinlich Fake/Wegwerf-Adresse |
+| `LOW` | 0–30 | Probably legitimate |
+| `MEDIUM` | 31–60 | Suspicious, manual review recommended |
+| `HIGH` | 61–100 | Very likely fake/disposable address |
 
-## Anwendungsfälle
+## Common use cases
 
-- **Registrierung:** Wegwerf-Adressen bei Account-Erstellung blockieren
-- **Newsletter:** Listenhygiene — Fake-Adressen vor Versand aussortieren
-- **Lead-Qualifizierung:** Nur Leads mit echten E-Mail-Adressen weiterverarbeiten
+- **Registration:** Block disposable addresses during account creation
+- **Newsletter:** List hygiene — filter out fake addresses before sending
+- **Lead qualification:** Only process leads with real email addresses

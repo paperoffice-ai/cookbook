@@ -1,6 +1,6 @@
-# OCR Complete-Mode — Text + Bounding Boxes + Tabellen
+# OCR Complete-Mode — Text + Bounding Boxes + Tables
 
-Extrahiere Text inklusive Positionsdaten (Bounding Boxes), Tabellen-Strukturen und Layout-Informationen. Der Complete-Mode liefert alle verfügbaren OCR-Daten — ideal für Dokumentenanalyse mit Positionsbezug.
+Extract text including position data (bounding boxes), table structures, and layout information. Complete-Mode provides all available OCR data — ideal for document analysis with positional context.
 
 ## Endpoint
 
@@ -8,40 +8,40 @@ Extrahiere Text inklusive Positionsdaten (Bounding Boxes), Tabellen-Strukturen u
 POST https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter  | Wert       | Beschreibung                                 |
+| Parameter  | Value      | Description                                  |
 |-----------|------------|----------------------------------------------|
-| `file_1`  | Datei      | Das zu verarbeitende Dokument                |
-| `ocr_mode`| `complete` | Vollständige Analyse mit Layout + Tabellen   |
-| `priority`| `900`      | Synchrone Verarbeitung (sofort)              |
+| `file_1`  | File       | The document to process                      |
+| `ocr_mode`| `complete` | Full analysis with layout + tables           |
+| `priority`| `900`      | Synchronous processing (immediate)           |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
-chmod +x example.sh && ./example.sh /pfad/zur/datei.pdf
+chmod +x example.sh && ./example.sh /path/to/file.pdf
 
 # Python
 pip install requests
-python3 example.py /pfad/zur/datei.pdf
+python3 example.py /path/to/file.pdf
 
 # Node.js (v18+)
-node example.js /pfad/zur/datei.pdf
+node example.js /path/to/file.pdf
 ```
 
-## Wann Complete-Mode verwenden?
+## When to use Complete-Mode?
 
-- **Tabellen-Extraktion** — Rechnungspositionen, Preislisten, Finanzdaten
-- **Layout-Analyse** — Position von Textblöcken auf der Seite
-- **Formular-Erkennung** — Felder mit ihren Koordinaten identifizieren
-- **Dokumenten-Rekonstruktion** — Originalstruktur nachbilden
+- **Table extraction** — Invoice line items, price lists, financial data
+- **Layout analysis** — Position of text blocks on the page
+- **Form recognition** — Identify fields with their coordinates
+- **Document reconstruction** — Recreate original structure
 
-## Response-Struktur
+## Response structure
 
 ```json
 {
@@ -52,14 +52,14 @@ node example.js /pfad/zur/datei.pdf
     "output": {
       "pages": {
         "00001": {
-          "ocr_text": "Text der Seite...",
+          "ocr_text": "Text of the page...",
           "line_count": 12,
           "confidence_avg": 0.9871,
           "char_count": 456,
           "language": { "primary": "de", "confidence": 0.97 },
           "bounding_boxes": [
             {
-              "text": "Rechnung #2024-001",
+              "text": "Invoice #2024-001",
               "x": 50, "y": 80, "w": 320, "h": 28,
               "confidence": 0.99
             }
@@ -67,8 +67,8 @@ node example.js /pfad/zur/datei.pdf
           "tables": [
             {
               "rows": [
-                ["Pos", "Beschreibung", "Menge", "Preis"],
-                ["1", "Beratung", "8h", "960,00 €"]
+                ["Pos", "Description", "Quantity", "Price"],
+                ["1", "Consulting", "8h", "960.00 EUR"]
               ]
             }
           ]
@@ -81,7 +81,7 @@ node example.js /pfad/zur/datei.pdf
         "total_lines": 12,
         "total_chars": 456,
         "avg_confidence": 0.99,
-        "poaiocr_extracted_fulltext": "***Page 1 of 1***\n\nRechnung #2024-001...",
+        "poaiocr_extracted_fulltext": "***Page 1 of 1***\n\nInvoice #2024-001...",
         "processing_engine": "paperoffice_ai_ocr_neural_v3.0"
       }
     },
@@ -90,26 +90,26 @@ node example.js /pfad/zur/datei.pdf
 }
 ```
 
-## Zusätzliche Felder gegenüber Text-Mode
+## Additional fields compared to Text-Mode
 
-| Feld | Beschreibung |
-|------|-------------|
-| `pages.XXXXX.bounding_boxes` | Array mit Textblöcken inkl. Position (x, y, w, h) und Konfidenz |
-| `pages.XXXXX.tables` | Erkannte Tabellen als verschachtelte Arrays |
-| `ocr_tier` | Verwendeter OCR-Tier (`complete`) |
+| Field | Description |
+|-------|-------------|
+| `pages.XXXXX.bounding_boxes` | Array of text blocks including position (x, y, w, h) and confidence |
+| `pages.XXXXX.tables` | Detected tables as nested arrays |
+| `ocr_tier` | OCR tier used (`complete`) |
 
-## Bounding-Box-Format
+## Bounding box format
 
-Jede Bounding Box enthält:
+Each bounding box contains:
 
-| Feld | Typ | Beschreibung |
-|------|-----|-------------|
-| `text` | string | Erkannter Text im Bereich |
-| `x`, `y` | number | Position (links oben, in Pixel) |
-| `w`, `h` | number | Breite und Höhe (in Pixel) |
-| `confidence` | number | Erkennungssicherheit (0–1) |
+| Field | Type | Description |
+|-------|------|-------------|
+| `text` | string | Recognized text in the region |
+| `x`, `y` | number | Position (top left, in pixels) |
+| `w`, `h` | number | Width and height (in pixels) |
+| `confidence` | number | Recognition confidence (0–1) |
 
-## Siehe auch
+## See also
 
-- [Text-Mode](../text-mode/) — Nur reiner Text (schneller)
-- [Searchable PDF](../searchable-pdf/) — Durchsuchbare PDF erzeugen
+- [Text-Mode](../text-mode/) — Plain text only (faster)
+- [Searchable PDF](../searchable-pdf/) — Generate searchable PDF

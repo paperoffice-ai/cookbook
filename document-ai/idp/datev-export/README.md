@@ -1,11 +1,11 @@
-# DATEV-Export aus Rechnungs-IDP
+# DATEV Export from Invoice IDP
 
-Extrahiert Rechnungsdaten via IDP und konvertiert sie automatisch in einen **DATEV-kompatiblen Buchungssatz** (CSV-Format für DATEV Unternehmen Online / Kanzlei-Rechnungswesen).
+Extracts invoice data via IDP and automatically converts it into a **DATEV-compatible accounting entry** (CSV format for DATEV Unternehmen Online / Kanzlei-Rechnungswesen).
 
 ## Workflow
 
 ```
-PDF-Rechnung → PaperOffice IDP (invoice) → DATEV Buchungsstapel (CSV)
+PDF invoice → PaperOffice IDP (invoice) → DATEV posting batch (CSV)
 ```
 
 ## Endpoint
@@ -14,95 +14,95 @@ PDF-Rechnung → PaperOffice IDP (invoice) → DATEV Buchungsstapel (CSV)
 POST https://api.paperoffice.ai/latest/job/add/workflow
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter         | Wert       | Beschreibung                         |
+| Parameter         | Value      | Description                          |
 |-------------------|------------|--------------------------------------|
-| `file_1`          | Datei      | PDF der Rechnung                     |
-| `model`           | `premium`  | Extraktionsqualität                  |
-| `idp_collection`  | `invoice`  | Rechnungs-Extraktion                 |
-| `priority`        | `900`      | Synchrone Verarbeitung (≥900)        |
+| `file_1`          | File       | PDF of the invoice                   |
+| `model`           | `premium`  | Extraction quality                   |
+| `idp_collection`  | `invoice`  | Invoice extraction                   |
+| `priority`        | `900`      | Synchronous processing (≥900)        |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
-# Bash — gibt DATEV-CSV auf stdout aus
-bash example.sh rechnung.pdf
+# Bash — outputs DATEV CSV to stdout
+bash example.sh invoice.pdf
 
-# Python — mit formatierter Ausgabe + CSV
-python3 example.py rechnung.pdf
+# Python — with formatted output + CSV
+python3 example.py invoice.pdf
 
-# Python — direkt in CSV-Datei schreiben
-python3 example.py rechnung.pdf > buchung.csv
+# Python — write directly to CSV file
+python3 example.py invoice.pdf > booking.csv
 
 # Node.js
 npm install form-data
-node example.js rechnung.pdf
+node example.js invoice.pdf
 ```
 
-## DATEV Buchungsstapel-Format
+## DATEV posting batch format
 
-Das generierte CSV folgt dem **DATEV-Buchungsstapel** Format:
+The generated CSV follows the **DATEV posting batch** format:
 
-| Spalte                           | Beispiel         | Quelle (IDP-Feld)       |
-|----------------------------------|------------------|--------------------------|
-| Umsatz (ohne Soll/Haben-Kz)     | `1469.06`        | `_total_amount.value_raw`|
-| Soll/Haben-Kennzeichen           | `S`              | Fest: Soll               |
-| Konto                            | `70000`          | Kreditor (anpassbar)     |
-| Gegenkonto                       | `1200`           | Bank (anpassbar)         |
-| BU-Schlüssel                     | `9`              | Aus `_vat_rate` abgeleitet|
-| Belegdatum                       | `1503`           | `_invoice_date` → DDMM  |
-| Belegfeld 1                      | `2024-001`       | `_invoice_number`        |
-| Buchungstext                     | `Mustermann GmbH`| `_supplier_name`         |
+| Column                           | Example          | Source (IDP field)         |
+|----------------------------------|------------------|----------------------------|
+| Umsatz (ohne Soll/Haben-Kz)     | `1469.06`        | `_total_amount.value_raw`  |
+| Soll/Haben-Kennzeichen           | `S`              | Fixed: debit               |
+| Konto                            | `70000`          | Creditor (customizable)    |
+| Gegenkonto                       | `1200`           | Bank (customizable)        |
+| BU-Schlüssel                     | `9`              | Derived from `_vat_rate`   |
+| Belegdatum                       | `1503`           | `_invoice_date` → DDMM    |
+| Belegfeld 1                      | `2024-001`       | `_invoice_number`          |
+| Buchungstext                     | `Mustermann GmbH`| `_supplier_name`           |
 
-### BU-Schlüssel Mapping
+### BU key mapping
 
-| USt-Satz | BU-Schlüssel | Bedeutung                    |
+| VAT rate | BU key      | Meaning                      |
 |----------|-------------|------------------------------|
-| 19%      | `9`         | Vorsteuer 19%                |
-| 7%       | `8`         | Vorsteuer 7%                 |
-| Sonstige | (leer)      | Manuell zuordnen             |
+| 19%      | `9`         | Input tax 19%                |
+| 7%       | `8`         | Input tax 7%                 |
+| Other    | (empty)     | Assign manually              |
 
-### Kontenrahmen
+### Chart of accounts
 
-Die Beispiele nutzen **SKR04** als Standard:
+The examples use **SKR04** as default:
 
-| Konto  | Bedeutung                         |
-|--------|-----------------------------------|
-| 70000  | Kreditor (Sammelkonto)            |
-| 1200   | Bank                              |
+| Account | Meaning                           |
+|---------|-----------------------------------|
+| 70000   | Creditor (collective account)     |
+| 1200    | Bank                              |
 
-Für **SKR03** die Kontonummern in den Beispielen anpassen (z.B. Konto `1800` für Bank).
+For **SKR03**, adjust the account numbers in the examples (e.g. account `1800` for bank).
 
-## Beispiel-Ausgabe
+## Example output
 
 ```
---- Extrahierte Rechnungsdaten ---
-  Rechnungsnr:  2024-001
-  Datum:        2024-03-15
-  Lieferant:    Mustermann GmbH
-  Betrag:       1.469,06
-  Netto:        1.234,50
-  USt:          234,56
+--- Extracted Invoice Data ---
+  Invoice no.:  2024-001
+  Date:         2024-03-15
+  Supplier:     Mustermann GmbH
+  Amount:       1.469,06
+  Net:          1.234,50
+  VAT:          234,56
 
---- DATEV Buchungssatz (CSV) ---
+--- DATEV Accounting Entry (CSV) ---
 Umsatz (ohne Soll/Haben-Kz);Soll/Haben-Kennzeichen;Konto;Gegenkonto;BU-Schlüssel;Belegdatum;Belegfeld 1;Buchungstext
 1469.06;S;70000;1200;9;1503;2024-001;Mustermann GmbH
 ```
 
-## Erweiterungsmöglichkeiten
+## Extension possibilities
 
-- **Batch-Verarbeitung**: Schleife über mehrere PDFs → ein zusammengefasster Buchungsstapel
-- **Konten-Mapping**: Lieferantenname → Kreditor-Konto aus Stammdaten auflösen
-- **Validierung**: IBAN/USt-IdNr. gegen PaperOffice Validierungs-APIs prüfen
-- **DATEV XML**: Für komplexere Szenarien das DATEV-XML-Format statt CSV nutzen
+- **Batch processing**: Loop over multiple PDFs → one consolidated posting batch
+- **Account mapping**: Resolve supplier name → creditor account from master data
+- **Validation**: Verify IBAN/VAT ID against PaperOffice validation APIs
+- **DATEV XML**: Use DATEV XML format instead of CSV for more complex scenarios
 
-## Tipps
+## Tips
 
-- **`value_raw`** für Beträge verwenden (Punkt als Dezimaltrenner, DATEV-konform)
-- DATEV erwartet das Belegdatum im Format **DDMM** (ohne Jahr, da im Header definiert)
-- Bei Gutschriften `Soll/Haben-Kennzeichen` auf `H` setzen
+- Use **`value_raw`** for amounts (dot as decimal separator, DATEV-compliant)
+- DATEV expects the document date in **DDMM** format (without year, as defined in the header)
+- For credit notes, set `Soll/Haben-Kennzeichen` to `H`

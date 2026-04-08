@@ -1,8 +1,8 @@
-# Bildgenerierung
+# Image Generation
 
-Erzeugt Bilder aus Text-Prompts mit dem PaperOffice ImageStudio. Drei Modell-Stufen für unterschiedliche Auflösungen. Automatische Prompt-Optimierung durch den integrierten Precompiler.
+Generates images from text prompts with PaperOffice ImageStudio. Three model tiers for different resolutions. Automatic prompt optimization via the built-in precompiler.
 
-## Voraussetzungen
+## Prerequisites
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
@@ -14,7 +14,7 @@ export PAPEROFFICE_API_KEY=po_sk_xxx
 # cURL
 bash example.sh "A sunset over mountains" premium 1
 
-# Python (benötigt: pip install requests)
+# Python (requires: pip install requests)
 python example.py "A sunset over mountains" premium 2
 
 # Node.js 18+
@@ -27,30 +27,30 @@ node example.js "A sunset over mountains" premium 1
 POST https://api.paperoffice.ai/latest/job/add/paperoffice_imagestudio___generate
 ```
 
-## Parameter
+## Parameters
 
-| Parameter | Typ | Pflicht | Default | Beschreibung |
+| Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `prompt` | string | ✅ | — | Bildbeschreibung (auf Englisch empfohlen) |
-| `model` | string | — | `basic` | Modell-Stufe (siehe Tabelle) |
-| `num_images` | int | — | `1` | Anzahl zu generierender Bilder |
-| `negative_prompt` | string | — | — | Unerwünschte Elemente ausschließen |
-| `seed` | int | — | `-1` | Seed für Reproduzierbarkeit (`-1` = zufällig) |
-| `steps` | int | — | `15` | Inferenz-Schritte (mehr = detaillierter, langsamer) |
-| `guidance_scale` | float | — | `4.0` | Prompt-Treue (höher = strikter) |
-| `precompile_prompt` | bool | — | `true` | Automatische Prompt-Optimierung |
-| `output` | string | — | `url` | `url`, `base64` oder `inline` |
-| `priority` | int | — | — | `≥ 900` für synchrone Verarbeitung |
+| `prompt` | string | ✅ | — | Image description (English recommended) |
+| `model` | string | — | `basic` | Model tier (see table) |
+| `num_images` | int | — | `1` | Number of images to generate |
+| `negative_prompt` | string | — | — | Exclude unwanted elements |
+| `seed` | int | — | `-1` | Seed for reproducibility (`-1` = random) |
+| `steps` | int | — | `15` | Inference steps (more = more detailed, slower) |
+| `guidance_scale` | float | — | `4.0` | Prompt adherence (higher = stricter) |
+| `precompile_prompt` | bool | — | `true` | Automatic prompt optimization |
+| `output` | string | — | `url` | `url`, `base64` or `inline` |
+| `priority` | int | — | — | `≥ 900` for synchronous processing |
 
-## Modell-Stufen
+## Model Tiers
 
-| Modell | Auflösung | Empfehlung |
+| Model | Resolution | Recommendation |
 |---|---|---|
-| `basic` | 512×512 | Schnelle Vorschau, Prototyping |
-| `premium` | 1280×1280 | Standard für die meisten Anwendungsfälle |
-| `ultra` | 2048×2048 | Höchste Qualität, Druckmaterial |
+| `basic` | 512×512 | Quick preview, prototyping |
+| `premium` | 1280×1280 | Standard for most use cases |
+| `ultra` | 2048×2048 | Highest quality, print material |
 
-## Response-Beispiel
+## Response Example
 
 ```json
 {
@@ -65,24 +65,24 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_imagestudio___generat
 }
 ```
 
-## Bonus-Features
+## Bonus Features
 
-### Prompt-Precompiler
+### Prompt Precompiler
 
-Mit `precompile_prompt=true` wird der Prompt automatisch durch den `paperoffice_image_precompiler` optimiert — bessere Ergebnisse ohne manuelles Prompt-Engineering.
+With `precompile_prompt=true` the prompt is automatically optimized by the `paperoffice_image_precompiler` — better results without manual prompt engineering.
 
-### Hintergrund entfernen
+### Remove Background
 
 ```bash
 curl -s -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_imagestudio___remove_bg" \
   -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
-  -F "file_1=@bild.png" \
+  -F "file_1=@image.png" \
   -F "priority=900" | python3 -m json.tool
 ```
 
-## Tipps
+## Tips
 
-- **Prompt-Sprache:** Englische Prompts liefern in der Regel bessere Ergebnisse
-- **Negative Prompts:** z.B. `"blurry, low quality, distorted"` verbessert die Bildqualität
-- **Reproduzierbarkeit:** Gleicher `seed` + gleicher `prompt` = identisches Bild
-- **Guidance Scale:** Werte zwischen 3.0–7.0 sind für die meisten Prompts optimal
+- **Prompt language:** English prompts generally yield better results
+- **Negative prompts:** e.g. `"blurry, low quality, distorted"` improves image quality
+- **Reproducibility:** Same `seed` + same `prompt` = identical image
+- **Guidance scale:** Values between 3.0–7.0 are optimal for most prompts

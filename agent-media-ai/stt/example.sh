@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════
 # PaperOffice AI — Speech-to-Text (STT)
-# Transkribiert Audio-Dateien in Text
+# Transcribes audio files to text
 # ═══════════════════════════════════════════════════════════════
 
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Bitte PAPEROFFICE_API_KEY setzen (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
 BASE_URL="https://api.paperoffice.ai/latest"
 
-AUDIO_FILE="${1:?Bitte Audio-Datei als erstes Argument übergeben (MP3/WAV/OGG/FLAC/M4A/WEBM)}"
+AUDIO_FILE="${1:?Please pass audio file as first argument (MP3/WAV/OGG/FLAC/M4A/WEBM)}"
 LOCALE="${2:-}"
 
 if [ ! -f "${AUDIO_FILE}" ]; then
-  echo "Fehler: Datei '${AUDIO_FILE}' nicht gefunden" >&2
+  echo "Error: File '${AUDIO_FILE}' not found" >&2
   exit 1
 fi
 
-echo "→ STT: Transkribiere '${AUDIO_FILE}'"
+echo "→ STT: Transcribing '${AUDIO_FILE}'"
 
-# Datei-Key ist "file_1" — NICHT "file"!
+# File key is "file_1" — NOT "file"!
 CURL_ARGS=(
   -s -X POST "${BASE_URL}/job/add/paperoffice_voice___stt"
   -H "Authorization: Bearer ${API_KEY}"

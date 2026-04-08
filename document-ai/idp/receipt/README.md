@@ -1,6 +1,6 @@
-# Kassenbon-Extraktion (IDP Receipt)
+# Receipt Extraction (IDP Receipt)
 
-Extrahiert strukturierte Daten aus **Kassenbons und Quittungen** — Geschäftsname, Betrag, Datum, Zahlungsmethode und Artikelpositionen.
+Extracts structured data from **receipts and till slips** — store name, amount, date, payment method, and line items.
 
 ## Endpoint
 
@@ -8,55 +8,55 @@ Extrahiert strukturierte Daten aus **Kassenbons und Quittungen** — Geschäftsn
 POST https://api.paperoffice.ai/latest/job/add/workflow
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter         | Wert       | Beschreibung                         |
+| Parameter         | Value      | Description                          |
 |-------------------|------------|--------------------------------------|
-| `file_1`          | Datei      | Foto oder Scan des Kassenbons        |
-| `model`           | `premium`  | Extraktionsqualität                  |
-| `idp_collection`  | `receipt`  | Kassenbon-Extraktion aktivieren      |
-| `priority`        | `900`      | Synchrone Verarbeitung (≥900)        |
+| `file_1`          | File       | Photo or scan of the receipt         |
+| `model`           | `premium`  | Extraction quality                   |
+| `idp_collection`  | `receipt`  | Enable receipt extraction            |
+| `priority`        | `900`      | Synchronous processing (≥900)        |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
-bash example.sh kassenbon.pdf
+bash example.sh receipt.pdf
 
 # Python
 pip install requests
-python3 example.py kassenbon.pdf
+python3 example.py receipt.pdf
 
 # Node.js
 npm install form-data
-node example.js kassenbon.pdf
+node example.js receipt.pdf
 ```
 
-## Verfügbare Kassenbon-Felder
+## Available receipt fields
 
-| Feld                     | Typ      | Beschreibung                         |
+| Field                    | Type     | Description                          |
 |--------------------------|----------|--------------------------------------|
-| `_store_name`            | string   | Geschäftsname / Filiale              |
-| `_store_address`         | string   | Adresse des Geschäfts                |
-| `_store_phone`           | string   | Telefonnummer                        |
-| `_receipt_date`          | date     | Datum des Einkaufs                   |
-| `_receipt_time`          | string   | Uhrzeit des Einkaufs                 |
-| `_receipt_number`        | string   | Bonnummer / Transaktionsnummer       |
-| `_total_amount`          | number   | Gesamtbetrag                         |
-| `_net_amount`            | number   | Nettobetrag                          |
-| `_vat_amount`            | number   | Umsatzsteuer-Betrag                  |
-| `_vat_rate`              | number   | USt-Satz                             |
-| `_payment_method`        | string   | Zahlungsmethode (Bar, Karte, etc.)   |
-| `_card_last_four`        | string   | Letzte 4 Ziffern der Karte           |
-| `_currency`              | string   | Währung                              |
-| `_cashier`               | string   | Kassiererin / Bedienung              |
-| `_line_items`            | table    | Einzelne Artikelpositionen           |
+| `_store_name`            | string   | Store name / branch                  |
+| `_store_address`         | string   | Store address                        |
+| `_store_phone`           | string   | Phone number                         |
+| `_receipt_date`          | date     | Purchase date                        |
+| `_receipt_time`          | string   | Purchase time                        |
+| `_receipt_number`        | string   | Receipt number / transaction number  |
+| `_total_amount`          | number   | Total amount                         |
+| `_net_amount`            | number   | Net amount                           |
+| `_vat_amount`            | number   | VAT amount                           |
+| `_vat_rate`              | number   | VAT rate                             |
+| `_payment_method`        | string   | Payment method (cash, card, etc.)    |
+| `_card_last_four`        | string   | Last 4 digits of the card            |
+| `_currency`              | string   | Currency                             |
+| `_cashier`               | string   | Cashier / attendant                  |
+| `_line_items`            | table    | Individual line items                |
 
-## Response-Struktur
+## Response structure
 
 ```json
 {
@@ -87,9 +87,9 @@ node example.js kassenbon.pdf
 }
 ```
 
-## Typische Anwendungsfälle
+## Common use cases
 
-- **Spesenabrechnung**: Automatische Erfassung von Belegen
-- **Buchhaltung**: Belegerfassung für Kleinbeträge
-- **Reisekostenabrechnung**: Hotel- und Restaurantquittungen
-- **Ausgabenverfolgung**: Persönliche oder geschäftliche Ausgaben kategorisieren
+- **Expense reporting**: Automatic capture of receipts
+- **Accounting**: Receipt processing for small amounts
+- **Travel expense reports**: Hotel and restaurant receipts
+- **Expense tracking**: Categorize personal or business expenses

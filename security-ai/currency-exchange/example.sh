@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# PaperOffice AI — Wechselkurse abfragen
+# PaperOffice AI — Query exchange rates
 set -euo pipefail
 
 FROM="${1:-EUR}"
 TO="${2:-}"
 AMOUNT="${3:-100}"
 
-echo "→ Wechselkurse: ${AMOUNT} ${FROM}${TO:+ → $TO}"
+echo "→ Exchange rates: ${AMOUNT} ${FROM}${TO:+ → $TO}"
 
 API_KEY="${PAPEROFFICE_API_KEY:-}"
 

@@ -1,6 +1,6 @@
-# Chat mit Dokumenten (Document Intelligence)
+# Chat with documents (Document Intelligence)
 
-Stellt Fragen an ein hochgeladenes Dokument und erhält **KI-generierte Antworten mit Quellenangaben**. Basiert auf RAG (Retrieval-Augmented Generation) — die KI liest das Dokument und antwortet präzise auf Basis des Inhalts.
+Asks questions about an uploaded document and receives **AI-generated answers with source references**. Based on RAG (Retrieval-Augmented Generation) — the AI reads the document and answers precisely based on the content.
 
 ## Endpoint
 
@@ -8,81 +8,81 @@ Stellt Fragen an ein hochgeladenes Dokument und erhält **KI-generierte Antworte
 POST https://api.paperoffice.ai/latest/document_intelligence/chat
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter        | Pflicht | Beschreibung                                      |
-|------------------|---------|---------------------------------------------------|
-| `document_id`    | Ja      | ID des Dokuments (aus Upload-Response)             |
-| `question`       | Ja      | Frage an das Dokument (natürliche Sprache)         |
-| `context_window` | Nein    | Kontextfenster-Größe (mehr = breiterer Kontext)    |
+| Parameter        | Required | Description                                       |
+|------------------|----------|---------------------------------------------------|
+| `document_id`    | Yes      | ID of the document (from upload response)          |
+| `question`       | Yes      | Question about the document (natural language)     |
+| `context_window` | No       | Context window size (more = broader context)       |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
-# Bash — einzelne Frage
-bash example.sh 1234 "Was ist die Kündigungsfrist?"
+# Bash — single question
+bash example.sh 1234 "What is the termination period?"
 
-# Python — einzelne Frage
+# Python — single question
 pip install requests
-python3 example.py 1234 "Was ist die Kündigungsfrist?"
+python3 example.py 1234 "What is the termination period?"
 
-# Python — interaktiver Modus
+# Python — interactive mode
 python3 example.py 1234
 
 # Node.js
-node example.js 1234 "Was ist die Kündigungsfrist?"
+node example.js 1234 "What is the termination period?"
 ```
 
-## Response-Struktur
+## Response structure
 
 ```json
 {
   "status": "success",
-  "answer": "Die Kündigungsfrist beträgt 3 Monate zum Quartalsende gemäß §5 Abs. 2 des Vertrags.",
+  "answer": "The termination period is 3 months to the end of the quarter according to §5 para. 2 of the contract.",
   "sources": [
     {
       "page": 3,
-      "text": "Die Vertragslaufzeit beträgt 12 Monate. Die Kündigungsfrist beträgt 3 Monate...",
+      "text": "The contract duration is 12 months. The termination period is 3 months...",
       "confidence": "high"
     }
   ]
 }
 ```
 
-## Document Intelligence (RAG-Konzept)
+## Document Intelligence (RAG concept)
 
-Die Document Intelligence kombiniert zwei Schritte:
+Document Intelligence combines two steps:
 
-1. **Retrieval** — Die relevantesten Passagen im Dokument werden identifiziert
-2. **Generation** — Die KI formuliert eine Antwort basierend auf den gefundenen Passagen
+1. **Retrieval** — The most relevant passages in the document are identified
+2. **Generation** — The AI formulates an answer based on the found passages
 
-### Vorteile gegenüber einfacher Suche
+### Advantages over simple search
 
-| Eigenschaft         | Suche              | Document Chat                |
+| Property            | Search             | Document Chat                |
 |---------------------|--------------------|------------------------------|
-| Ausgabe             | Textfragmente      | Formulierte Antwort          |
-| Quellenangaben      | Nein               | Ja (Seite, Text, Konfidenz)  |
-| Zusammenfassung     | Nein               | Ja                           |
-| Folgefragen         | Nein               | Ja (Kontext bleibt erhalten) |
+| Output              | Text fragments     | Formulated answer            |
+| Source references    | No                 | Yes (page, text, confidence) |
+| Summary             | No                 | Yes                          |
+| Follow-up questions | No                 | Yes (context is preserved)   |
 
-## Quellenangaben
+## Source references
 
-Jede Antwort enthält `sources` mit:
+Each answer contains `sources` with:
 
-| Feld          | Beschreibung                               |
+| Field         | Description                                |
 |---------------|--------------------------------------------|
-| `page`        | Seitennummer im Dokument                   |
-| `text`        | Relevanter Textausschnitt                  |
-| `confidence`  | Konfidenz: `high`, `medium`, `low`         |
+| `page`        | Page number in the document                |
+| `text`        | Relevant text excerpt                      |
+| `confidence`  | Confidence: `high`, `medium`, `low`        |
 
-## Tipps
+## Tips
 
-- **Präzise Fragen** liefern bessere Antworten als vage Anfragen
-- **Interaktiver Modus** (Python) erlaubt Folgefragen zum selben Dokument
-- **context_window** erhöhen für Fragen, die Kontext über mehrere Seiten benötigen
-- Dokument muss vorher über `document-upload/` hochgeladen worden sein
-- Funktioniert mit PDF, DOCX, Bildern und allen unterstützten Formaten
+- **Precise questions** yield better answers than vague inquiries
+- **Interactive mode** (Python) allows follow-up questions about the same document
+- **context_window** — increase for questions that need context across multiple pages
+- Document must have been previously uploaded via `document-upload/`
+- Works with PDF, DOCX, images and all supported formats

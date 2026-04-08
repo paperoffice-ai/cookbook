@@ -1,6 +1,6 @@
-# Device Fingerprint — Geräte-Verifizierung
+# Device Fingerprint — Device Verification
 
-Prüft ob ein Gerät (Browser/App) bekannt und vertrauenswürdig ist. Ideal für Betrugs-Erkennung, Account-Sicherheit und Multi-Device-Tracking.
+Checks whether a device (browser/app) is known and trusted. Ideal for fraud detection, account security, and multi-device tracking.
 
 ## Endpoint
 
@@ -8,15 +8,15 @@ Prüft ob ein Gerät (Browser/App) bekannt und vertrauenswürdig ist. Ideal für
 POST https://api.paperoffice.ai/latest/fingerprint/verify
 ```
 
-**Authentifizierung:** Bearer Token erforderlich.
+**Authentication:** Bearer token required.
 
 ## Parameter
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `visitorId` | string | ✅ | Eindeutige Geräte-ID (z.B. aus FingerprintJS) |
+| `visitorId` | string | ✅ | Unique device ID (e.g. from FingerprintJS) |
 
-## Ausführen
+## How to run
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
@@ -32,7 +32,7 @@ python3 example.py "visitor_abc123"
 node example.js "visitor_abc123"
 ```
 
-## Erwartete Antwort
+## Expected response
 
 ```json
 {
@@ -43,8 +43,8 @@ node example.js "visitor_abc123"
 }
 ```
 
-## Anwendungsfälle
+## Common use cases
 
-- **Login-Schutz:** Unbekannte Geräte bei sensiblen Aktionen blockieren oder 2FA erzwingen
-- **Betrugs-Erkennung:** Auffällige Geräte-Wechsel erkennen
-- **Account-Sharing:** Erkennen, wenn ein Account von zu vielen Geräten genutzt wird
+- **Login protection:** Block unknown devices during sensitive actions or enforce 2FA
+- **Fraud detection:** Detect suspicious device changes
+- **Account sharing:** Detect when an account is used from too many devices

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — IP-Geolocation abfragen"""
+"""PaperOffice AI — Query IP geolocation"""
 import os
 import sys
 import json
@@ -10,9 +10,9 @@ API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
 def get_geolocation(ip: str = None, locale: str = "de", token: str = API_KEY) -> dict:
-    """Ermittelt Standort, Gerätedaten und Wechselkurse für eine IP-Adresse."""
+    """Retrieves location, device data, and exchange rates for an IP address."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     payload = {"locale": locale}
     if ip:

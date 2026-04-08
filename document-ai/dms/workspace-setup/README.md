@@ -1,54 +1,54 @@
-# Workspace erstellen & verwalten
+# Create & manage workspaces
 
-Workspaces sind die oberste Organisationsebene im PaperOffice DMS. Jeder Workspace bildet einen **isolierten Dokumentenbereich** mit eigenen Berechtigungen und Suchindizes.
+Workspaces are the top-level organizational unit in the PaperOffice DMS. Each workspace forms an **isolated document area** with its own permissions and search indexes.
 
 ## Endpoints
 
-| Aktion    | Methode | Pfad                                |
-|-----------|---------|-------------------------------------|
-| Erstellen | POST    | `/documents/workspace_create`       |
-| Auflisten | GET     | `/documents/workspace_list`         |
+| Action | Method | Path                                |
+|--------|--------|-------------------------------------|
+| Create | POST   | `/documents/workspace_create`       |
+| List   | GET    | `/documents/workspace_list`         |
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter (Erstellen)
+## Parameters (Create)
 
-| Parameter     | Pflicht | Beschreibung                        |
-|---------------|---------|-------------------------------------|
-| `name`        | Ja      | Name des Workspace                  |
-| `description` | Nein    | Optionale Beschreibung              |
+| Parameter     | Required | Description                         |
+|---------------|----------|-------------------------------------|
+| `name`        | Yes      | Name of the workspace               |
+| `description` | No       | Optional description                |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
-bash example.sh "Buchhaltung" "Rechnungen und Belege"
+bash example.sh "Accounting" "Invoices and receipts"
 
 # Python
 pip install requests
-python3 example.py "Buchhaltung" "Rechnungen und Belege"
+python3 example.py "Accounting" "Invoices and receipts"
 
 # Node.js
-node example.js "Buchhaltung" "Rechnungen und Belege"
+node example.js "Accounting" "Invoices and receipts"
 ```
 
-## Response-Struktur (Erstellen)
+## Response structure (Create)
 
 ```json
 {
   "status": "success",
   "workspace": {
     "id": 42,
-    "name": "Buchhaltung",
-    "description": "Rechnungen und Belege",
+    "name": "Accounting",
+    "description": "Invoices and receipts",
     "created_at": "2026-04-08T10:30:00Z"
   }
 }
 ```
 
-## Response-Struktur (Auflisten)
+## Response structure (List)
 
 ```json
 {
@@ -56,22 +56,22 @@ node example.js "Buchhaltung" "Rechnungen und Belege"
   "workspaces": [
     {
       "id": 42,
-      "name": "Buchhaltung",
-      "description": "Rechnungen und Belege"
+      "name": "Accounting",
+      "description": "Invoices and receipts"
     }
   ]
 }
 ```
 
-## Workspace-Konzept
+## Workspace concept
 
-- **Isolation**: Dokumente in einem Workspace sind nur innerhalb dieses Workspace suchbar
-- **Berechtigungen**: Zugriff wird pro Workspace über API-Keys gesteuert
-- **Tagging**: Innerhalb eines Workspace können Dokumente zusätzlich mit Tags organisiert werden
-- **Suche**: Jeder Workspace hat einen eigenen Suchindex für schnelle Abfragen
+- **Isolation**: Documents in a workspace are only searchable within that workspace
+- **Permissions**: Access is controlled per workspace via API keys
+- **Tagging**: Within a workspace, documents can be further organized with tags
+- **Search**: Each workspace has its own search index for fast queries
 
-## Tipps
+## Tips
 
-- Workspace-Namen sollten eindeutig und beschreibend sein
-- Einen Workspace pro Abteilung oder Projekt anlegen
-- Über die Workspace-Liste regelmäßig prüfen, ob alle Workspaces noch benötigt werden
+- Workspace names should be unique and descriptive
+- Create one workspace per department or project
+- Regularly review the workspace list to check if all workspaces are still needed

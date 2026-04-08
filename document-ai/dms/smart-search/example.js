@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-/** PaperOffice AI — Intelligente Dokumentensuche im DMS */
+/** PaperOffice AI — Smart document search in DMS */
 
 const api_base = "https://api.paperoffice.ai/latest";
 const api_key = process.env.PAPEROFFICE_API_KEY || "";
 
 async function document_search(query, workspace_name = "", limit = 10, token = api_key) {
-  if (!token) throw new Error("PAPEROFFICE_API_KEY nicht gesetzt");
+  if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
   const params = new URLSearchParams({ global_search: query, limit: String(limit) });
   if (workspace_name) params.set("workspace_name", workspace_name);
@@ -26,24 +26,24 @@ async function document_search(query, workspace_name = "", limit = 10, token = a
 (async () => {
   const query = process.argv[2];
   if (!query) {
-    console.error("Verwendung: node example.js <suchbegriff> [workspace] [limit]");
+    console.error("Usage: node example.js <search_term> [workspace] [limit]");
     process.exit(1);
   }
 
   const workspace = process.argv[3] || "";
   const limit = parseInt(process.argv[4] || "10", 10);
 
-  console.log(`→ Suche nach: ${query}`);
+  console.log(`→ Searching for: ${query}`);
   const data = await document_search(query, workspace, limit);
 
   if (data.status !== "success") {
-    console.error("Fehler:", JSON.stringify(data, null, 2));
+    console.error("Error:", JSON.stringify(data, null, 2));
     process.exit(1);
   }
 
   const results = data.results || [];
   const total = data.total ?? results.length;
-  console.log(`Treffer: ${total}`);
+  console.log(`Hits: ${total}`);
   console.log();
 
   for (const r of results) {

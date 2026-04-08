@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * PaperOffice AI — Bildgenerierung
- * Erzeugt Bilder aus Text-Prompts (bis 2048×2048)
+ * PaperOffice AI — Image Generation
+ * Generates images from text prompts (up to 2048×2048)
  *
- * Verwendung:
+ * Usage:
  *     export PAPEROFFICE_API_KEY=po_sk_xxx
  *     node example.js "A sunset over mountains"
  *     node example.js "A sunset over mountains" premium 2
@@ -26,7 +26,7 @@ async function generate_image(
     token = API_KEY,
   } = {}
 ) {
-  if (!token) throw new Error("PAPEROFFICE_API_KEY nicht gesetzt");
+  if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
   const form = new FormData();
   form.append("prompt", prompt);
@@ -65,9 +65,9 @@ async function generate_image(
 
   const image_urls = result.image_urls || [];
   if (image_urls.length > 0) {
-    image_urls.forEach((url, i) => console.log(`Bild ${i + 1}:  ${url}`));
+    image_urls.forEach((url, i) => console.log(`Image ${i + 1}: ${url}`));
   } else {
-    console.log("Keine Bild-URLs in der Antwort");
+    console.log("No image URLs in the response");
   }
 
   console.log();

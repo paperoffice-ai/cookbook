@@ -1,6 +1,6 @@
-# Vertragsanalyse (IDP Contract)
+# Contract Analysis (IDP Contract)
 
-Extrahiert strukturierte Daten aus **Verträgen** — Vertragsparteien, Laufzeit, Kündigungsfrist, Vertragswert und Schlüsselklauseln.
+Extracts structured data from **contracts** — contracting parties, duration, cancellation period, contract value, and key clauses.
 
 ## Endpoint
 
@@ -8,82 +8,82 @@ Extrahiert strukturierte Daten aus **Verträgen** — Vertragsparteien, Laufzeit
 POST https://api.paperoffice.ai/latest/job/add/workflow
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter         | Wert       | Beschreibung                         |
+| Parameter         | Value      | Description                          |
 |-------------------|------------|--------------------------------------|
-| `file_1`          | Datei      | PDF des Vertrags                     |
-| `model`           | `premium`  | Extraktionsqualität                  |
-| `idp_collection`  | `contract` | Vertragsanalyse aktivieren           |
-| `priority`        | `900`      | Synchrone Verarbeitung (≥900)        |
+| `file_1`          | File       | PDF of the contract                  |
+| `model`           | `premium`  | Extraction quality                   |
+| `idp_collection`  | `contract` | Enable contract analysis             |
+| `priority`        | `900`      | Synchronous processing (≥900)        |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
-bash example.sh vertrag.pdf
+bash example.sh contract.pdf
 
 # Python
 pip install requests
-python3 example.py vertrag.pdf
+python3 example.py contract.pdf
 
 # Node.js
 npm install form-data
-node example.js vertrag.pdf
+node example.js contract.pdf
 ```
 
-## Verfügbare Vertragsfelder
+## Available contract fields
 
-### Vertragsparteien
+### Contracting parties
 
-| Feld                     | Typ      | Beschreibung                         |
+| Field                    | Type     | Description                          |
 |--------------------------|----------|--------------------------------------|
-| `_party_a_name`          | string   | Name / Firma der ersten Partei       |
-| `_party_a_address`       | string   | Adresse der ersten Partei            |
-| `_party_b_name`          | string   | Name / Firma der zweiten Partei      |
-| `_party_b_address`       | string   | Adresse der zweiten Partei           |
+| `_party_a_name`          | string   | Name / company of the first party    |
+| `_party_a_address`       | string   | Address of the first party           |
+| `_party_b_name`          | string   | Name / company of the second party   |
+| `_party_b_address`       | string   | Address of the second party          |
 
-### Vertragsdaten
+### Contract details
 
-| Feld                     | Typ      | Beschreibung                         |
+| Field                    | Type     | Description                          |
 |--------------------------|----------|--------------------------------------|
-| `_contract_type`         | string   | Vertragsart (Mietvertrag, Dienstvertrag, etc.) |
-| `_contract_number`       | string   | Vertragsnummer / Aktenzeichen        |
-| `_contract_date`         | date     | Datum des Vertragsabschlusses        |
-| `_effective_date`        | date     | Inkrafttreten des Vertrags           |
+| `_contract_type`         | string   | Contract type (lease, service agreement, etc.) |
+| `_contract_number`       | string   | Contract number / reference number   |
+| `_contract_date`         | date     | Date of contract execution           |
+| `_effective_date`        | date     | Contract effective date              |
 
-### Laufzeit & Kündigung
+### Duration & termination
 
-| Feld                     | Typ      | Beschreibung                         |
+| Field                    | Type     | Description                          |
 |--------------------------|----------|--------------------------------------|
-| `_start_date`            | date     | Vertragsbeginn                       |
-| `_end_date`              | date     | Vertragsende                         |
-| `_duration`              | string   | Laufzeit (z.B. "24 Monate")         |
-| `_notice_period`         | string   | Kündigungsfrist                      |
-| `_renewal_clause`        | string   | Automatische Verlängerung            |
+| `_start_date`            | date     | Contract start date                  |
+| `_end_date`              | date     | Contract end date                    |
+| `_duration`              | string   | Duration (e.g. "24 months")         |
+| `_notice_period`         | string   | Cancellation period                  |
+| `_renewal_clause`        | string   | Automatic renewal                    |
 
-### Finanzielles
+### Financial
 
-| Feld                     | Typ      | Beschreibung                         |
+| Field                    | Type     | Description                          |
 |--------------------------|----------|--------------------------------------|
-| `_contract_value`        | number   | Vertragswert / Gesamtsumme          |
-| `_monthly_payment`       | number   | Monatliche Zahlung                   |
-| `_payment_terms`         | string   | Zahlungsbedingungen                  |
-| `_currency`              | string   | Währung                              |
+| `_contract_value`        | number   | Contract value / total sum           |
+| `_monthly_payment`       | number   | Monthly payment                      |
+| `_payment_terms`         | string   | Payment terms                        |
+| `_currency`              | string   | Currency                             |
 
-### Weitere Klauseln
+### Additional clauses
 
-| Feld                     | Typ      | Beschreibung                         |
+| Field                    | Type     | Description                          |
 |--------------------------|----------|--------------------------------------|
-| `_governing_law`         | string   | Anwendbares Recht / Gerichtsstand    |
-| `_confidentiality`       | string   | Vertraulichkeitsklausel              |
-| `_penalty_clause`        | string   | Vertragsstrafe                       |
+| `_governing_law`         | string   | Governing law / jurisdiction         |
+| `_confidentiality`       | string   | Confidentiality clause               |
+| `_penalty_clause`        | string   | Penalty clause                       |
 
-## Response-Struktur
+## Response structure
 
 ```json
 {
@@ -113,8 +113,8 @@ node example.js vertrag.pdf
 }
 ```
 
-## Tipps
+## Tips
 
-- **`model=ultra`** für mehrseitige Verträge mit komplexen Klauseln empfohlen
-- Kombiniere mit **Custom Fields** (`idp_fields`) für branchenspezifische Klauseln
-- Bei niedrigem `source_boxes_confidence` → manuelles Review einplanen
+- **`model=ultra`** recommended for multi-page contracts with complex clauses
+- Combine with **Custom Fields** (`idp_fields`) for industry-specific clauses
+- When `source_boxes_confidence` is low → plan for manual review

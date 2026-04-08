@@ -1,6 +1,6 @@
 # Voice Agent Builder
 
-**Tool:** Beliebiges AI-Tool | **Output:** Voice Agent mit TTS + STT
+**Tool:** Any AI Tool | **Output:** Voice Agent with TTS + STT
 
 ## Prompt
 
@@ -20,16 +20,16 @@ Use POST /job/add/paperoffice_voice___tts with:
 - Bearer token required for all endpoints.
 ```
 
-## Was du bekommst
+## What you get
 
-Ein Voice-Agent der:
-- Audio-Input entgegennimmt und transkribiert
-- Den Text verarbeitet (z.B. Fragen beantwortet)
-- Eine natürliche Audio-Antwort mit PaperOffice TTS generiert
-- Die Stimme `Nadja` für natürlichstes Deutsch verwendet
+A voice agent that:
+- Accepts audio input and transcribes it
+- Processes the text (e.g. answers questions)
+- Generates a natural audio response with PaperOffice TTS
+- Uses the `Nadja` voice for the most natural German
 
-## Tipps
+## Tips
 
-- `priority=999` für garantiert synchrone TTS-Antwort
-- `output=url` liefert eine herunterladbare Audio-URL
-- `output=base64` für Inline-Embedding
+- `priority=999` for guaranteed synchronous TTS response
+- `output=url` returns a downloadable audio URL
+- `output=base64` for inline embedding

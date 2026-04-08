@@ -1,6 +1,6 @@
-# IDP mit eigenen Extraktionsfeldern (Custom Fields)
+# IDP with Custom Extraction Fields (Custom Fields)
 
-Definiert **eigene Felder** zur gezielten Datenextraktion — für Dokumente, die keine Standard-Collection (invoice, receipt, etc.) abdeckt.
+Defines **custom fields** for targeted data extraction — for documents not covered by a standard collection (invoice, receipt, etc.).
 
 ## Endpoint
 
@@ -8,90 +8,90 @@ Definiert **eigene Felder** zur gezielten Datenextraktion — für Dokumente, di
 POST https://api.paperoffice.ai/latest/job/add/workflow
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter    | Wert                | Beschreibung                              |
+| Parameter    | Value               | Description                               |
 |--------------|---------------------|-------------------------------------------|
-| `file_1`     | Datei               | Das zu verarbeitende Dokument             |
-| `model`      | `premium`           | Empfohlen für Custom Fields               |
-| `idp_fields` | JSON-String         | Array mit Felddefinitionen (siehe unten)  |
-| `priority`   | `900`               | Synchrone Verarbeitung (≥900)             |
+| `file_1`     | File                | The document to process                   |
+| `model`      | `premium`           | Recommended for custom fields             |
+| `idp_fields` | JSON string         | Array of field definitions (see below)    |
+| `priority`   | `900`               | Synchronous processing (≥900)             |
 
-## idp_fields Syntax
+## idp_fields syntax
 
-`idp_fields` erwartet ein JSON-Array als String. Jedes Feld hat:
+`idp_fields` expects a JSON array as a string. Each field has:
 
-| Eigenschaft   | Typ    | Beschreibung                                  |
+| Property      | Type   | Description                                   |
 |---------------|--------|-----------------------------------------------|
-| `name`        | string | Eindeutiger Feldname (snakecase empfohlen)    |
-| `type`        | string | `string`, `number`, `date` oder `boolean`     |
-| `description` | string | Natürlichsprachige Beschreibung für die KI    |
+| `name`        | string | Unique field name (snakecase recommended)     |
+| `type`        | string | `string`, `number`, `date`, or `boolean`      |
+| `description` | string | Natural language description for the AI       |
 
-### Beispiel
+### Example
 
 ```json
 [
   {
     "name": "vertragsnummer",
     "type": "string",
-    "description": "Vertragsnummer im Dokument"
+    "description": "Contract number in the document"
   },
   {
     "name": "kuendigungsfrist",
     "type": "string",
-    "description": "Kündigungsfrist in Monaten oder als Datum"
+    "description": "Cancellation period in months or as a date"
   },
   {
     "name": "monatlicher_betrag",
     "type": "number",
-    "description": "Monatlicher Betrag in Euro"
+    "description": "Monthly amount in euros"
   },
   {
     "name": "vertragspartner",
     "type": "string",
-    "description": "Name des Vertragspartners"
+    "description": "Name of the contracting party"
   }
 ]
 ```
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
-bash example.sh vertrag.pdf
+bash example.sh contract.pdf
 
 # Python
 pip install requests
-python3 example.py vertrag.pdf
+python3 example.py contract.pdf
 
 # Node.js
 npm install form-data
-node example.js vertrag.pdf
+node example.js contract.pdf
 ```
 
-## Wann Custom Fields statt Collection?
+## When to use custom fields vs. a collection?
 
-| Szenario                               | Empfehlung                   |
-|----------------------------------------|------------------------------|
-| Standardrechnung                       | `idp_collection=invoice`     |
-| Kassenbon                              | `idp_collection=receipt`     |
-| Vertrag mit speziellen Klauseln        | **Custom Fields**            |
-| Technische Spezifikation               | **Custom Fields**            |
-| Branchenspezifisches Formular          | **Custom Fields**            |
-| Behörden-Bescheid                      | **Custom Fields**            |
+| Scenario                               | Recommendation                |
+|----------------------------------------|-------------------------------|
+| Standard invoice                       | `idp_collection=invoice`      |
+| Cash register receipt                  | `idp_collection=receipt`      |
+| Contract with special clauses          | **Custom Fields**             |
+| Technical specification                | **Custom Fields**             |
+| Industry-specific form                 | **Custom Fields**             |
+| Government notice                      | **Custom Fields**             |
 
-## Tipps
+## Tips
 
-- **Beschreibung ist entscheidend**: Je präziser die `description`, desto besser die Extraktion
-- Nutze `model=premium` oder `model=ultra` für Custom Fields — `basic` reicht oft nicht
-- Kombinierbar: `idp_collection` und `idp_fields` gleichzeitig für Standard + eigene Felder
-- Maximal ~50 Custom Fields pro Request empfohlen
+- **Description is crucial**: The more precise the `description`, the better the extraction
+- Use `model=premium` or `model=ultra` for custom fields — `basic` is often insufficient
+- Combinable: `idp_collection` and `idp_fields` simultaneously for standard + custom fields
+- Maximum of ~50 custom fields per request recommended
 
-## Response-Struktur
+## Response structure
 
 ```json
 {

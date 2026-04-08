@@ -1,20 +1,20 @@
-# MCP-Setup für Claude Desktop und Claude Code
+# MCP Setup for Claude Desktop and Claude Code
 
-Anleitung zum Anbinden des **PaperOffice MCP-Servers** an **Claude Desktop** und **Claude Code**. Nach der Einrichtung kann Claude PaperOffice-Tools direkt aufrufen — analog zur Nutzung in anderen MCP-fähigen Umgebungen.
+Guide for connecting the **PaperOffice MCP Server** to **Claude Desktop** and **Claude Code**. After setup, Claude can invoke PaperOffice tools directly — analogous to usage in other MCP-capable environments.
 
-## Verifizierter Endpoint
+## Verified Endpoint
 
 | Transport | URL |
 |-----------|-----|
 | SSE (Server-Sent Events) | `https://mcp.paperoffice.ai/claude` |
 
-**Authentifizierung:** Bearer-Token über HTTP-Header oder Query-Parameter.
+**Authentication:** Bearer token via HTTP header or query parameter.
 
 ## Claude Desktop: `claude_desktop_config.json`
 
-Die Konfigurationsdatei liegt je nach Betriebssystem im Anwendungsdaten-Ordner von Claude Desktop (Pfad in der offiziellen Anthropic-Dokumentation nachschlagen).
+The configuration file is located in the application data folder of Claude Desktop, depending on the operating system (refer to the official Anthropic documentation for the exact path).
 
-Eintrag für PaperOffice:
+Entry for PaperOffice:
 
 ```json
 {
@@ -29,37 +29,37 @@ Eintrag für PaperOffice:
 }
 ```
 
-Ersetze `your_api_key` durch deinen gültigen PaperOffice-API-Schlüssel. Nach Speichern Claude Desktop neu starten, damit MCP-Server geladen werden.
+Replace `your_api_key` with your valid PaperOffice API key. After saving, restart Claude Desktop so that MCP servers are loaded.
 
 ## Claude Code
 
-**Claude Code** (CLI / IDE-Integration) verwendet ebenfalls eine MCP-Server-Liste — strukturell ähnlich wie bei Claude Desktop: Remote-Server mit `url` und `headers` für `Authorization`.
+**Claude Code** (CLI / IDE integration) also uses an MCP server list — structurally similar to Claude Desktop: remote server with `url` and `headers` for `Authorization`.
 
-- Trage denselben Server ein wie oben (`https://mcp.paperoffice.ai/claude`, Bearer-Token).
-- Konkreter Dateipfad und JSON-Schema können sich je nach Claude-Code-Version unterscheiden; bitte die **aktuelle Anthropic-Dokumentation zu Claude Code + MCP** verwenden und die Felder (`mcpServers`, `url`, `headers`) analog setzen.
+- Add the same server as above (`https://mcp.paperoffice.ai/claude`, Bearer token).
+- The exact file path and JSON schema may differ depending on the Claude Code version; please refer to the **current Anthropic documentation for Claude Code + MCP** and set the fields (`mcpServers`, `url`, `headers`) accordingly.
 
-## Verhalten
+## Behavior
 
-- Claude kann **PaperOffice-Tools direkt aufrufen** (z. B. OCR, IDP, Übersetzung), sobald die MCP-Verbindung steht.
-- Die Toolauswahl erfolgt im Dialog — du beschreibst das Ziel, Claude wählt passende Tools aus der bereitgestellten Liste.
+- Claude can **invoke PaperOffice tools directly** (e.g. OCR, IDP, Translation) once the MCP connection is established.
+- Tool selection happens in the dialog — you describe the goal, Claude selects matching tools from the provided list.
 
-## Artefakte-Modus (Hinweis)
+## Artifacts Mode (Note)
 
-Im **Artefakte-Modus** von Claude lassen sich Ergebnisse aus Tool-Aufrufen (z. B. **OCR-Text** oder strukturierte Ausgaben) oft direkt weiterverarbeiten: Zusammenfassungen, Tabellen, Nachbearbeitung oder Einbindung in längere Antworten — ohne die Rohdaten manuell zwischen Fenstern zu kopieren.
+In Claude's **Artifacts mode**, results from tool calls (e.g. **OCR text** or structured outputs) can often be further processed directly: summaries, tables, post-processing, or embedding in longer responses — without manually copying raw data between windows.
 
 ## Troubleshooting
 
-1. **Konfigurationspfad:** Falsche Datei oder JSON-Syntaxfehler — Desktop-Log bzw. Entwicklertools prüfen.
-2. **Token:** Gültigkeit und Schreibweise `Bearer your_api_key` prüfen.
-3. **Health:** `GET https://mcp.paperoffice.ai/health` zur schnellen Verfügbarkeitsprüfung.
+1. **Configuration path:** Wrong file or JSON syntax error — check the desktop log or developer tools.
+2. **Token:** Verify validity and spelling `Bearer your_api_key`.
+3. **Health:** `GET https://mcp.paperoffice.ai/health` for a quick availability check.
 
-## Weitere URLs (Referenz)
+## Other URLs (Reference)
 
-| Zweck | URL |
-|-------|-----|
+| Purpose | URL |
+|---------|-----|
 | Cursor | `https://mcp.paperoffice.ai/cursor` |
 | OpenAI / ChatGPT | `https://mcp.paperoffice.ai/openai` |
-| Standard-MCP | `https://mcp.paperoffice.ai/mcp` |
-| Universal / Übersicht | `https://mcp.paperoffice.ai/` |
+| Standard MCP | `https://mcp.paperoffice.ai/mcp` |
+| Universal / Overview | `https://mcp.paperoffice.ai/` |
 
-Für Claude ist der Eintrag **`/claude`** die passende URL.
+For Claude, the **`/claude`** entry is the appropriate URL.

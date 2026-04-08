@@ -1,6 +1,6 @@
-# Knowledge Graph — Aufbau und Abfrage
+# Knowledge Graph — Build and query
 
-Erstellt automatisch einen Knowledge Graph aus unstrukturiertem Text und ermöglicht natürlichsprachliche Abfragen über die extrahierten Zusammenhänge.
+Automatically creates a knowledge graph from unstructured text and enables natural language queries over the extracted relationships.
 
 ## Endpoints
 
@@ -9,31 +9,31 @@ POST https://api.paperoffice.ai/latest/knowledge_graph/build
 POST https://api.paperoffice.ai/latest/knowledge_graph/query
 ```
 
-**Authentifizierung:** Bearer Token
+**Authentication:** Bearer Token
 
-## Parameter (build)
+## Parameters (build)
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `text` | string | ✅* | Text, aus dem der Graph erstellt wird |
-| `document_id` | string | ✅* | Alternativ: ID eines bereits hochgeladenen Dokuments |
+| `text` | string | ✅* | Text from which the graph is created |
+| `document_id` | string | ✅* | Alternatively: ID of an already uploaded document |
 
-\* Entweder `text` oder `document_id` muss angegeben werden.
+\* Either `text` or `document_id` must be provided.
 
-## Parameter (query)
+## Parameters (query)
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `graph_id` | string | ✅ | ID des zuvor erstellten Graphs |
-| `query` | string | ✅ | Natürlichsprachliche Frage |
+| `graph_id` | string | ✅ | ID of the previously created graph |
+| `query` | string | ✅ | Natural language question |
 
-## Ausführen
+## How to run
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
 
 # Bash
-bash example.sh "Die Firma XY sitzt in Berlin. CEO ist Herr Meier."
+bash example.sh "The company XY is located in Berlin. The CEO is Mr. Meier."
 
 # Python
 pip install requests
@@ -43,7 +43,7 @@ python3 example.py
 node example.js
 ```
 
-## Erwartete Antwort (build)
+## Expected response (build)
 
 ```json
 {
@@ -62,7 +62,7 @@ node example.js
 }
 ```
 
-## Erwartete Antwort (query)
+## Expected response (query)
 
 ```json
 {
@@ -76,14 +76,14 @@ node example.js
 }
 ```
 
-## Funktionsweise
+## How it works
 
-1. **Build:** Der Text wird analysiert, Entitäten extrahiert und Beziehungen zwischen ihnen erkannt. Das Ergebnis ist ein gerichteter Graph mit Knoten (Entitäten) und Kanten (Beziehungen).
-2. **Query:** Natürlichsprachliche Fragen werden gegen den Graph aufgelöst. Die Antwort basiert auf den gespeicherten Zusammenhängen und enthält relevante Knoten als Beleg.
+1. **Build:** The text is analyzed, entities are extracted and relationships between them are identified. The result is a directed graph with nodes (entities) and edges (relationships).
+2. **Query:** Natural language questions are resolved against the graph. The answer is based on the stored relationships and includes relevant nodes as evidence.
 
-## Anwendungsfälle
+## Common use cases
 
-- **Due Diligence:** Unternehmensbeziehungen aus Verträgen und Berichten extrahieren
-- **Investigative Recherche:** Personen-Netzwerke und Verflechtungen aufdecken
-- **Wissensmanagement:** Interne Dokumente vernetzen und durchsuchbar machen
-- **Compliance:** Lieferketten-Beziehungen und Abhängigkeiten analysieren
+- **Due diligence:** Extract business relationships from contracts and reports
+- **Investigative research:** Uncover person networks and interconnections
+- **Knowledge management:** Connect and make internal documents searchable
+- **Compliance:** Analyze supply chain relationships and dependencies

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — DATEV-Export aus Rechnungs-IDP
+"""PaperOffice AI — DATEV Export from Invoice IDP
 
-Extrahiert Rechnungsdaten via IDP und konvertiert sie in einen
-DATEV-kompatiblen Buchungssatz (CSV-Format).
+Extracts invoice data via IDP and converts it into a
+DATEV-compatible accounting entry (CSV format).
 
-Verwendung:
+Usage:
     export PAPEROFFICE_API_KEY=po_sk_xxx
-    python3 example.py rechnung.pdf
-    python3 example.py rechnung.pdf > buchung.csv
+    python3 example.py invoice.pdf
+    python3 example.py invoice.pdf > booking.csv
 """
 import os
 import sys
@@ -18,15 +18,15 @@ import requests
 api_url = "https://api.paperoffice.ai/latest/job/add/workflow"
 api_key = os.environ.get("PAPEROFFICE_API_KEY", "")
 
-# DATEV Kontenrahmen SKR04 Defaults — anpassbar
+# DATEV chart of accounts SKR04 defaults — customizable
 KONTO_KREDITOR = "70000"
 KONTO_BANK = "1200"
 
 
 def extract_invoice(pdf_path: str, token: str = api_key) -> dict:
-    """Extrahiert Rechnungsfelder via IDP."""
+    """Extracts invoice fields via IDP."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     with open(pdf_path, "rb") as f:
         response = requests.post(
@@ -44,7 +44,7 @@ def extract_invoice(pdf_path: str, token: str = api_key) -> dict:
 
 
 def get_field(fields: dict, name: str, raw: bool = False) -> str:
-    """Hilfsfunktion: Feldwert aus suggested_fields extrahieren."""
+    """Helper: extract field value from suggested_fields."""
     info = fields.get(name, {})
     if raw:
         return info.get("value_raw", info.get("value", ""))
@@ -52,7 +52,7 @@ def get_field(fields: dict, name: str, raw: bool = False) -> str:
 
 
 def to_datev_date(iso_date: str) -> str:
-    """ISO-Datum (YYYY-MM-DD) → DATEV-Format (DDMM)."""
+    """ISO date (YYYY-MM-DD) → DATEV format (DDMM)."""
     parts = iso_date.split("-")
     if len(parts) == 3:
         return f"{parts[2]}{parts[1]}"
@@ -60,14 +60,14 @@ def to_datev_date(iso_date: str) -> str:
 
 
 def to_datev_csv(fields: dict) -> str:
-    """Konvertiert IDP-Felder in DATEV-Buchungsstapel CSV."""
+    """Converts IDP fields to DATEV posting batch CSV."""
     umsatz = get_field(fields, "_total_amount", raw=True)
     datum = get_field(fields, "_invoice_date", raw=True)
     re_nr = get_field(fields, "_invoice_number")
     lieferant = get_field(fields, "_supplier_name")
     ust = get_field(fields, "_vat_rate")
 
-    # BU-Schlüssel aus USt-Satz ableiten
+    # Derive BU key from VAT rate
     bu_schluessel = ""
     if ust:
         try:
@@ -111,26 +111,26 @@ def to_datev_csv(fields: dict) -> str:
 if __name__ == "__main__":
     pdf = sys.argv[1] if len(sys.argv) > 1 else None
     if not pdf:
-        sys.exit("Verwendung: python3 example.py <rechnung.pdf>")
+        sys.exit("Usage: python3 example.py <invoice.pdf>")
 
     data = extract_invoice(pdf)
     pages = data.get("result", {}).get("pages_idp", [])
     if not pages:
-        sys.exit("Keine IDP-Daten gefunden")
+        sys.exit("No IDP data found")
 
     fields = pages[0].get("suggested_fields", {})
 
-    # Zusammenfassung der extrahierten Felder
-    print("--- Extrahierte Rechnungsdaten ---")
-    print(f"  Rechnungsnr:  {get_field(fields, '_invoice_number')}")
-    print(f"  Datum:        {get_field(fields, '_invoice_date')}")
-    print(f"  Lieferant:    {get_field(fields, '_supplier_name')}")
-    print(f"  Betrag:       {get_field(fields, '_total_amount')}")
-    print(f"  Netto:        {get_field(fields, '_net_amount')}")
-    print(f"  USt:          {get_field(fields, '_vat_amount')}")
+    # Summary of extracted fields
+    print("--- Extracted Invoice Data ---")
+    print(f"  Invoice no.:  {get_field(fields, '_invoice_number')}")
+    print(f"  Date:         {get_field(fields, '_invoice_date')}")
+    print(f"  Supplier:     {get_field(fields, '_supplier_name')}")
+    print(f"  Amount:       {get_field(fields, '_total_amount')}")
+    print(f"  Net:          {get_field(fields, '_net_amount')}")
+    print(f"  VAT:          {get_field(fields, '_vat_amount')}")
     print()
 
-    # DATEV-CSV generieren
+    # Generate DATEV CSV
     datev_csv = to_datev_csv(fields)
-    print("--- DATEV Buchungssatz (CSV) ---")
+    print("--- DATEV Accounting Entry (CSV) ---")
     print(datev_csv)

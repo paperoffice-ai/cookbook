@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# PaperOffice AI — IP-Geolocation abfragen
+# PaperOffice AI — Query IP geolocation
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Bitte PAPEROFFICE_API_KEY setzen (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
 IP_ADDR="${1:-}"
 
-echo "→ Geolocation abfragen${IP_ADDR:+ für: $IP_ADDR}"
+echo "→ Querying geolocation${IP_ADDR:+ for: $IP_ADDR}"
 
 CMD=(curl -s -X POST "https://api.paperoffice.ai/latest/ip2location/full"
   -H "Authorization: Bearer ${API_KEY}"

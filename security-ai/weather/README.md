@@ -1,6 +1,6 @@
-# Wetter — Aktuelle Daten & Vorhersage
+# Weather — Current Data & Forecast
 
-Liefert aktuelle Wetterdaten, Mehrtages-Vorhersage und Luftqualität für beliebige GPS-Koordinaten. **GRATIS** — kostet keine Credits!
+Provides current weather data, multi-day forecast, and air quality for any GPS coordinates. **FREE** — costs no credits!
 
 ## Endpoint
 
@@ -8,19 +8,19 @@ Liefert aktuelle Wetterdaten, Mehrtages-Vorhersage und Luftqualität für belieb
 POST https://api.paperoffice.ai/latest/location2weather
 ```
 
-**Authentifizierung:** Bearer Token erforderlich, aber **kostenlos** (keine Credit-Belastung).
+**Authentication:** Bearer token required, but **free** (no credit charge).
 
-**Wichtig:** Erwartet Koordinaten (`lat`/`lon`), NICHT Städtenamen!
+**Important:** Expects coordinates (`lat`/`lon`), NOT city names!
 
 ## Parameter
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `lat` | float | ✅ | Breitengrad (z.B. `52.52` für Berlin) |
-| `lon` | float | ✅ | Längengrad (z.B. `13.41` für Berlin) |
-| `locale` | string | ❌ | Sprache der Antwort (Standard: `de`) |
+| `lat` | float | ✅ | Latitude (e.g. `52.52` for Berlin) |
+| `lon` | float | ✅ | Longitude (e.g. `13.41` for Berlin) |
+| `locale` | string | ❌ | Response language (default: `de`) |
 
-## Ausführen
+## How to run
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
@@ -28,7 +28,7 @@ export PAPEROFFICE_API_KEY=po_sk_xxx
 # Bash — Berlin
 bash example.sh 52.52 13.41
 
-# Bash — München
+# Bash — Munich
 bash example.sh 48.14 11.58
 
 # Python
@@ -39,13 +39,13 @@ python3 example.py 52.52 13.41
 node example.js 52.52 13.41
 ```
 
-## Erwartete Antwort (gekürzt)
+## Expected response (abbreviated)
 
 ```json
 {
     "current": {
         "temp_c": 4.3,
-        "condition": { "text": "Bedeckt" },
+        "condition": { "text": "Overcast" },
         "humidity": 65,
         "wind_kph": 12.5,
         "feelslike_c": 1.2
@@ -56,7 +56,7 @@ node example.js 52.52 13.41
             "day": {
                 "maxtemp_c": 8.5,
                 "mintemp_c": 2.1,
-                "condition": { "text": "Teilweise bewölkt" }
+                "condition": { "text": "Partly cloudy" }
             }
         }
     ],
@@ -67,13 +67,13 @@ node example.js 52.52 13.41
 }
 ```
 
-## Tipp: Koordinaten nicht bekannt?
+## Tip: Coordinates not known?
 
-Kombiniere dieses Recipe mit dem [Geocoding-Recipe](../geocoding/): Erst Adresse → Koordinaten, dann Koordinaten → Wetter.
+Combine this recipe with the [Geocoding recipe](../geocoding/): First address → coordinates, then coordinates → weather.
 
-## Anwendungsfälle
+## Common use cases
 
-- **Logistik:** Wetterwarnungen für Lieferrouten automatisch einblenden
-- **Bauwirtschaft:** Wetterabhängige Arbeiten planen und dokumentieren
-- **Events:** Wetter am Veranstaltungsort vorab prüfen
-- **Smart Home:** Wetterdaten in Automatisierungen einbeziehen
+- **Logistics:** Automatically display weather warnings for delivery routes
+- **Construction:** Plan and document weather-dependent work
+- **Events:** Check weather at the venue in advance
+- **Smart home:** Incorporate weather data into automations

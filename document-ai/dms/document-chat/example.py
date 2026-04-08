@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Chat mit einem Dokument (RAG)
+"""PaperOffice AI — Chat with a document (RAG)
 
-Stellt Fragen an ein hochgeladenes Dokument. Die KI antwortet
-basierend auf dem Dokumentinhalt mit Quellenangaben.
+Asks questions about an uploaded document. The AI answers
+based on the document content with source references.
 
-Verwendung:
+Usage:
     export PAPEROFFICE_API_KEY=po_sk_xxx
-    python3 example.py 1234 "Was ist die Kündigungsfrist?"
+    python3 example.py 1234 "What is the termination period?"
 """
 import os
 import sys
@@ -22,9 +22,9 @@ def document_chat(
     context_window: int = None,
     token: str = api_key,
 ) -> dict:
-    """Stellt eine Frage an ein Dokument und gibt die RAG-Antwort zurück."""
+    """Asks a question about a document and returns the RAG answer."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     data = {"document_id": document_id, "question": question}
     if context_window is not None:
@@ -40,16 +40,16 @@ def document_chat(
 
 
 def print_answer(data: dict):
-    """Gibt Antwort und Quellen formatiert aus."""
+    """Prints answer and sources in formatted output."""
     print()
-    print("Antwort:")
+    print("Answer:")
     print(data.get("answer", "—"))
     print()
 
     sources = data.get("sources", [])
     if sources:
-        print(f"Quellen ({len(sources)}):")
-        print(f"{'Seite':<8} {'Konfidenz':<12} {'Text':<60}")
+        print(f"Sources ({len(sources)}):")
+        print(f"{'Page':<8} {'Confidence':<12} {'Text':<60}")
         print("─" * 82)
         for s in sources:
             page = str(s.get("page", "—"))
@@ -59,13 +59,13 @@ def print_answer(data: dict):
 
 
 def interactive_chat(document_id: int):
-    """Interaktiver Chat-Modus — mehrere Fragen nacheinander stellen."""
-    print(f"Dokument-Chat (ID: {document_id}) — 'q' zum Beenden")
+    """Interactive chat mode — ask multiple questions in sequence."""
+    print(f"Document chat (ID: {document_id}) — 'q' to quit")
     print("─" * 50)
 
     while True:
         try:
-            question = input("\nFrage: ").strip()
+            question = input("\nQuestion: ").strip()
         except (EOFError, KeyboardInterrupt):
             break
 
@@ -76,22 +76,22 @@ def interactive_chat(document_id: int):
         if result.get("status") == "success":
             print_answer(result)
         else:
-            print("Fehler:", result)
+            print("Error:", result)
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        sys.exit("Verwendung: python3 example.py <document_id> [frage]")
+        sys.exit("Usage: python3 example.py <document_id> [question]")
 
     doc_id = int(sys.argv[1])
 
     if len(sys.argv) > 2:
         question = sys.argv[2]
-        print(f"→ Frage an Dokument {doc_id}: {question}")
+        print(f"→ Question to document {doc_id}: {question}")
         result = document_chat(doc_id, question)
         if result.get("status") == "success":
             print_answer(result)
         else:
-            print("Fehler:", result)
+            print("Error:", result)
     else:
         interactive_chat(doc_id)

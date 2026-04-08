@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Dokument ins DMS hochladen
+"""PaperOffice AI — Upload document to DMS
 
-Verwendung:
+Usage:
     export PAPEROFFICE_API_KEY=po_sk_xxx
-    python3 example.py vertrag.pdf "Buchhaltung" "rechnung,2026,q1"
+    python3 example.py contract.pdf "Accounting" "invoice,2026,q1"
 """
 import os
 import sys
@@ -20,9 +20,9 @@ def document_upload(
     description: str = "",
     token: str = api_key,
 ) -> dict:
-    """Lädt ein Dokument in den angegebenen Workspace hoch."""
+    """Uploads a document to the specified workspace."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     data = {"workspace_name": workspace_name}
     if tags:
@@ -42,28 +42,28 @@ def document_upload(
 
 
 def print_document_info(data: dict):
-    """Gibt die Metadaten des hochgeladenen Dokuments aus."""
+    """Prints the metadata of the uploaded document."""
     doc = data.get("document", {})
     print(f"  ID:        {doc.get('id', '—')}")
-    print(f"  Dateiname: {doc.get('filename', '—')}")
+    print(f"  Filename:  {doc.get('filename', '—')}")
     print(f"  Workspace: {doc.get('workspace', '—')}")
     print(f"  Tags:      {doc.get('tags', [])}")
-    print(f"  Größe:     {doc.get('size', '—')}")
-    print(f"  Erstellt:  {doc.get('created_at', '—')}")
+    print(f"  Size:      {doc.get('size', '—')}")
+    print(f"  Created:   {doc.get('created_at', '—')}")
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        sys.exit("Verwendung: python3 example.py <datei> <workspace> [tags]")
+        sys.exit("Usage: python3 example.py <file> <workspace> [tags]")
 
     file_path = sys.argv[1]
     workspace = sys.argv[2]
     tags = sys.argv[3] if len(sys.argv) > 3 else ""
 
-    print(f"→ Lade hoch: {file_path} → Workspace: {workspace}")
+    print(f"→ Uploading: {file_path} → Workspace: {workspace}")
     result = document_upload(file_path, workspace, tags=tags)
 
     if result.get("status") == "success":
         print_document_info(result)
     else:
-        print("Fehler:", result)
+        print("Error:", result)

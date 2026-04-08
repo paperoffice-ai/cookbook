@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Workspace erstellen & auflisten
+"""PaperOffice AI — Create & list workspaces
 
-Verwendung:
+Usage:
     export PAPEROFFICE_API_KEY=po_sk_xxx
-    python3 example.py "Buchhaltung" "Rechnungen und Belege"
+    python3 example.py "Accounting" "Invoices and receipts"
 """
 import os
 import sys
@@ -14,9 +14,9 @@ api_key = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
 def workspace_create(name: str, description: str = "", token: str = api_key) -> dict:
-    """Erstellt einen neuen Workspace im DMS."""
+    """Creates a new workspace in the DMS."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.post(
         f"{api_base}/documents/workspace_create",
@@ -28,9 +28,9 @@ def workspace_create(name: str, description: str = "", token: str = api_key) -> 
 
 
 def workspace_list(token: str = api_key) -> dict:
-    """Gibt alle verfügbaren Workspaces zurück."""
+    """Returns all available workspaces."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.get(
         f"{api_base}/documents/workspace_list",
@@ -41,11 +41,11 @@ def workspace_list(token: str = api_key) -> dict:
 
 
 def print_workspaces(data: dict):
-    """Formatierte Ausgabe der Workspace-Liste."""
+    """Formatted output of the workspace list."""
     workspaces = data.get("workspaces", [])
-    print(f"Gefunden: {len(workspaces)} Workspace(s)")
+    print(f"Found: {len(workspaces)} workspace(s)")
     print()
-    print(f"{'ID':<8} {'Name':<30} {'Beschreibung':<40}")
+    print(f"{'ID':<8} {'Name':<30} {'Description':<40}")
     print("─" * 80)
     for ws in workspaces:
         ws_id = str(ws.get("id", "—"))
@@ -55,22 +55,22 @@ def print_workspaces(data: dict):
 
 
 if __name__ == "__main__":
-    name = sys.argv[1] if len(sys.argv) > 1 else "Mein Workspace"
-    desc = sys.argv[2] if len(sys.argv) > 2 else "Automatisch erstellter Workspace"
+    name = sys.argv[1] if len(sys.argv) > 1 else "My Workspace"
+    desc = sys.argv[2] if len(sys.argv) > 2 else "Automatically created workspace"
 
-    print(f"→ Erstelle Workspace: {name}")
+    print(f"→ Creating workspace: {name}")
     result = workspace_create(name, desc)
 
     if result.get("status") == "success":
         ws = result.get("workspace", {})
-        print(f"  ID:           {ws.get('id', '—')}")
-        print(f"  Name:         {ws.get('name', '—')}")
-        print(f"  Beschreibung: {ws.get('description', '—')}")
-        print(f"  Erstellt:     {ws.get('created_at', '—')}")
+        print(f"  ID:          {ws.get('id', '—')}")
+        print(f"  Name:        {ws.get('name', '—')}")
+        print(f"  Description: {ws.get('description', '—')}")
+        print(f"  Created:     {ws.get('created_at', '—')}")
     else:
-        print("Fehler:", result)
+        print("Error:", result)
 
     print()
-    print("→ Alle Workspaces auflisten")
+    print("→ Listing all workspaces")
     list_data = workspace_list()
     print_workspaces(list_data)

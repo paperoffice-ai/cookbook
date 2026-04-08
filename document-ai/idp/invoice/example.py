@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Rechnungs-Extraktion (IDP Invoice)
+"""PaperOffice AI — Invoice Extraction (IDP Invoice)
 
-Extrahiert 28+ Felder aus Rechnungen inkl. Bounding Boxes.
+Extracts 28+ fields from invoices including bounding boxes.
 
-Verwendung:
+Usage:
     export PAPEROFFICE_API_KEY=po_sk_xxx
-    python3 example.py rechnung.pdf
+    python3 example.py invoice.pdf
 """
 import os
 import sys
@@ -17,9 +17,9 @@ api_key = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
 def extract_invoice(pdf_path: str, token: str = api_key) -> dict:
-    """Sendet PDF an IDP-Endpoint und gibt die Antwort zurück."""
+    """Sends PDF to IDP endpoint and returns the response."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     with open(pdf_path, "rb") as f:
         response = requests.post(
@@ -37,17 +37,17 @@ def extract_invoice(pdf_path: str, token: str = api_key) -> dict:
 
 
 def print_invoice_table(data: dict):
-    """Gibt extrahierte Rechnungsfelder als formatierte Tabelle aus."""
+    """Prints extracted invoice fields as a formatted table."""
     pages = data.get("result", {}).get("pages_idp", [])
     if not pages:
-        print("Keine IDP-Daten gefunden")
+        print("No IDP data found")
         return
 
     fields = pages[0].get("suggested_fields", {})
-    print(f"Job-ID:  {data.get('job_id', '—')}")
-    print(f"Felder:  {len(fields)}")
+    print(f"Job ID:  {data.get('job_id', '—')}")
+    print(f"Fields:  {len(fields)}")
     print()
-    print(f"{'Feld':<32} {'Wert':<42} {'Konfidenz':<10}")
+    print(f"{'Field':<32} {'Value':<42} {'Confidence':<10}")
     print("─" * 86)
 
     for name, info in sorted(fields.items()):
@@ -61,7 +61,7 @@ def print_invoice_table(data: dict):
 if __name__ == "__main__":
     pdf = sys.argv[1] if len(sys.argv) > 1 else None
     if not pdf:
-        sys.exit("Verwendung: python3 example.py <datei.pdf>")
+        sys.exit("Usage: python3 example.py <file.pdf>")
 
     result = extract_invoice(pdf)
     print_invoice_table(result)

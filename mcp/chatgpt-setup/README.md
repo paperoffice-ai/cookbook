@@ -1,44 +1,44 @@
-# MCP-Setup für ChatGPT (OpenAI) und Custom GPTs
+# MCP Setup for ChatGPT (OpenAI) and Custom GPTs
 
-Anleitung zur Nutzung des **PaperOffice MCP-Servers** mit **ChatGPT**, **Custom GPTs** und OpenAI-nahen Integrationen. Der dedizierte Endpoint ist für die OpenAI-Ökosysteme vorgesehen.
+Guide for using the **PaperOffice MCP Server** with **ChatGPT**, **Custom GPTs**, and OpenAI-related integrations. The dedicated endpoint is intended for the OpenAI ecosystem.
 
-## Verifizierter Endpoint
+## Verified Endpoint
 
-| Zweck | URL |
-|-------|-----|
+| Purpose | URL |
+|---------|-----|
 | ChatGPT / OpenAI | `https://mcp.paperoffice.ai/openai` |
 
-**Transport:** SSE (Server-Sent Events), wie bei allen PaperOffice-MCP-Endpunkten.
+**Transport:** SSE (Server-Sent Events), as with all PaperOffice MCP endpoints.
 
-**Authentifizierung:** API-Key als **Bearer-Token** (HTTP-Header `Authorization: Bearer your_api_key` oder alternativ Query-Parameter, sofern vom jeweiligen Client unterstützt).
+**Authentication:** API key as **Bearer token** (HTTP header `Authorization: Bearer your_api_key` or alternatively query parameter, if supported by the respective client).
 
-## Custom GPT als Action
+## Custom GPT as Action
 
-1. **Action-URL:** Verwende `https://mcp.paperoffice.ai/openai` als Basis für die Verbindung zu PaperOffice (je nach GPT-Builder: „OpenAPI“-basierte Action oder vergleichbare MCP-Anbindung).
-2. **Schema:** Das **OpenAPI-Schema** (bzw. die vom MCP-Server bereitgestellte Schnittstellenbeschreibung) wird **automatisch vom MCP-Server** bereitgestellt — keine manuelle Pflege einer statischen Postman-Datei im Cookbook nötig.
-3. **Auth:** Trage den PaperOffice-API-Key als Bearer-Token ein; in manchen Oberflächen als „API Key“ mit Präfix oder als reines Secret — konsistent mit der Bearer-Vorgabe halten.
+1. **Action URL:** Use `https://mcp.paperoffice.ai/openai` as the base for connecting to PaperOffice (depending on GPT Builder: "OpenAPI"-based Action or comparable MCP integration).
+2. **Schema:** The **OpenAPI schema** (or the interface description provided by the MCP server) is **automatically provided by the MCP server** — no manual maintenance of a static Postman file in the Cookbook needed.
+3. **Auth:** Enter the PaperOffice API key as Bearer token; in some interfaces as "API Key" with prefix or as a plain secret — keep consistent with the Bearer specification.
 
-Hinweis: Die genaue Oberfläche von ChatGPT / GPT-Store ändert sich; falls „Actions“ nur klassische REST-OpenAPI ohne MCP erwarten, die **aktuelle OpenAI-Dokumentation** zu Actions und MCP prüfen und die bereitgestellte Schema-URL verwenden.
+Note: The exact ChatGPT / GPT Store interface changes over time; if "Actions" only expect classic REST-OpenAPI without MCP, check the **current OpenAI documentation** for Actions and MCP and use the provided schema URL.
 
-## Nutzung über API
+## Usage via API
 
-Wenn du programmatisch gegen OpenAI und parallel PaperOffice-MCP arbeitest:
+If you work programmatically with OpenAI and PaperOffice MCP in parallel:
 
-- Verbinde deinen Stack mit `https://mcp.paperoffice.ai/openai` und dem Bearer-Token.
-- Nutze die vom Server exponierten MCP-Methoden (z. B. `tools/list`, `tools/call`) entsprechend dem MCP-Standard — siehe Rezept **Tool-Discovery** im selben Cookbook-Verzeichnis.
+- Connect your stack to `https://mcp.paperoffice.ai/openai` with the Bearer token.
+- Use the MCP methods exposed by the server (e.g. `tools/list`, `tools/call`) according to the MCP standard — see the **Tool Discovery** recipe in the same Cookbook directory.
 
-## Sicherheit
+## Security
 
-- API-Keys **nicht** in öffentlichen Repositories oder Screenshots abbilden.
-- Keys regelmäßig rotieren und nur mit minimal nötigen Berechtigungen verwenden.
+- **Do not** expose API keys in public repositories or screenshots.
+- Rotate keys regularly and use only with minimally required permissions.
 
-## Referenz: andere MCP-URLs
+## Reference: Other MCP URLs
 
-| Client-Typ | URL |
-|------------|-----|
+| Client Type | URL |
+|-------------|-----|
 | Cursor | `https://mcp.paperoffice.ai/cursor` |
 | Claude | `https://mcp.paperoffice.ai/claude` |
-| Standard-MCP | `https://mcp.paperoffice.ai/mcp` |
+| Standard MCP | `https://mcp.paperoffice.ai/mcp` |
 | Universal | `https://mcp.paperoffice.ai/` |
 
-Für ChatGPT und OpenAI-nahe Setups ist **`/openai`** die passende URL.
+For ChatGPT and OpenAI-related setups, **`/openai`** is the appropriate URL.

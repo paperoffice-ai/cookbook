@@ -1,6 +1,6 @@
-# OCR Text-Mode — Reiner Text, schnellster Modus
+# OCR Text-Mode — Plain text, fastest mode
 
-Extrahiere reinen Text aus PDFs, Bildern oder Scans. Der Text-Mode ist der schnellste OCR-Modus — ideal wenn nur der Textinhalt benötigt wird, ohne Layout- oder Positionsdaten.
+Extract plain text from PDFs, images, or scans. Text-Mode is the fastest OCR mode — ideal when only the text content is needed, without layout or position data.
 
 ## Endpoint
 
@@ -8,40 +8,40 @@ Extrahiere reinen Text aus PDFs, Bildern oder Scans. Der Text-Mode ist der schne
 POST https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter  | Wert     | Beschreibung                          |
+| Parameter  | Value    | Description                           |
 |-----------|----------|---------------------------------------|
-| `file_1`  | Datei    | Das zu verarbeitende Dokument         |
-| `ocr_mode`| `text`   | Nur reinen Text extrahieren           |
-| `priority`| `900`    | Synchrone Verarbeitung (sofort)       |
+| `file_1`  | File     | The document to process               |
+| `ocr_mode`| `text`   | Extract plain text only               |
+| `priority`| `900`    | Synchronous processing (immediate)    |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
-chmod +x example.sh && ./example.sh /pfad/zur/datei.pdf
+chmod +x example.sh && ./example.sh /path/to/file.pdf
 
 # Python
 pip install requests
-python3 example.py /pfad/zur/datei.pdf
+python3 example.py /path/to/file.pdf
 
 # Node.js (v18+)
-node example.js /pfad/zur/datei.pdf
+node example.js /path/to/file.pdf
 ```
 
-## Wann Text-Mode verwenden?
+## When to use Text-Mode?
 
-- **Volltextsuche** — Index für Suchmaschinen aufbauen
-- **KI-Verarbeitung** — Text als Input für LLMs oder Embeddings
-- **Schnelle Extraktion** — Wenn Layout/Position irrelevant ist
-- **Batch-Verarbeitung** — Hoher Durchsatz bei vielen Dokumenten
+- **Full-text search** — Build index for search engines
+- **AI processing** — Text as input for LLMs or embeddings
+- **Quick extraction** — When layout/position is irrelevant
+- **Batch processing** — High throughput for many documents
 
-## Response-Struktur
+## Response structure
 
 ```json
 {
@@ -52,7 +52,7 @@ node example.js /pfad/zur/datei.pdf
     "output": {
       "pages": {
         "00001": {
-          "ocr_text": "Text der ersten Seite...",
+          "ocr_text": "Text of the first page...",
           "line_count": 8,
           "confidence_avg": 0.9954,
           "char_count": 212,
@@ -65,7 +65,7 @@ node example.js /pfad/zur/datei.pdf
         "total_lines": 8,
         "total_chars": 212,
         "avg_confidence": 1,
-        "poaiocr_extracted_fulltext": "***Page 1 of 1***\n\nDer vollständige Text...",
+        "poaiocr_extracted_fulltext": "***Page 1 of 1***\n\nThe complete text...",
         "processing_engine": "paperoffice_ai_ocr_neural_v3.0"
       }
     },
@@ -74,17 +74,17 @@ node example.js /pfad/zur/datei.pdf
 }
 ```
 
-## Wichtige Felder
+## Key fields
 
-| Feld | Beschreibung |
-|------|-------------|
-| `summary.poaiocr_extracted_fulltext` | Gesamter Text aller Seiten (mit Seitenmarkern) |
-| `pages.XXXXX.ocr_text` | Text einer einzelnen Seite |
-| `pages.XXXXX.confidence_avg` | Erkennungssicherheit (0–1) |
-| `summary.avg_confidence` | Durchschnittliche Konfidenz über alle Seiten |
-| `summary.processing_engine` | Verwendete OCR-Engine |
+| Field | Description |
+|-------|-------------|
+| `summary.poaiocr_extracted_fulltext` | Full text of all pages (with page markers) |
+| `pages.XXXXX.ocr_text` | Text of a single page |
+| `pages.XXXXX.confidence_avg` | Recognition confidence (0–1) |
+| `summary.avg_confidence` | Average confidence across all pages |
+| `summary.processing_engine` | OCR engine used |
 
-## Siehe auch
+## See also
 
-- [Complete-Mode](../complete-mode/) — Text + Bounding Boxes + Tabellen
-- [Searchable PDF](../searchable-pdf/) — Durchsuchbare PDF erzeugen
+- [Complete-Mode](../complete-mode/) — Text + bounding boxes + tables
+- [Searchable PDF](../searchable-pdf/) — Generate searchable PDF

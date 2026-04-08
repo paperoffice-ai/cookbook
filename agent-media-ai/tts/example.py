@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 PaperOffice AI — Text-to-Speech (TTS)
-Wandelt Text in natürliche Sprache um (100+ Stimmen)
+Converts text to natural speech (100+ voices)
 
-Verwendung:
+Usage:
     export PAPEROFFICE_API_KEY=po_sk_xxx
     python example.py "Hallo Welt" Nadja mp3
 """
@@ -24,9 +24,9 @@ def text_to_speech(
     output: str = "url",
     token: str = API_KEY,
 ) -> dict:
-    """Erzeugt Audio aus Text über die PaperOffice TTS-API."""
+    """Generates audio from text via the PaperOffice TTS API."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.post(
         f"{BASE_URL}/job/add/paperoffice_voice___tts",
@@ -53,10 +53,10 @@ if __name__ == "__main__":
 
     result = data.get("result", {})
     print(f"Status:   {data.get('status', 'N/A')}")
-    print(f"Stimme:   {result.get('voice', 'N/A')}")
-    print(f"Sprache:  {result.get('language', 'N/A')}")
-    print(f"Dauer:    {result.get('audio_duration_seconds', 'N/A')}s")
-    print(f"Größe:    {result.get('audio_size', 'N/A')} Bytes")
+    print(f"Voice:    {result.get('voice', 'N/A')}")
+    print(f"Language: {result.get('language', 'N/A')}")
+    print(f"Duration: {result.get('audio_duration_seconds', 'N/A')}s")
+    print(f"Size:     {result.get('audio_size', 'N/A')} Bytes")
     if result.get("audio_url"):
         print(f"URL:      {result['audio_url']}")
     print()

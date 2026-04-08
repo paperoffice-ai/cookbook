@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# PaperOffice AI — Erster OCR-Call (Text-Extraktion)
+# PaperOffice AI — First OCR Call (Text Extraction)
 
 api_base="https://api.paperoffice.ai/latest"
-api_key="${PAPEROFFICE_API_KEY:?Bitte PAPEROFFICE_API_KEY setzen}"
-input_file="${1:?Bitte Dateipfad als Argument übergeben}"
+api_key="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY}"
+input_file="${1:?Error: Please provide file path as argument}"
 
 response=$(curl -s "${api_base}/job/add/paperoffice_aiocr___generate" \
   -H "Authorization: Bearer ${api_key}" \
@@ -11,15 +11,15 @@ response=$(curl -s "${api_base}/job/add/paperoffice_aiocr___generate" \
   -F "ocr_mode=text" \
   -F "priority=900")
 
-# Vollständige Antwort anzeigen
+# Show full response
 echo "${response}" | python3 -m json.tool
 
-# Extrahierten Text ausgeben
+# Print extracted text
 fulltext=$(echo "${response}" | python3 -c "
 import sys, json
 data = json.load(sys.stdin)
-print(data.get('result', {}).get('output', {}).get('summary', {}).get('poaiocr_extracted_fulltext', 'Kein Text extrahiert'))
+print(data.get('result', {}).get('output', {}).get('summary', {}).get('poaiocr_extracted_fulltext', 'No text extracted'))
 ")
 echo ""
-echo "--- Extrahierter Text ---"
+echo "--- Extracted Text ---"
 echo "${fulltext}"

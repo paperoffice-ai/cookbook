@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-/** PaperOffice AI — IP-Geolocation abfragen */
+/** PaperOffice AI — Query IP geolocation */
 
 const API_URL = "https://api.paperoffice.ai/latest/ip2location/full";
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
 async function get_geolocation(ip = null, locale = "de", token = API_KEY) {
-  if (!token) throw new Error("PAPEROFFICE_API_KEY nicht gesetzt");
+  if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
   const payload = { locale };
   if (ip) payload.ip = ip;

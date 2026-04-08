@@ -1,47 +1,47 @@
-# Webhooks — Event-Benachrichtigungen
+# Webhooks — Event Notifications
 
-Statt ständig den Job-Status zu pollen, kannst du Webhooks registrieren und wirst aktiv benachrichtigt wenn ein Ereignis eintritt.
+Instead of constantly polling the job status, you can register webhooks and get actively notified when an event occurs.
 
 ## Endpoints
 
-| Aktion     | Methode | Endpoint              |
-|-----------|---------|-----------------------|
-| Subscribe | POST    | `/webhooks/subscribe` |
-| Auflisten | GET     | `/webhooks/list`      |
-| Testen    | POST    | `/webhooks/test`      |
+| Action    | Method | Endpoint              |
+|-----------|--------|-----------------------|
+| Subscribe | POST   | `/webhooks/subscribe` |
+| List      | GET    | `/webhooks/list`      |
+| Test      | POST   | `/webhooks/test`      |
 
-**Authentifizierung:** Bearer Token für alle Endpoints
+**Authentication:** Bearer Token for all endpoints
 
-## Subscribe-Parameter
+## Subscribe parameters
 
 ```json
 {
-  "name": "mein_erster_webhook",
-  "url": "https://mein-server.de/webhook",
+  "name": "my_first_webhook",
+  "url": "https://my-server.com/webhook",
   "events": ["job.completed", "job.failed"],
-  "secret": "mein_geheimer_schlüssel"
+  "secret": "my_secret_key"
 }
 ```
 
-| Parameter | Pflicht | Beschreibung                              |
-|----------|---------|-------------------------------------------|
-| `name`   | Ja      | Eindeutiger Name für den Webhook          |
-| `url`    | Ja      | HTTPS-URL die aufgerufen wird             |
-| `events` | Ja      | Array von Event-Typen                     |
-| `secret` | Nein    | Shared Secret für Signatur-Verifizierung  |
-| `filters`| Nein    | Zusätzliche Filter (z.B. nach Tool-ID)    |
+| Parameter | Required | Description                              |
+|----------|----------|------------------------------------------|
+| `name`   | Yes      | Unique name for the webhook              |
+| `url`    | Yes      | HTTPS URL to be called                   |
+| `events` | Yes      | Array of event types                     |
+| `secret` | No       | Shared secret for signature verification |
+| `filters`| No       | Additional filters (e.g. by tool ID)     |
 
-## Verfügbare Events
+## Available events
 
-| Event            | Beschreibung                    |
+| Event            | Description                     |
 |-----------------|---------------------------------|
-| `job.completed` | Job erfolgreich abgeschlossen   |
-| `job.failed`    | Job fehlgeschlagen              |
-| `job.queued`    | Job in die Queue eingereiht     |
+| `job.completed` | Job completed successfully      |
+| `job.failed`    | Job failed                      |
+| `job.queued`    | Job added to the queue          |
 
-## Signatur-Verifizierung
+## Signature verification
 
-Jeder Webhook-Call enthält einen `X-PaperOffice-Signature` Header. Damit stellst du sicher, dass der Call wirklich von PaperOffice kommt:
+Every webhook call includes an `X-PaperOffice-Signature` header. Use it to verify that the call actually comes from PaperOffice:
 
 ```python
 import hmac, hashlib
@@ -55,29 +55,29 @@ expected = hmac.new(
 is_valid = hmac.compare_digest(expected, received_signature)
 ```
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
-# Webhook registrieren (Bash)
-chmod +x example.sh && ./example.sh https://mein-server.de/webhook
+# Register webhook (Bash)
+chmod +x example.sh && ./example.sh https://my-server.com/webhook
 
-# Python — Registrieren + Receiver starten
+# Python — Register + start receiver
 pip install requests flask
-python3 example.py https://mein-server.de/webhook   # Nur registrieren
-python3 example.py serve                              # Receiver starten
+python3 example.py https://my-server.com/webhook   # Register only
+python3 example.py serve                              # Start receiver
 
 # Node.js (v18+)
-node example.js https://mein-server.de/webhook   # Nur registrieren
-node example.js serve                             # Receiver starten
+node example.js https://my-server.com/webhook   # Register only
+node example.js serve                             # Start receiver
 ```
 
 ## Webhook vs. Polling
 
-| Aspekt       | Polling                     | Webhooks                       |
-|-------------|-----------------------------|--------------------------------|
-| Latenz      | Abhängig vom Intervall      | Quasi-Echtzeit                 |
-| Traffic     | Viele unnötige Requests     | Nur bei tatsächlichen Events   |
-| Komplexität | Einfacher zu implementieren | Braucht öffentlichen Endpoint  |
-| Zuverlässig | Immer (Pull-basiert)        | Retry-Logik nötig              |
+| Aspect      | Polling                      | Webhooks                       |
+|-------------|------------------------------|--------------------------------|
+| Latency     | Depends on interval          | Near real-time                 |
+| Traffic     | Many unnecessary requests    | Only on actual events          |
+| Complexity  | Easier to implement          | Requires public endpoint       |
+| Reliability | Always (pull-based)          | Retry logic required           |

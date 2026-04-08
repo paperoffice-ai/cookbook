@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Kassenbon-Extraktion (IDP Receipt)
+"""PaperOffice AI — Receipt Extraction (IDP Receipt)
 
-Extrahiert Felder aus Kassenbons und Quittungen.
+Extracts fields from receipts and till slips.
 
-Verwendung:
+Usage:
     export PAPEROFFICE_API_KEY=po_sk_xxx
-    python3 example.py kassenbon.pdf
+    python3 example.py receipt.pdf
 """
 import os
 import sys
@@ -16,9 +16,9 @@ api_key = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
 def extract_receipt(file_path: str, token: str = api_key) -> dict:
-    """Extrahiert Kassenbon-Felder via IDP."""
+    """Extracts receipt fields via IDP."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     with open(file_path, "rb") as f:
         response = requests.post(
@@ -36,17 +36,17 @@ def extract_receipt(file_path: str, token: str = api_key) -> dict:
 
 
 def print_receipt(data: dict):
-    """Gibt Kassenbon-Felder formatiert aus."""
+    """Prints receipt fields in formatted output."""
     pages = data.get("result", {}).get("pages_idp", [])
     if not pages:
-        print("Keine IDP-Daten gefunden")
+        print("No IDP data found")
         return
 
     fields = pages[0].get("suggested_fields", {})
-    print(f"Job-ID:  {data.get('job_id', '—')}")
-    print(f"Felder:  {len(fields)}")
+    print(f"Job ID:  {data.get('job_id', '—')}")
+    print(f"Fields:  {len(fields)}")
     print()
-    print(f"{'Feld':<32} {'Wert':<42} {'Konfidenz':<10}")
+    print(f"{'Field':<32} {'Value':<42} {'Confidence':<10}")
     print("─" * 86)
 
     for name, info in sorted(fields.items()):
@@ -60,7 +60,7 @@ def print_receipt(data: dict):
 if __name__ == "__main__":
     pdf = sys.argv[1] if len(sys.argv) > 1 else None
     if not pdf:
-        sys.exit("Verwendung: python3 example.py <kassenbon.pdf>")
+        sys.exit("Usage: python3 example.py <receipt.pdf>")
 
     result = extract_receipt(pdf)
     print_receipt(result)

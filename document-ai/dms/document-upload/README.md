@@ -1,6 +1,6 @@
-# Dokument hochladen (DMS Upload)
+# Upload document (DMS Upload)
 
-Lädt ein Dokument in das PaperOffice DMS hoch. Dokumente werden automatisch indexiert und sind sofort über die **Smart Search** auffindbar.
+Uploads a document to the PaperOffice DMS. Documents are automatically indexed and immediately discoverable via **Smart Search**.
 
 ## Endpoint
 
@@ -8,76 +8,76 @@ Lädt ein Dokument in das PaperOffice DMS hoch. Dokumente werden automatisch ind
 POST https://api.paperoffice.ai/latest/documents/upload
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter        | Pflicht | Beschreibung                                    |
-|------------------|---------|-------------------------------------------------|
-| `file_1`         | Ja      | Datei (PDF, DOCX, Bild, etc.)                   |
-| `workspace_name` | Ja      | Ziel-Workspace für das Dokument                  |
-| `tags`           | Nein    | Komma-getrennte Tags (z.B. "rechnung,2026,q1")  |
-| `description`    | Nein    | Optionale Beschreibung des Dokuments             |
+| Parameter        | Required | Description                                     |
+|------------------|----------|-------------------------------------------------|
+| `file_1`         | Yes      | File (PDF, DOCX, image, etc.)                   |
+| `workspace_name` | Yes      | Target workspace for the document                |
+| `tags`           | No       | Comma-separated tags (e.g. "invoice,2026,q1")   |
+| `description`    | No       | Optional description of the document             |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
-bash example.sh vertrag.pdf "Buchhaltung" "vertrag,2026"
+bash example.sh contract.pdf "Accounting" "contract,2026"
 
 # Python
 pip install requests
-python3 example.py vertrag.pdf "Buchhaltung" "vertrag,2026"
+python3 example.py contract.pdf "Accounting" "contract,2026"
 
 # Node.js
 npm install form-data
-node example.js vertrag.pdf "Buchhaltung" "vertrag,2026"
+node example.js contract.pdf "Accounting" "contract,2026"
 ```
 
-## Response-Struktur
+## Response structure
 
 ```json
 {
   "status": "success",
   "document": {
     "id": 1234,
-    "filename": "vertrag.pdf",
-    "workspace": "Buchhaltung",
-    "tags": ["vertrag", "2026"],
+    "filename": "contract.pdf",
+    "workspace": "Accounting",
+    "tags": ["contract", "2026"],
     "size": 245760,
     "created_at": "2026-04-08T10:30:00Z"
   }
 }
 ```
 
-## Upload-Workflow
+## Upload workflow
 
-1. **Workspace wählen** — Dokument einem bestehenden Workspace zuordnen
-2. **Tags vergeben** — Komma-getrennte Tags für spätere Filterung
-3. **Upload** — Datei wird hochgeladen und automatisch indexiert
-4. **Suche** — Dokument ist sofort über Smart Search auffindbar
+1. **Choose workspace** — Assign the document to an existing workspace
+2. **Assign tags** — Comma-separated tags for later filtering
+3. **Upload** — File is uploaded and automatically indexed
+4. **Search** — Document is immediately discoverable via Smart Search
 
-## Tagging-Strategie
+## Tagging strategy
 
-Empfohlene Tag-Kategorien:
+Recommended tag categories:
 
-| Kategorie     | Beispiele                          |
+| Category      | Examples                           |
 |---------------|------------------------------------|
-| Dokumenttyp   | `rechnung`, `vertrag`, `angebot`   |
-| Zeitraum      | `2026`, `q1`, `januar`             |
-| Abteilung     | `buchhaltung`, `hr`, `einkauf`     |
-| Status        | `offen`, `geprüft`, `archiviert`   |
-| Priorität     | `wichtig`, `dringend`              |
+| Document type | `invoice`, `contract`, `quote`     |
+| Time period   | `2026`, `q1`, `january`            |
+| Department    | `accounting`, `hr`, `procurement`  |
+| Status        | `open`, `reviewed`, `archived`     |
+| Priority      | `important`, `urgent`              |
 
-## Unterstützte Dateiformate
+## Supported file formats
 
 PDF, DOCX, DOC, XLSX, XLS, PPTX, PPT, TXT, CSV, PNG, JPG, TIFF, BMP, GIF, WEBP
 
-## Tipps
+## Tips
 
-- **Workspace vorher erstellen** — siehe Recipe `workspace-setup/`
-- **Tags konsistent vergeben** — erleichtert spätere Suche erheblich
-- **Dateigröße**: Maximal 50 MB pro Datei
-- Nach dem Upload kann das Dokument sofort mit `document-chat/` befragt werden
+- **Create workspace first** — see recipe `workspace-setup/`
+- **Use tags consistently** — greatly simplifies later searches
+- **File size**: Maximum 50 MB per file
+- After upload, the document can be queried immediately with `document-chat/`

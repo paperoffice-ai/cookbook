@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Intelligente Dokumentensuche im DMS
+"""PaperOffice AI — Smart document search in DMS
 
-Verwendung:
+Usage:
     export PAPEROFFICE_API_KEY=po_sk_xxx
-    python3 example.py "Vertragsbedingungen" "Buchhaltung"
+    python3 example.py "contract terms" "Accounting"
 """
 import os
 import sys
@@ -20,9 +20,9 @@ def document_search(
     offset: int = 0,
     token: str = api_key,
 ) -> dict:
-    """Führt eine semantische Suche im DMS durch."""
+    """Performs a semantic search in the DMS."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     data = {"global_search": query, "limit": limit, "offset": offset}
     if workspace_name:
@@ -38,13 +38,13 @@ def document_search(
 
 
 def print_results(data: dict):
-    """Formatierte Ausgabe der Suchergebnisse."""
+    """Formatted output of search results."""
     results = data.get("results", [])
     total = data.get("total", len(results))
 
-    print(f"Treffer: {total}")
+    print(f"Hits: {total}")
     print()
-    print(f"{'ID':<8} {'Dateiname':<35} {'Score':<10} {'Workspace':<20}")
+    print(f"{'ID':<8} {'Filename':<35} {'Score':<10} {'Workspace':<20}")
     print("─" * 75)
 
     for r in results:
@@ -62,16 +62,16 @@ def print_results(data: dict):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        sys.exit("Verwendung: python3 example.py <suchbegriff> [workspace] [limit]")
+        sys.exit("Usage: python3 example.py <search_term> [workspace] [limit]")
 
     query = sys.argv[1]
     workspace = sys.argv[2] if len(sys.argv) > 2 else ""
     limit = int(sys.argv[3]) if len(sys.argv) > 3 else 10
 
-    print(f"→ Suche nach: {query}")
+    print(f"→ Searching for: {query}")
     result = document_search(query, workspace_name=workspace, limit=limit)
 
     if result.get("status") == "success":
         print_results(result)
     else:
-        print("Fehler:", result)
+        print("Error:", result)

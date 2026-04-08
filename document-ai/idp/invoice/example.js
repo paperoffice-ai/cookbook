@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** PaperOffice AI — Rechnungs-Extraktion (IDP Invoice) */
+/** PaperOffice AI — Invoice Extraction (IDP Invoice) */
 const fs = require("fs");
 const path = require("path");
 
@@ -7,7 +7,7 @@ const api_url = "https://api.paperoffice.ai/latest/job/add/workflow";
 const api_key = process.env.PAPEROFFICE_API_KEY || "";
 
 async function extract_invoice(pdf_path, token = api_key) {
-  if (!token) throw new Error("PAPEROFFICE_API_KEY nicht gesetzt");
+  if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
   const FormData = (await import("form-data")).default;
   const form = new FormData();
@@ -29,20 +29,20 @@ async function extract_invoice(pdf_path, token = api_key) {
 (async () => {
   const pdf = process.argv[2];
   if (!pdf) {
-    console.error("Verwendung: node example.js <datei.pdf>");
+    console.error("Usage: node example.js <file.pdf>");
     process.exit(1);
   }
 
   const data = await extract_invoice(pdf);
   const pages = data?.result?.pages_idp || [];
   if (!pages.length) {
-    console.log("Keine IDP-Daten gefunden");
+    console.log("No IDP data found");
     process.exit(1);
   }
 
   const fields = pages[0]?.suggested_fields || {};
-  console.log(`Job-ID:  ${data.job_id ?? "—"}`);
-  console.log(`Felder:  ${Object.keys(fields).length}`);
+  console.log(`Job ID:  ${data.job_id ?? "—"}`);
+  console.log(`Fields:  ${Object.keys(fields).length}`);
   console.log();
 
   const sorted = Object.entries(fields).sort(([a], [b]) => a.localeCompare(b));

@@ -1,6 +1,6 @@
-# Entity-Extraktion — Named Entity Recognition (NER)
+# Entity Extraction — Named Entity Recognition (NER)
 
-Extrahiert benannte Entitäten (Personen, Organisationen, Orte, Daten, Beträge etc.) aus Texten oder Dokumenten mittels KI-gestützter NER-Analyse.
+Extracts named entities (persons, organizations, locations, dates, amounts, etc.) from texts or documents using AI-powered NER analysis.
 
 ## Endpoint
 
@@ -8,35 +8,35 @@ Extrahiert benannte Entitäten (Personen, Organisationen, Orte, Daten, Beträge 
 POST https://api.paperoffice.ai/latest/document_intelligence/entities
 ```
 
-**Authentifizierung:** Bearer Token
+**Authentication:** Bearer Token
 
-## Parameter
+## Parameters
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `text` | string | ✅* | Zu analysierender Text |
-| `file_1` | file | ✅* | Alternativ: Dokument hochladen (PDF, DOCX etc.) |
-| `entity_types` | string | ❌ | Komma-separierte Liste: `person`, `organization`, `location`, `date`, `money`, `phone`, `email` |
+| `text` | string | ✅* | Text to analyze |
+| `file_1` | file | ✅* | Alternatively: upload a document (PDF, DOCX, etc.) |
+| `entity_types` | string | ❌ | Comma-separated list: `person`, `organization`, `location`, `date`, `money`, `phone`, `email` |
 
-\* Entweder `text` oder `file_1` muss angegeben werden.
+\* Either `text` or `file_1` must be provided.
 
-## Ausführen
+## How to run
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
 
 # Bash
-bash example.sh "Die Firma ABC GmbH sitzt in Berlin."
+bash example.sh "The company ABC GmbH is located in Berlin."
 
 # Python
 pip install requests
-python3 example.py "Die Firma ABC GmbH sitzt in Berlin."
+python3 example.py "The company ABC GmbH is located in Berlin."
 
 # Node.js (v18+)
-node example.js "Die Firma ABC GmbH sitzt in Berlin."
+node example.js "The company ABC GmbH is located in Berlin."
 ```
 
-## Erwartete Antwort
+## Expected response
 
 ```json
 {
@@ -74,21 +74,21 @@ node example.js "Die Firma ABC GmbH sitzt in Berlin."
 }
 ```
 
-## Unterstützte Entity-Typen
+## Supported entity types
 
-| Typ | Beschreibung | Beispiele |
+| Type | Description | Examples |
 |---|---|---|
-| `person` | Personennamen | Max Mustermann, Dr. Meier |
-| `organization` | Firmen, Behörden | Mustermann GmbH, Finanzamt München |
-| `location` | Orte, Adressen | München, Hauptstraße 5 |
-| `date` | Datumsangaben | 15. März 2025, Q1/2024 |
-| `money` | Geldbeträge | 250.000 EUR, 1.500,00 € |
-| `phone` | Telefonnummern | +49 89 123456 |
-| `email` | E-Mail-Adressen | info@beispiel.de |
+| `person` | Person names | Max Mustermann, Dr. Meier |
+| `organization` | Companies, authorities | Mustermann GmbH, Finanzamt München |
+| `location` | Places, addresses | München, Hauptstraße 5 |
+| `date` | Date references | 15. März 2025, Q1/2024 |
+| `money` | Monetary amounts | 250.000 EUR, 1.500,00 € |
+| `phone` | Phone numbers | +49 89 123456 |
+| `email` | Email addresses | info@beispiel.de |
 
-## Anwendungsfälle
+## Common use cases
 
-- **Vertragsanalyse:** Parteien, Beträge und Fristen automatisch aus Verträgen extrahieren
-- **Rechnungsverarbeitung:** Lieferanten, Rechnungsnummern und Summen erkennen
-- **Compliance:** Personenbezogene Daten in Dokumenten identifizieren (DSGVO)
-- **Wissensmanagement:** Entitäten für Knowledge-Graph-Aufbau extrahieren
+- **Contract analysis:** Automatically extract parties, amounts and deadlines from contracts
+- **Invoice processing:** Recognize suppliers, invoice numbers and totals
+- **Compliance:** Identify personal data in documents (GDPR)
+- **Knowledge management:** Extract entities for knowledge graph construction

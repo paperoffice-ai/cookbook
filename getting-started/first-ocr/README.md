@@ -1,6 +1,6 @@
-# Erster OCR-Call — Text-Extraktion
+# First OCR Call — Text Extraction
 
-Extrahiere Text aus einem Dokument (PDF, Bild, Scan) mit PaperOffice AI OCR.
+Extract text from a document (PDF, image, scan) with PaperOffice AI OCR.
 
 ## Endpoint
 
@@ -8,47 +8,47 @@ Extrahiere Text aus einem Dokument (PDF, Bild, Scan) mit PaperOffice AI OCR.
 POST https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter  | Wert     | Beschreibung                          |
+| Parameter  | Value    | Description                           |
 |-----------|----------|---------------------------------------|
-| `file_1`  | Datei    | Das zu verarbeitende Dokument         |
-| `ocr_mode`| `text`   | Nur Text extrahieren (kein Layout)    |
-| `priority`| `900`    | Synchrone Verarbeitung (sofort)       |
+| `file_1`  | File     | The document to process               |
+| `ocr_mode`| `text`   | Extract text only (no layout)         |
+| `priority`| `900`    | Synchronous processing (immediate)    |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
-chmod +x example.sh && ./example.sh /pfad/zur/datei.pdf
+chmod +x example.sh && ./example.sh /path/to/file.pdf
 
 # Python
 pip install requests
-python3 example.py /pfad/zur/datei.pdf
+python3 example.py /path/to/file.pdf
 
 # Node.js (v18+)
-node example.js /pfad/zur/datei.pdf
+node example.js /path/to/file.pdf
 ```
 
-## Response-Struktur
+## Response structure
 
 ```json
 {
   "result": {
     "output": {
       "summary": {
-        "poaiocr_extracted_fulltext": "Der vollständige extrahierte Text...",
+        "poaiocr_extracted_fulltext": "The full extracted text...",
         "total_pages": 1,
         "total_lines": 42,
         "avg_confidence": 0.97
       },
       "pages": {
         "00001": {
-          "ocr_text": "Text der ersten Seite..."
+          "ocr_text": "Text of the first page..."
         }
       }
     }
@@ -56,12 +56,12 @@ node example.js /pfad/zur/datei.pdf
 }
 ```
 
-## Priority-System
+## Priority system
 
-| Priority | Verhalten                                      |
+| Priority | Behavior                                       |
 |---------|------------------------------------------------|
-| `900`   | **Synchron** — Ergebnis direkt in der Response  |
-| `500`   | **Async** — Gibt `job_id` zurück zum Pollen     |
-| `100`   | **Niedrig** — Hintergrund-Verarbeitung          |
+| `900`   | **Synchronous** — Result directly in the response |
+| `500`   | **Async** — Returns `job_id` for polling        |
+| `100`   | **Low** — Background processing                 |
 
-Für synchrone Ergebnisse (wie in diesem Beispiel) immer `priority=900` verwenden.
+For synchronous results (as in this example) always use `priority=900`.

@@ -1,18 +1,18 @@
 #!/usr/bin/env node
-/** PaperOffice AI — Async Job-Polling (Submit → Poll → Ergebnis) */
+/** PaperOffice AI — Async Job Polling (Submit → Poll → Result) */
 import { readFileSync } from "node:fs";
 import { basename } from "node:path";
 
 const api_base = "https://api.paperoffice.ai/latest";
 const api_key = process.env.PAPEROFFICE_API_KEY;
 if (!api_key) {
-  console.error("Fehler: PAPEROFFICE_API_KEY nicht gesetzt");
+  console.error("Error: PAPEROFFICE_API_KEY not set");
   process.exit(1);
 }
 
 const input_file = process.argv[2];
 if (!input_file) {
-  console.error("Fehler: Dateipfad als Argument übergeben");
+  console.error("Error: Please provide file path as argument");
   process.exit(1);
 }
 
@@ -20,8 +20,8 @@ const headers = { Authorization: `Bearer ${api_key}` };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Schritt 1: Job einreichen (priority=500 → async)
-console.log(">>> Job einreichen...");
+// Step 1: Submit job (priority=500 → async)
+console.log(">>> Submitting job...");
 const form_data = new FormData();
 const file_buffer = readFileSync(input_file);
 form_data.append("file_1", new Blob([file_buffer]), basename(input_file));
@@ -36,14 +36,14 @@ const submit_response = await fetch(
 const submit_data = await submit_response.json();
 const job_id = submit_data.job_id;
 if (!job_id) {
-  console.error("Fehler: Keine job_id erhalten", submit_data);
+  console.error("Error: No job_id received", submit_data);
   process.exit(1);
 }
 
-console.log(`Job eingereicht: ${job_id}`);
+console.log(`Job submitted: ${job_id}`);
 
-// Schritt 2: Status pollen bis fertig
-console.log(">>> Warte auf Ergebnis...");
+// Step 2: Poll status until completed
+console.log(">>> Waiting for result...");
 const max_attempts = 30;
 
 for (let attempt = 1; attempt <= max_attempts; attempt++) {
@@ -55,23 +55,23 @@ for (let attempt = 1; attempt <= max_attempts; attempt++) {
   const poll_data = await poll_response.json();
   const status = poll_data.status ?? "unknown";
 
-  console.log(`  Versuch ${attempt}/${max_attempts}: ${status}`);
+  console.log(`  Attempt ${attempt}/${max_attempts}: ${status}`);
 
   if (status === "completed") {
     const summary = poll_data?.result?.output?.summary ?? {};
     console.log();
-    console.log("--- Ergebnis ---");
-    console.log(`Seiten: ${summary.total_pages}`);
-    console.log(`Zeilen: ${summary.total_lines}`);
-    console.log(summary.poaiocr_extracted_fulltext ?? "Kein Text");
+    console.log("--- Result ---");
+    console.log(`Pages: ${summary.total_pages}`);
+    console.log(`Lines: ${summary.total_lines}`);
+    console.log(summary.poaiocr_extracted_fulltext ?? "No text");
     process.exit(0);
   }
 
   if (status === "failed" || status === "error") {
-    console.error("Job fehlgeschlagen!", poll_data);
+    console.error("Job failed!", poll_data);
     process.exit(1);
   }
 }
 
-console.error(`Timeout: Job nach ${max_attempts} Versuchen nicht fertig`);
+console.error(`Timeout: Job not completed after ${max_attempts} attempts`);
 process.exit(1);

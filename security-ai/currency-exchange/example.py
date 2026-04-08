@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Wechselkurse abfragen (VISITOR-fähig, kein Token nötig)"""
+"""PaperOffice AI — Query exchange rates (VISITOR-capable, no token required)"""
 import os
 import sys
 import requests
@@ -8,7 +8,7 @@ API_URL = "https://api.paperoffice.ai/latest/currency_exchange/get_rates"
 
 
 def get_exchange_rates(from_currency: str = "EUR", to_currency: str = None, amount: float = 1) -> dict:
-    """Ruft aktuelle Wechselkurse für 172+ Währungen ab."""
+    """Fetches current exchange rates for 172+ currencies."""
     payload = {"from": from_currency, "amount": amount}
     if to_currency:
         payload["to"] = to_currency
@@ -34,9 +34,9 @@ if __name__ == "__main__":
 
     data = get_exchange_rates(from_cur, to_cur, amount)
 
-    print(f"Basis:    {data.get('base')}")
-    print(f"Betrag:   {data.get('amount')}")
-    print(f"Währungen:{data.get('currencies_count')}")
+    print(f"Base:       {data.get('base')}")
+    print(f"Amount:     {data.get('amount')}")
+    print(f"Currencies: {data.get('currencies_count')}")
 
     rates = data.get("rates", {})
     top_currencies = ["USD", "GBP", "CHF", "JPY", "CNY"]

@@ -9,19 +9,19 @@ import requests
 api_base = "https://api.paperoffice.ai/latest"
 api_key = os.environ.get("PAPEROFFICE_API_KEY")
 if not api_key:
-    sys.exit("Fehler: PAPEROFFICE_API_KEY nicht gesetzt")
+    sys.exit("Error: PAPEROFFICE_API_KEY not set")
 
 headers = {"Authorization": f"Bearer {api_key}"}
-webhook_secret = "mein_webhook_secret_123"
+webhook_secret = "my_webhook_secret_123"
 
 
 def subscribe_webhook(url, events):
-    """Webhook bei PaperOffice registrieren."""
+    """Register a webhook with PaperOffice."""
     response = requests.post(
         f"{api_base}/webhooks/subscribe",
         headers={**headers, "Content-Type": "application/json"},
         json={
-            "name": "mein_erster_webhook",
+            "name": "my_first_webhook",
             "url": url,
             "events": events,
             "secret": webhook_secret,
@@ -31,13 +31,13 @@ def subscribe_webhook(url, events):
 
 
 def list_webhooks():
-    """Alle registrierten Webhooks abrufen."""
+    """Retrieve all registered webhooks."""
     response = requests.get(f"{api_base}/webhooks/list", headers=headers)
     return response.json()
 
 
 def verify_signature(payload_body, signature):
-    """Webhook-Signatur mit HMAC-SHA256 verifizieren."""
+    """Verify webhook signature with HMAC-SHA256."""
     expected = hmac.new(
         webhook_secret.encode(),
         payload_body,
@@ -46,26 +46,26 @@ def verify_signature(payload_body, signature):
     return hmac.compare_digest(expected, signature)
 
 
-# --- Webhook registrieren und auflisten ---
+# --- Register webhook and list all ---
 if __name__ == "__main__":
     webhook_url = sys.argv[1] if len(sys.argv) > 1 else "https://example.com/webhook"
 
-    print(">>> Webhook registrieren...")
+    print(">>> Registering webhook...")
     result = subscribe_webhook(webhook_url, ["job.completed", "job.failed"])
     print(result)
 
-    print("\n>>> Webhooks auflisten...")
+    print("\n>>> Listing webhooks...")
     webhooks = list_webhooks()
-    print(f"Gesamt: {webhooks.get('total', 0)}")
+    print(f"Total: {webhooks.get('total', 0)}")
     for sub in webhooks.get("subscriptions", []):
         print(f"  - {sub.get('name')}: {sub.get('url')}")
 
-    # --- Flask-basierter Receiver (optional starten mit: python example.py serve) ---
+    # --- Flask-based receiver (optionally start with: python example.py serve) ---
     if len(sys.argv) > 1 and sys.argv[1] == "serve":
         try:
             from flask import Flask, request, jsonify
         except ImportError:
-            sys.exit("Flask nicht installiert: pip install flask")
+            sys.exit("Flask not installed: pip install flask")
 
         app = Flask(__name__)
 
@@ -73,13 +73,13 @@ if __name__ == "__main__":
         def receive_webhook():
             signature = request.headers.get("X-PaperOffice-Signature", "")
             if not verify_signature(request.get_data(), signature):
-                return jsonify({"error": "Ungültige Signatur"}), 401
+                return jsonify({"error": "Invalid signature"}), 401
 
             event = request.json
-            print(f"Webhook empfangen: {event.get('event')}")
-            print(f"  Job-ID: {event.get('job_id')}")
+            print(f"Webhook received: {event.get('event')}")
+            print(f"  Job ID: {event.get('job_id')}")
             print(f"  Status: {event.get('status')}")
             return jsonify({"received": True}), 200
 
-        print("\n>>> Webhook-Receiver läuft auf http://localhost:5000/webhook")
+        print("\n>>> Webhook receiver running on http://localhost:5000/webhook")
         app.run(port=5000)

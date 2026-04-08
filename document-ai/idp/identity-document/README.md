@@ -1,6 +1,6 @@
-# Ausweisdokument-Extraktion (IDP Identity)
+# Identity Document Extraction (IDP Identity)
 
-Extrahiert strukturierte Daten aus **Personalausweisen, Reisepässen und Führerscheinen** — Name, Geburtsdatum, Dokumentnummer, Ablaufdatum, Nationalität und mehr.
+Extracts structured data from **ID cards, passports, and driver's licenses** — name, date of birth, document number, expiry date, nationality, and more.
 
 ## Endpoint
 
@@ -8,69 +8,69 @@ Extrahiert strukturierte Daten aus **Personalausweisen, Reisepässen und Führer
 POST https://api.paperoffice.ai/latest/job/add/workflow
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter         | Wert       | Beschreibung                         |
+| Parameter         | Value      | Description                          |
 |-------------------|------------|--------------------------------------|
-| `file_1`          | Datei      | Scan oder Foto des Ausweises         |
-| `model`           | `premium`  | Extraktionsqualität                  |
-| `idp_collection`  | `identity` | Ausweisdokument-Extraktion aktivieren|
-| `priority`        | `900`      | Synchrone Verarbeitung (≥900)        |
+| `file_1`          | File       | Scan or photo of the ID document     |
+| `model`           | `premium`  | Extraction quality                   |
+| `idp_collection`  | `identity` | Enable identity document extraction  |
+| `priority`        | `900`      | Synchronous processing (≥900)        |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
-bash example.sh ausweis.pdf
+bash example.sh id_card.pdf
 
 # Python
 pip install requests
-python3 example.py ausweis.pdf
+python3 example.py id_card.pdf
 
 # Node.js
 npm install form-data
-node example.js ausweis.pdf
+node example.js id_card.pdf
 ```
 
-## Verfügbare Ausweis-Felder
+## Available identity document fields
 
-### Persönliche Daten
+### Personal data
 
-| Feld                     | Typ      | Beschreibung                         |
+| Field                    | Type     | Description                          |
 |--------------------------|----------|--------------------------------------|
-| `_first_name`            | string   | Vorname                              |
-| `_last_name`             | string   | Nachname                             |
-| `_full_name`             | string   | Vollständiger Name                   |
-| `_date_of_birth`         | date     | Geburtsdatum                         |
-| `_place_of_birth`        | string   | Geburtsort                           |
-| `_gender`                | string   | Geschlecht                           |
-| `_nationality`           | string   | Staatsangehörigkeit                  |
-| `_address`               | string   | Wohnadresse (falls vorhanden)        |
+| `_first_name`            | string   | First name                           |
+| `_last_name`             | string   | Last name                            |
+| `_full_name`             | string   | Full name                            |
+| `_date_of_birth`         | date     | Date of birth                        |
+| `_place_of_birth`        | string   | Place of birth                       |
+| `_gender`                | string   | Gender                               |
+| `_nationality`           | string   | Nationality                          |
+| `_address`               | string   | Residential address (if available)   |
 
-### Dokumentdaten
+### Document data
 
-| Feld                     | Typ      | Beschreibung                         |
+| Field                    | Type     | Description                          |
 |--------------------------|----------|--------------------------------------|
-| `_document_type`         | string   | Art (Personalausweis, Reisepass, Führerschein) |
-| `_document_number`       | string   | Dokumentnummer / Seriennummer        |
-| `_issuing_authority`     | string   | Ausstellende Behörde                 |
-| `_issuing_country`       | string   | Ausstellungsland                     |
-| `_issue_date`            | date     | Ausstellungsdatum                    |
-| `_expiry_date`           | date     | Ablaufdatum / Gültig bis             |
+| `_document_type`         | string   | Type (ID card, passport, driver's license) |
+| `_document_number`       | string   | Document number / serial number      |
+| `_issuing_authority`     | string   | Issuing authority                    |
+| `_issuing_country`       | string   | Issuing country                      |
+| `_issue_date`            | date     | Issue date                           |
+| `_expiry_date`           | date     | Expiry date / valid until            |
 
-### Maschinenlesbare Zone (MRZ)
+### Machine Readable Zone (MRZ)
 
-| Feld                     | Typ      | Beschreibung                         |
+| Field                    | Type     | Description                          |
 |--------------------------|----------|--------------------------------------|
-| `_mrz_line_1`            | string   | Erste Zeile der MRZ                  |
-| `_mrz_line_2`            | string   | Zweite Zeile der MRZ                 |
-| `_mrz_line_3`            | string   | Dritte Zeile der MRZ (falls vorhanden)|
+| `_mrz_line_1`            | string   | First line of the MRZ               |
+| `_mrz_line_2`            | string   | Second line of the MRZ              |
+| `_mrz_line_3`            | string   | Third line of the MRZ (if available)|
 
-## Response-Struktur
+## Response structure
 
 ```json
 {
@@ -110,17 +110,17 @@ node example.js ausweis.pdf
 }
 ```
 
-## Typische Anwendungsfälle
+## Common use cases
 
-- **KYC-Prüfung**: Know Your Customer im Finanzsektor
-- **Onboarding**: Automatische Datenerfassung bei Neukundenregistrierung
-- **Altersverifikation**: Geburtsdatum automatisch prüfen
-- **Ablaufüberwachung**: Dokumente mit ablaufender Gültigkeit erkennen
+- **KYC verification**: Know Your Customer in the financial sector
+- **Onboarding**: Automatic data capture during new customer registration
+- **Age verification**: Automatically check date of birth
+- **Expiry monitoring**: Detect documents with upcoming expiration
 
-## Hinweis zum Datenschutz
+## Data privacy notice
 
-Ausweisdokumente enthalten besonders schützenswerte personenbezogene Daten. Beachte:
-- DSGVO-konforme Verarbeitung sicherstellen
-- Daten nur so lange speichern wie nötig
-- Zugriff auf extrahierte Daten beschränken
-- PaperOffice AI verarbeitet Daten auf EU-Servern (Frankfurt)
+Identity documents contain particularly sensitive personal data. Please note:
+- Ensure GDPR-compliant processing
+- Only store data for as long as necessary
+- Restrict access to extracted data
+- PaperOffice AI processes data on EU servers (Frankfurt)

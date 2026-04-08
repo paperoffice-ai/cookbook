@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Health Check (VISITOR, kein Token nötig)"""
+"""PaperOffice AI — Health Check (VISITOR, no token required)"""
 import requests
 
 response = requests.get("https://api.paperoffice.ai/latest/health")

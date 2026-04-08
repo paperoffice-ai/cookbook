@@ -1,6 +1,6 @@
-# Geocoding — Adresse ↔ Koordinaten
+# Geocoding — Address ↔ Coordinates
 
-Wandelt Adressen in GPS-Koordinaten um (Forward) und Koordinaten zurück in Adressen (Reverse). Unterstützt mehrere Sprachen.
+Converts addresses into GPS coordinates (forward) and coordinates back into addresses (reverse). Supports multiple languages.
 
 ## Endpoints
 
@@ -9,24 +9,24 @@ POST https://api.paperoffice.ai/latest/geocoding/forward
 POST https://api.paperoffice.ai/latest/geocoding/reverse
 ```
 
-**Authentifizierung:** Bearer Token erforderlich.
+**Authentication:** Bearer token required.
 
 ## Parameter (Forward)
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `address` | string | ✅ | Adresse oder Ortsname |
-| `lang` | string | ❌ | Sprache der Antwort (Standard: `de`) |
+| `address` | string | ✅ | Address or place name |
+| `lang` | string | ❌ | Response language (default: `de`) |
 
 ## Parameter (Reverse)
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `lat` | float | ✅ | Breitengrad |
-| `lng` | float | ✅ | Längengrad |
-| `lang` | string | ❌ | Sprache der Antwort (Standard: `de`) |
+| `lat` | float | ✅ | Latitude |
+| `lng` | float | ✅ | Longitude |
+| `lang` | string | ❌ | Response language (default: `de`) |
 
-## Ausführen
+## How to run
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
@@ -42,7 +42,7 @@ python3 example.py "Brandenburger Tor, Berlin"
 node example.js "Marienplatz, München"
 ```
 
-## Erwartete Antwort (Forward)
+## Expected response (Forward)
 
 ```json
 {
@@ -60,9 +60,9 @@ node example.js "Marienplatz, München"
 }
 ```
 
-## Anwendungsfälle
+## Common use cases
 
-- **Adressvalidierung:** Prüfen ob eine eingegebene Adresse existiert
-- **Entfernungsberechnung:** Koordinaten für Distanz-Berechnungen ermitteln
-- **Kartendarstellung:** Adressen auf Karten anzeigen
-- **Lieferzonen:** Prüfen ob eine Adresse in ein bestimmtes Gebiet fällt
+- **Address validation:** Check whether an entered address exists
+- **Distance calculation:** Determine coordinates for distance calculations
+- **Map display:** Show addresses on maps
+- **Delivery zones:** Check whether an address falls within a specific area

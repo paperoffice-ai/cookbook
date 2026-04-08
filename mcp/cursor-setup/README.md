@@ -1,18 +1,18 @@
-# MCP-Setup für Cursor IDE
+# MCP Setup for Cursor IDE
 
-Anleitung zum Anbinden des **PaperOffice MCP-Servers** an die **Cursor IDE**. Nach erfolgreicher Konfiguration stehen alle PaperOffice-API-Tools direkt im KI-Chat zur Verfügung.
+Guide for connecting the **PaperOffice MCP Server** to the **Cursor IDE**. After successful configuration, all PaperOffice API tools are available directly in the AI chat.
 
-## Verifizierter Endpoint
+## Verified Endpoint
 
 | Transport | URL |
 |-----------|-----|
 | SSE (Server-Sent Events) | `https://mcp.paperoffice.ai/cursor` |
 
-**Authentifizierung:** Bearer-Token über HTTP-Header oder Query-Parameter (`Authorization: Bearer <token>` bzw. entsprechender Query-Name je nach Client).
+**Authentication:** Bearer token via HTTP header or query parameter (`Authorization: Bearer <token>` or corresponding query name depending on client).
 
-## Konfiguration: `.cursor/mcp.json`
+## Configuration: `.cursor/mcp.json`
 
-Lege im Projektroot (oder in der Cursor-Konfiguration) eine Datei `.cursor/mcp.json` an bzw. ergänze sie um den Eintrag `paperoffice`:
+Create or update a file `.cursor/mcp.json` in your project root (or in the Cursor configuration) with the `paperoffice` entry:
 
 ```json
 {
@@ -27,34 +27,34 @@ Lege im Projektroot (oder in der Cursor-Konfiguration) eine Datei `.cursor/mcp.j
 }
 ```
 
-Ersetze `your_api_key` durch deinen gültigen PaperOffice-API-Schlüssel.
+Replace `your_api_key` with your valid PaperOffice API key.
 
-## Was passiert danach?
+## What happens next?
 
-- Cursor nutzt **SSE-Transport** für die Verbindung zum MCP-Server.
-- Es stehen **alle 357 PaperOffice-Tools** (Stand Plattform) im KI-Kontext bereit — dieselbe Toolpalette wie über die REST-API, gebündelt über MCP.
-- Du musst keine einzelnen Endpoints manuell im Chat referenzieren; das Modell kann passende Tools auswählen und aufrufen.
+- Cursor uses **SSE transport** for the connection to the MCP server.
+- **All 357 PaperOffice tools** (as of current platform) are available in the AI context — the same tool palette as via the REST API, bundled through MCP.
+- You don't need to manually reference individual endpoints in the chat; the model can select and invoke matching tools.
 
-## Vorteile im Alltag
+## Benefits in daily use
 
-- **OCR, IDP, Übersetzung, TTS, STT** und weitere Kategorien direkt aus dem Editor heraus testen und automatisieren.
-- Weniger Kontextwechsel: Experimente und kleine Pipelines bleiben in Cursor statt in separaten Skripten oder Postman.
-- Konsistente Authentifizierung über denselben API-Key wie bei direkten API-Aufrufen.
+- **OCR, IDP, Translation, TTS, STT** and other categories can be tested and automated directly from the editor.
+- Less context switching: experiments and small pipelines stay in Cursor instead of separate scripts or Postman.
+- Consistent authentication using the same API key as for direct API calls.
 
 ## Troubleshooting
 
-1. **API-Key:** Prüfe, ob der Key aktiv ist, zum richtigen Konto gehört und nicht abgelaufen ist. Header muss exakt `Bearer <token>` sein (Leerzeichen nach `Bearer`).
-2. **Erreichbarkeit:** Prüfe den Server-Status mit `GET https://mcp.paperoffice.ai/health` (oder dem in eurer Umgebung dokumentierten Health-Pfad auf dem MCP-Host).
-3. **Netzwerk / Proxy:** Firewalls oder TLS-Inspektion können SSE-Verbindungen stören — ggf. Ausnahmen für `mcp.paperoffice.ai` setzen.
-4. **Cursor-Version:** Stelle sicher, dass die installierte Cursor-Version MCP mit Remote-URL und SSE unterstützt; bei Problemen Release Notes prüfen.
+1. **API Key:** Check that the key is active, belongs to the correct account, and has not expired. The header must be exactly `Bearer <token>` (space after `Bearer`).
+2. **Reachability:** Check the server status with `GET https://mcp.paperoffice.ai/health` (or the health path documented for your environment on the MCP host).
+3. **Network / Proxy:** Firewalls or TLS inspection can disrupt SSE connections — set exceptions for `mcp.paperoffice.ai` if needed.
+4. **Cursor Version:** Make sure the installed Cursor version supports MCP with remote URL and SSE; check the release notes if issues arise.
 
-## Weitere Endpunkte (Überblick)
+## Other Endpoints (Overview)
 
-| Zweck | URL |
-|-------|-----|
-| Claude-optimiert | `https://mcp.paperoffice.ai/claude` |
+| Purpose | URL |
+|---------|-----|
+| Claude-optimized | `https://mcp.paperoffice.ai/claude` |
 | OpenAI / ChatGPT | `https://mcp.paperoffice.ai/openai` |
-| Standard-MCP | `https://mcp.paperoffice.ai/mcp` |
+| Standard MCP | `https://mcp.paperoffice.ai/mcp` |
 | Universal | `https://mcp.paperoffice.ai/` |
 
-Für Cursor ist der Eintrag **`/cursor`** die passende URL.
+For Cursor, the **`/cursor`** entry is the appropriate URL.

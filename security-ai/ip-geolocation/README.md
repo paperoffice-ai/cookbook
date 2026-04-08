@@ -1,6 +1,6 @@
-# IP-Geolocation — Standort & Gerätedaten
+# IP Geolocation — Location & Device Data
 
-Ermittelt den physischen Standort, Geräteinformationen und Wechselkurse für eine IP-Adresse. Ohne IP-Parameter wird die eigene IP des Aufrufers verwendet.
+Retrieves the physical location, device information, and exchange rates for an IP address. Without the IP parameter, the caller's own IP is used.
 
 ## Endpoint
 
@@ -8,24 +8,24 @@ Ermittelt den physischen Standort, Geräteinformationen und Wechselkurse für ei
 POST https://api.paperoffice.ai/latest/ip2location/full
 ```
 
-**Authentifizierung:** VISITOR-fähig (IP-Ratelimit), empfohlen mit Bearer Token.
+**Authentication:** VISITOR-capable (IP rate limit), recommended with Bearer token.
 
 ## Parameter
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `ip` | string | ❌ | IP-Adresse (Standard: eigene IP) |
-| `locale` | string | ❌ | Sprache der Antwort (Standard: `de`) |
+| `ip` | string | ❌ | IP address (default: own IP) |
+| `locale` | string | ❌ | Response language (default: `de`) |
 
-## Ausführen
+## How to run
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
 
-# Bash — eigene IP
+# Bash — own IP
 bash example.sh
 
-# Bash — bestimmte IP
+# Bash — specific IP
 bash example.sh "8.8.8.8"
 
 # Python
@@ -36,7 +36,7 @@ python3 example.py "8.8.8.8"
 node example.js "8.8.8.8"
 ```
 
-## Erwartete Antwort (gekürzt)
+## Expected response (abbreviated)
 
 ```json
 {
@@ -57,8 +57,8 @@ node example.js "8.8.8.8"
 }
 ```
 
-## Anwendungsfälle
+## Common use cases
 
-- **Geo-Blocking:** Zugriff auf Inhalte nach Land einschränken
-- **Betrugserkennung:** IP-Standort mit Rechnungsadresse vergleichen
-- **Lokalisierung:** Sprache, Währung und Steuersätze automatisch anpassen
+- **Geo-blocking:** Restrict access to content by country
+- **Fraud detection:** Compare IP location with billing address
+- **Localization:** Automatically adapt language, currency, and tax rates

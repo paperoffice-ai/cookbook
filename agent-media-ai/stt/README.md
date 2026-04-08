@@ -1,8 +1,8 @@
 # Speech-to-Text (STT)
 
-Transkribiert Audio-Dateien in Text. Unterstützt MP3, WAV, OGG, FLAC, M4A und WEBM (max. 25 MB). Automatische Spracherkennung oder manueller Sprach-Hint.
+Transcribes audio files to text. Supports MP3, WAV, OGG, FLAC, M4A and WEBM (max. 25 MB). Automatic language detection or manual language hint.
 
-## Voraussetzungen
+## Prerequisites
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
@@ -13,9 +13,9 @@ export PAPEROFFICE_API_KEY=po_sk_xxx
 ```bash
 # cURL
 bash example.sh audio.mp3
-bash example.sh audio.mp3 de    # mit Sprach-Hint
+bash example.sh audio.mp3 de    # with language hint
 
-# Python (benötigt: pip install requests)
+# Python (requires: pip install requests)
 python example.py audio.mp3
 python example.py audio.mp3 de
 
@@ -30,29 +30,29 @@ node example.js audio.mp3 de
 POST https://api.paperoffice.ai/latest/job/add/paperoffice_voice___stt
 ```
 
-## Parameter
+## Parameters
 
-| Parameter | Typ | Pflicht | Default | Beschreibung |
+| Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `file_1` | file | ✅ | — | Audio-Datei (MP3/WAV/OGG/FLAC/M4A/WEBM, max. 25 MB) |
-| `priority` | int | — | — | `≥ 900` für synchrone Verarbeitung |
-| `locale` | string | — | auto | Sprach-Hint (z.B. `de`, `en`, `fr`) |
-| `language` | string | — | auto | Alternative zu `locale` |
+| `file_1` | file | ✅ | — | Audio file (MP3/WAV/OGG/FLAC/M4A/WEBM, max. 25 MB) |
+| `priority` | int | — | — | `≥ 900` for synchronous processing |
+| `locale` | string | — | auto | Language hint (e.g. `de`, `en`, `fr`) |
+| `language` | string | — | auto | Alternative to `locale` |
 
-> **Wichtig:** Der Datei-Key ist `file_1`, **nicht** `file`!
+> **Important:** The file key is `file_1`, **not** `file`!
 
-## Unterstützte Audio-Formate
+## Supported Audio Formats
 
-| Format | MIME-Type | Hinweis |
+| Format | MIME Type | Note |
 |---|---|---|
-| MP3 | `audio/mpeg` | Am häufigsten verwendet |
-| WAV | `audio/wav` | Unkomprimiert, beste Qualität |
-| OGG | `audio/ogg` | Kompakt, gute Qualität |
-| FLAC | `audio/flac` | Verlustfrei komprimiert |
-| M4A | `audio/mp4` | Apple-Format |
-| WEBM | `audio/webm` | Browser-Aufnahmen |
+| MP3 | `audio/mpeg` | Most commonly used |
+| WAV | `audio/wav` | Uncompressed, best quality |
+| OGG | `audio/ogg` | Compact, good quality |
+| FLAC | `audio/flac` | Losslessly compressed |
+| M4A | `audio/mp4` | Apple format |
+| WEBM | `audio/webm` | Browser recordings |
 
-## Response-Beispiel
+## Response Example
 
 ```json
 {
@@ -67,8 +67,8 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_voice___stt
 }
 ```
 
-## Tipps
+## Tips
 
-- **Sprach-Hint:** Bei mehrsprachigen Audios kann `locale` die Erkennungsgenauigkeit verbessern
-- **Dateigröße:** Maximal 25 MB pro Request — längere Aufnahmen vorher splitten
-- **Qualität:** Das Feld `quality` zeigt die verwendete Erkennungsstufe an
+- **Language hint:** For multilingual audio, `locale` can improve recognition accuracy
+- **File size:** Maximum 25 MB per request — split longer recordings beforehand
+- **Quality:** The `quality` field indicates the recognition tier used

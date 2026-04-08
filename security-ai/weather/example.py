@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Wetterdaten abrufen (GRATIS, kostet keine Credits!)"""
+"""PaperOffice AI — Fetch weather data (FREE, costs no credits!)"""
 import os
 import sys
 import json
@@ -10,9 +10,9 @@ API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
 def get_weather(lat: float, lon: float, locale: str = "de", token: str = API_KEY) -> dict:
-    """Holt aktuelle Wetterdaten, Vorhersage und Luftqualität für Koordinaten."""
+    """Fetches current weather data, forecast, and air quality for coordinates."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.post(
         API_URL,
@@ -31,18 +31,18 @@ if __name__ == "__main__":
     current = data.get("current", {})
     condition = current.get("condition", {})
 
-    print(f"Temperatur:    {current.get('temp_c')}°C")
-    print(f"Zustand:       {condition.get('text')}")
-    print(f"Luftfeuchtigkeit: {current.get('humidity')}%")
-    print(f"Wind:          {current.get('wind_kph')} km/h")
+    print(f"Temperature: {current.get('temp_c')}°C")
+    print(f"Condition:   {condition.get('text')}")
+    print(f"Humidity:    {current.get('humidity')}%")
+    print(f"Wind:        {current.get('wind_kph')} km/h")
 
     air = data.get("air_quality", {})
     if air:
-        print(f"Luftqualität:  {json.dumps(air, ensure_ascii=False)[:200]}")
+        print(f"Air quality: {json.dumps(air, ensure_ascii=False)[:200]}")
 
     forecast = data.get("forecast", [])
     if forecast:
-        print(f"\nVorhersage ({len(forecast)} Tage):")
+        print(f"\nForecast ({len(forecast)} days):")
         for day in forecast[:3]:
             print(f"  {day.get('date')}: {day.get('day', {}).get('condition', {}).get('text')} "
                   f"({day.get('day', {}).get('mintemp_c')}–{day.get('day', {}).get('maxtemp_c')}°C)")

@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-/** PaperOffice AI — Workspace erstellen & auflisten */
+/** PaperOffice AI — Create & list workspaces */
 
 const api_base = "https://api.paperoffice.ai/latest";
 const api_key = process.env.PAPEROFFICE_API_KEY || "";
 
 async function workspace_create(name, description = "", token = api_key) {
-  if (!token) throw new Error("PAPEROFFICE_API_KEY nicht gesetzt");
+  if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
   const response = await fetch(`${api_base}/documents/workspace_create`, {
     method: "POST",
@@ -21,7 +21,7 @@ async function workspace_create(name, description = "", token = api_key) {
 }
 
 async function workspace_list(token = api_key) {
-  if (!token) throw new Error("PAPEROFFICE_API_KEY nicht gesetzt");
+  if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
   const response = await fetch(`${api_base}/documents/workspace_list`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -32,28 +32,28 @@ async function workspace_list(token = api_key) {
 }
 
 (async () => {
-  const name = process.argv[2] || "Mein Workspace";
-  const desc = process.argv[3] || "Automatisch erstellter Workspace";
+  const name = process.argv[2] || "My Workspace";
+  const desc = process.argv[3] || "Automatically created workspace";
 
-  console.log(`→ Erstelle Workspace: ${name}`);
+  console.log(`→ Creating workspace: ${name}`);
   const create_data = await workspace_create(name, desc);
 
   if (create_data.status === "success") {
     const ws = create_data.workspace || {};
-    console.log(`  ID:           ${ws.id ?? "—"}`);
-    console.log(`  Name:         ${ws.name ?? "—"}`);
-    console.log(`  Beschreibung: ${ws.description ?? "—"}`);
-    console.log(`  Erstellt:     ${ws.created_at ?? "—"}`);
+    console.log(`  ID:          ${ws.id ?? "—"}`);
+    console.log(`  Name:        ${ws.name ?? "—"}`);
+    console.log(`  Description: ${ws.description ?? "—"}`);
+    console.log(`  Created:     ${ws.created_at ?? "—"}`);
   } else {
-    console.error("Fehler:", JSON.stringify(create_data, null, 2));
+    console.error("Error:", JSON.stringify(create_data, null, 2));
   }
 
   console.log();
-  console.log("→ Alle Workspaces auflisten");
+  console.log("→ Listing all workspaces");
   const list_data = await workspace_list();
 
   const workspaces = list_data.workspaces || [];
-  console.log(`Gefunden: ${workspaces.length} Workspace(s)`);
+  console.log(`Found: ${workspaces.length} workspace(s)`);
   console.log();
   for (const ws of workspaces) {
     console.log(`  [${ws.id ?? "—"}] ${ws.name ?? "—"} — ${ws.description ?? ""}`);

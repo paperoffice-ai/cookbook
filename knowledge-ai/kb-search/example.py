@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Knowledge Base semantische Suche mit formatierter Ausgabe"""
+"""PaperOffice AI — Knowledge Base semantic search with formatted output"""
 import os
 import sys
 import requests
@@ -9,9 +9,9 @@ API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
 def kb_search(query: str, kb_id: int = None, limit: int = 5) -> dict:
-    """Semantische Suche über Knowledge-Base-Artikel."""
+    """Semantic search across knowledge base articles."""
     if not API_KEY:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     payload = {"query": query, "limit": limit}
     if kb_id:
@@ -27,9 +27,9 @@ def kb_search(query: str, kb_id: int = None, limit: int = 5) -> dict:
 
 
 def print_results(results: list):
-    """Formatierte Ausgabe der Suchergebnisse mit Score-Balken."""
+    """Formatted output of search results with score bars."""
     if not results:
-        print("  Keine Ergebnisse gefunden.")
+        print("  No results found.")
         return
 
     for i, r in enumerate(results, 1):
@@ -37,7 +37,7 @@ def print_results(results: list):
         bar_length = int(score * 20)
         bar = "█" * bar_length + "░" * (20 - bar_length)
 
-        print(f"  {i}. {r.get('title', 'Ohne Titel')}")
+        print(f"  {i}. {r.get('title', 'Untitled')}")
         print(f"     Score: [{bar}] {score:.0%}")
         snippet = r.get("snippet", "")
         if snippet:
@@ -46,17 +46,17 @@ def print_results(results: list):
 
 
 if __name__ == "__main__":
-    query = sys.argv[1] if len(sys.argv) > 1 else "Wie funktioniert die API-Authentifizierung?"
+    query = sys.argv[1] if len(sys.argv) > 1 else "How does API authentication work?"
     kb_id = int(sys.argv[2]) if len(sys.argv) > 2 else None
 
-    print(f"=== Knowledge Base Suche ===")
-    print(f"Frage: {query}")
+    print(f"=== Knowledge Base Search ===")
+    print(f"Query: {query}")
     if kb_id:
-        print(f"KB-ID: {kb_id}")
+        print(f"KB ID: {kb_id}")
     print()
 
     result = kb_search(query, kb_id=kb_id)
     results = result.get("results", [])
 
-    print(f"Treffer: {len(results)}\n")
+    print(f"Hits: {len(results)}\n")
     print_results(results)

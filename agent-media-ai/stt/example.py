@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 PaperOffice AI — Speech-to-Text (STT)
-Transkribiert Audio-Dateien in Text
+Transcribes audio files to text
 
-Verwendung:
+Usage:
     export PAPEROFFICE_API_KEY=po_sk_xxx
     python example.py audio.mp3
     python example.py audio.mp3 de
@@ -22,14 +22,14 @@ def speech_to_text(
     locale: str | None = None,
     token: str = API_KEY,
 ) -> dict:
-    """Transkribiert eine Audio-Datei über die PaperOffice STT-API."""
+    """Transcribes an audio file via the PaperOffice STT API."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     if not os.path.isfile(audio_path):
-        raise FileNotFoundError(f"Datei nicht gefunden: {audio_path}")
+        raise FileNotFoundError(f"File not found: {audio_path}")
 
-    # Datei-Key ist "file_1" — NICHT "file"!
+    # File key is "file_1" — NOT "file"!
     with open(audio_path, "rb") as f:
         files = {"file_1": (os.path.basename(audio_path), f)}
         data = {"priority": "900"}
@@ -49,7 +49,7 @@ def speech_to_text(
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Verwendung: python example.py <audio_datei> [locale]")
+        print("Usage: python example.py <audio_file> [locale]")
         sys.exit(1)
 
     audio_path = sys.argv[1]
@@ -60,8 +60,8 @@ if __name__ == "__main__":
     result = data.get("result", {})
     print(f"Status:   {data.get('status', 'N/A')}")
     print(f"Text:     {result.get('text', 'N/A')}")
-    print(f"Sprache:  {result.get('language', 'N/A')}")
-    print(f"Dauer:    {result.get('audio_duration_seconds', 'N/A')}s")
-    print(f"Qualität: {result.get('quality', 'N/A')}")
+    print(f"Language: {result.get('language', 'N/A')}")
+    print(f"Duration: {result.get('audio_duration_seconds', 'N/A')}s")
+    print(f"Quality:  {result.get('quality', 'N/A')}")
     print()
     print(json.dumps(data, indent=2, ensure_ascii=False))

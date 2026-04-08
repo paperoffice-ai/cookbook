@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# PaperOffice AI — Geocoding (Adresse → Koordinaten und umgekehrt)
+# PaperOffice AI — Geocoding (address → coordinates and vice versa)
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Bitte PAPEROFFICE_API_KEY setzen (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
 ADDRESS="${1:-Alexanderplatz 1, Berlin}"
 
 echo "=== Forward Geocoding: $ADDRESS ==="

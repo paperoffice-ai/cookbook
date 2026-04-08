@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-/** PaperOffice AI — Knowledge Base CRUD mit async/await */
+/** PaperOffice AI — Knowledge Base CRUD with async/await */
 
 const BASE_URL = "https://api.paperoffice.ai/latest/knowledge";
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
 function headers() {
-  if (!API_KEY) throw new Error("PAPEROFFICE_API_KEY nicht gesetzt");
+  if (!API_KEY) throw new Error("PAPEROFFICE_API_KEY not set");
   return { "Authorization": `Bearer ${API_KEY}` };
 }
 
@@ -26,7 +26,7 @@ async function api_post(endpoint, data) {
   return response.json();
 }
 
-// --- CRUD-Funktionen ---
+// --- CRUD Functions ---
 
 const kb_list = () => api_get("kb_list");
 const kb_create = (name, description = "", primary_language = "de") =>
@@ -41,69 +41,69 @@ const article_update = (article_id, data) =>
   api_post("article_update", { article_id, ...data });
 const article_delete = (article_id) => api_post("article_delete", { article_id });
 
-// --- Vollständiger CRUD-Zyklus ---
+// --- Complete CRUD Cycle ---
 
-// 1. Bestehende KBs
-console.log("=== Bestehende Knowledge Bases ===");
+// 1. Existing KBs
+console.log("=== Existing Knowledge Bases ===");
 const existing = await kb_list();
 for (const kb of existing.data || []) {
   console.log(`  • [${kb.id}] ${kb.name} (${kb.status})`);
 }
 
-// 2. Neue KB
-console.log("\n=== Neue KB erstellen ===");
-const created = await kb_create("Cookbook-Test-KB", "Testdaten für Cookbook-Beispiel");
+// 2. New KB
+console.log("\n=== Create new KB ===");
+const created = await kb_create("Cookbook-Test-KB", "Test data for cookbook example");
 const kb_data = created.data || created;
 const kb_id = kb_data.id || kb_data.kb_id;
-console.log(`  Erstellt: ID=${kb_id}`);
+console.log(`  Created: ID=${kb_id}`);
 
 if (!kb_id) {
-  console.log("⚠ Keine KB-ID erhalten.");
+  console.log("⚠ No KB ID received.");
   process.exit(1);
 }
 
-// 3. KB umbenennen
-console.log("\n=== KB umbenennen ===");
+// 3. Rename KB
+console.log("\n=== Rename KB ===");
 await kb_update(kb_id, { name: "Cookbook-Test-KB-Updated" });
-console.log("  Umbenannt: Cookbook-Test-KB → Cookbook-Test-KB-Updated");
+console.log("  Renamed: Cookbook-Test-KB → Cookbook-Test-KB-Updated");
 
-// 4. Artikel erstellen
-console.log("\n=== Artikel erstellen ===");
+// 4. Create articles
+console.log("\n=== Create articles ===");
 const art1 = await article_create(
   kb_id,
-  "Erste Schritte mit PaperOffice",
-  "PaperOffice AI bietet intelligente Dokumentenverarbeitung, OCR und Knowledge Management.",
-  "Einführung"
+  "Getting Started with PaperOffice",
+  "PaperOffice AI provides intelligent document processing, OCR and knowledge management.",
+  "Introduction"
 );
 const art1_id = (art1.data || art1).id || art1.article_id;
-console.log(`  Artikel 1: ID=${art1_id}`);
+console.log(`  Article 1: ID=${art1_id}`);
 
 const art2 = await article_create(
   kb_id,
-  "API-Authentifizierung",
-  "Alle API-Aufrufe benötigen einen Bearer Token im Authorization-Header.",
-  "Technik"
+  "API Authentication",
+  "All API calls require a Bearer Token in the Authorization header.",
+  "Technical"
 );
 const art2_id = (art2.data || art2).id || art2.article_id;
-console.log(`  Artikel 2: ID=${art2_id}`);
+console.log(`  Article 2: ID=${art2_id}`);
 
-// 5. Artikel auflisten
-console.log("\n=== Artikel in KB ===");
+// 5. List articles
+console.log("\n=== Articles in KB ===");
 const articles = await article_list(kb_id);
 for (const art of articles.data || []) {
   console.log(`  • [${art.id}] ${art.title}`);
 }
 
-// 6. Artikel aktualisieren
+// 6. Update article
 if (art1_id) {
-  console.log("\n=== Artikel aktualisieren ===");
-  await article_update(art1_id, { title: "Erste Schritte (aktualisiert)" });
-  console.log(`  Artikel ${art1_id} aktualisiert.`);
+  console.log("\n=== Update article ===");
+  await article_update(art1_id, { title: "Getting Started (updated)" });
+  console.log(`  Article ${art1_id} updated.`);
 }
 
-// 7. Aufräumen
-console.log("\n=== Aufräumen — KB löschen ===");
+// 7. Cleanup
+console.log("\n=== Cleanup — Delete KB ===");
 await kb_delete(kb_id);
-console.log(`  KB ${kb_id} gelöscht.`);
+console.log(`  KB ${kb_id} deleted.`);
 
-console.log("\n✓ Vollständiger CRUD-Zyklus abgeschlossen.");
+console.log("\n✓ Complete CRUD cycle finished.");

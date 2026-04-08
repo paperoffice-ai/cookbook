@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Entity-Extraktion (NER) mit Gruppierung nach Typ"""
+"""PaperOffice AI — Entity extraction (NER) with grouping by type"""
 import os
 import sys
 import requests
@@ -7,7 +7,7 @@ import requests
 API_URL = "https://api.paperoffice.ai/latest/document_intelligence/entities"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
-BEISPIEL_TEXT = (
+EXAMPLE_TEXT = (
     "Die Mustermann GmbH mit Sitz in München hat am 15. März 2025 "
     "einen Vertrag über 250.000 EUR mit der Beispiel AG abgeschlossen. "
     "Ansprechpartner ist Max Mustermann, erreichbar unter +49 89 123456."
@@ -15,9 +15,9 @@ BEISPIEL_TEXT = (
 
 
 def extract_entities(text: str, entity_types: list = None) -> dict:
-    """Extrahiert benannte Entitäten aus einem Text."""
+    """Extracts named entities from a text."""
     if not API_KEY:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     payload = {"text": text}
     if entity_types:
@@ -33,7 +33,7 @@ def extract_entities(text: str, entity_types: list = None) -> dict:
 
 
 def group_by_type(entities: list) -> dict:
-    """Gruppiert Entitäten nach Typ für übersichtliche Ausgabe."""
+    """Groups entities by type for clear output."""
     grouped = {}
     for entity in entities:
         typ = entity.get("type", "unknown")
@@ -42,19 +42,19 @@ def group_by_type(entities: list) -> dict:
 
 
 if __name__ == "__main__":
-    text = sys.argv[1] if len(sys.argv) > 1 else BEISPIEL_TEXT
+    text = sys.argv[1] if len(sys.argv) > 1 else EXAMPLE_TEXT
 
-    print(f"=== Entity-Extraktion ===")
+    print(f"=== Entity Extraction ===")
     print(f"Text: {text[:100]}...\n")
 
     result = extract_entities(text)
     entities = result.get("entities", [])
 
-    print(f"Gefundene Entitäten: {len(entities)}\n")
+    print(f"Entities found: {len(entities)}\n")
 
     for typ, items in group_by_type(entities).items():
         print(f"--- {typ.upper()} ({len(items)}) ---")
         for e in items:
             conf = e.get("confidence", 0)
-            print(f"  • {e['text']:<30} (Konfidenz: {conf:.0%})")
+            print(f"  • {e['text']:<30} (Confidence: {conf:.0%})")
         print()

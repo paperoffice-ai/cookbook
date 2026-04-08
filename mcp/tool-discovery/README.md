@@ -1,62 +1,62 @@
-# Tool-Discovery — verfügbare PaperOffice-Tools über MCP
+# Tool Discovery — Available PaperOffice Tools via MCP
 
-Diese Anleitung beschreibt, wie du **verfügbare Tools** auf dem PaperOffice-MCP-Server findest, welche **Metadaten** jedes Tool hat und wie du sie über den **MCP-Standard** ansteuerst. Die PaperOffice-Plattform bündelt derzeit **357 API-Tools** (Stand: Dokumentation zur API-/MCP-Landschaft); die genaue Liste wird live vom System bereitgestellt.
+This guide describes how to **find available tools** on the PaperOffice MCP server, what **metadata** each tool has, and how to access them via the **MCP standard**. The PaperOffice platform currently bundles **357 API tools** (as of: API/MCP landscape documentation); the exact list is provided live by the system.
 
-## Einstieg: Universal-Root
+## Getting Started: Universal Root
 
-**GET** die Basis-URL, um eine **Übersicht** zu erhalten:
+**GET** the base URL to get an **overview**:
 
 ```
 https://mcp.paperoffice.ai/
 ```
 
-Diese Route dient der **Discovery**: Welche Tools (bzw. welche Schnittstellen) angeboten werden, in der Regel **nach Kategorien gruppiert** — typische Bereiche sind unter anderem **IDP**, **OCR**, **TTS**, **STT**, **Übersetzung** und weitere, wie in der API-Dokumentation beschrieben.
+This route serves as the **discovery** entry point: which tools (or interfaces) are offered, typically **grouped by category** — common areas include **IDP**, **OCR**, **TTS**, **STT**, **Translation** and more, as described in the API documentation.
 
-**Authentifizierung:** Bearer-Token (`Authorization: Bearer your_api_key`) oder Query-Parameter, je nach Client.
+**Authentication:** Bearer token (`Authorization: Bearer your_api_key`) or query parameter, depending on client.
 
-## Was jedes Tool typischerweise enthält
+## What each tool typically contains
 
-Für jedes Tool solltest du (über MCP bzw. die bereitgestellten Metadaten) folgendes finden:
+For each tool you should find (via MCP or the provided metadata) the following:
 
-| Aspekt | Bedeutung |
-|--------|-----------|
-| **Name** | Eindeutiger Tool-Name (Aufruf-Identifier). |
-| **Beschreibung** | Kurzbeschreibung, wofür das Tool gedacht ist. |
-| **Parameter-Schema** | Eingabeparameter in strukturierter Form (z. B. JSON-Schema). |
-| **Beispiele** | Beispielaufrufe oder Beispielpayloads, wo bereitgestellt. |
+| Aspect | Meaning |
+|--------|---------|
+| **Name** | Unique tool name (invocation identifier). |
+| **Description** | Short description of what the tool is for. |
+| **Parameter Schema** | Input parameters in structured form (e.g. JSON Schema). |
+| **Examples** | Example calls or example payloads, where provided. |
 
-So kannst du im Vorfeld prüfen, welche Tools für deinen Use Case passen, ohne alle 357 Einträge manuell durch die REST-Dokumentation zu jagen.
+This lets you check in advance which tools fit your use case without manually sifting through all 357 entries in the REST documentation.
 
-## MCP-Standard: `tools/list` und `tools/call`
+## MCP Standard: `tools/list` and `tools/call`
 
-Der **Model Context Protocol** definiert u. a.:
+The **Model Context Protocol** defines, among other things:
 
-- **`tools/list`** — Liste aller Tools, die der verbundene MCP-Server anbietet (inkl. Namen und Beschreibungen, Schema je nach Server).
-- **`tools/call`** — Ausführung eines konkreten Tools mit den übergebenen Argumenten.
+- **`tools/list`** — List of all tools the connected MCP server offers (including names and descriptions, schema depending on server).
+- **`tools/call`** — Execute a specific tool with the provided arguments.
 
-Konkrete Nachrichtenformate und Felder richten sich nach der MCP-Spezifikation und der PaperOffice-Serverimplementierung; in der Praxis verbindet du dich per **SSE** zu einem der Endpunkte (z. B. `https://mcp.paperoffice.ai/mcp` für Standard-MCP) und führst die JSON-RPC- oder protokollspezifischen Aufrufe aus, die dein Client unterstützt.
+Specific message formats and fields follow the MCP specification and the PaperOffice server implementation; in practice, you connect via **SSE** to one of the endpoints (e.g. `https://mcp.paperoffice.ai/mcp` for Standard MCP) and execute the JSON-RPC or protocol-specific calls your client supports.
 
-## Bezug zur REST-API
+## Relation to the REST API
 
-Die **357 Tools** spiegeln die **API-Tool-Landschaft** der PaperOffice-Plattform wider (Endpoints aus der zentralen Quelle). MCP ist eine **zusätzliche Zugriffsschicht** für KI-Clients; die fachliche Bedeutung der Tools (OCR, IDP, …) ist dieselbe wie bei direkten API-Aufrufen.
+The **357 tools** mirror the **API tool landscape** of the PaperOffice platform (endpoints from the central source). MCP is an **additional access layer** for AI clients; the functional meaning of the tools (OCR, IDP, …) is the same as with direct API calls.
 
-Für tiefergehende REST-Details (einzelne Pfade, Rate Limits) die **aktuelle API-Dokumentation** unter `https://api.paperoffice.ai/latest/docs/postman` heranziehen — die Collection wird dynamisch erzeugt und ist die kanonische Referenz.
+For deeper REST details (individual paths, rate limits), refer to the **current API documentation** at `https://api.paperoffice.ai/latest/docs/postman` — the collection is dynamically generated and is the canonical reference.
 
-## Endpunkte auf einen Blick
+## Endpoints at a Glance
 
-| Zweck | URL |
-|-------|-----|
-| Universal / Discovery-Start | `https://mcp.paperoffice.ai/` |
+| Purpose | URL |
+|---------|-----|
+| Universal / Discovery Start | `https://mcp.paperoffice.ai/` |
 | Cursor | `https://mcp.paperoffice.ai/cursor` |
 | Claude | `https://mcp.paperoffice.ai/claude` |
 | OpenAI / ChatGPT | `https://mcp.paperoffice.ai/openai` |
-| Standard-MCP | `https://mcp.paperoffice.ai/mcp` |
+| Standard MCP | `https://mcp.paperoffice.ai/mcp` |
 
-Alle genannten Endpunkte unterstützen **SSE-Transport**; Authentifizierung erfolgt durchgehend per **Bearer-Token** (Header oder Query).
+All listed endpoints support **SSE transport**; authentication is consistently via **Bearer token** (header or query).
 
-## Kurz-Checkliste
+## Quick Checklist
 
-1. Token beschaffen und sicher aufbewahren.
-2. `GET https://mcp.paperoffice.ai/` für die Übersicht nutzen (oder `tools/list` über MCP).
-3. Passendes Tool per Schema und Beschreibung auswählen.
-4. Mit `tools/call` oder dem jeweiligen Client ausführen.
+1. Obtain and securely store your token.
+2. Use `GET https://mcp.paperoffice.ai/` for the overview (or `tools/list` via MCP).
+3. Select the matching tool by schema and description.
+4. Execute with `tools/call` or the respective client.

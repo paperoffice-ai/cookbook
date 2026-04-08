@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
  * PaperOffice AI — Text-to-Speech (TTS)
- * Wandelt Text in natürliche Sprache um (100+ Stimmen)
+ * Converts text to natural speech (100+ voices)
  *
- * Verwendung:
+ * Usage:
  *     export PAPEROFFICE_API_KEY=po_sk_xxx
  *     node example.js "Hallo Welt" Nadja mp3
  */
@@ -18,7 +18,7 @@ async function text_to_speech(
   speed = 1.0,
   token = API_KEY
 ) {
-  if (!token) throw new Error("PAPEROFFICE_API_KEY nicht gesetzt");
+  if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
   const form = new FormData();
   form.append("text", text);
@@ -50,10 +50,10 @@ async function text_to_speech(
   const result = data.result || {};
 
   console.log(`Status:   ${data.status || "N/A"}`);
-  console.log(`Stimme:   ${result.voice || "N/A"}`);
-  console.log(`Sprache:  ${result.language || "N/A"}`);
-  console.log(`Dauer:    ${result.audio_duration_seconds || "N/A"}s`);
-  console.log(`Größe:    ${result.audio_size || "N/A"} Bytes`);
+  console.log(`Voice:    ${result.voice || "N/A"}`);
+  console.log(`Language: ${result.language || "N/A"}`);
+  console.log(`Duration: ${result.audio_duration_seconds || "N/A"}s`);
+  console.log(`Size:     ${result.audio_size || "N/A"} Bytes`);
   if (result.audio_url) console.log(`URL:      ${result.audio_url}`);
   console.log();
   console.log(JSON.stringify(data, null, 2));

@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# PaperOffice AI — Rechnungs-Extraktion (IDP Invoice)
+# PaperOffice AI — Invoice Extraction (IDP Invoice)
 set -euo pipefail
 
 api_base="https://api.paperoffice.ai/latest"
-api_key="${PAPEROFFICE_API_KEY:?Bitte PAPEROFFICE_API_KEY setzen}"
-input_file="${1:?Bitte Dateipfad als Argument übergeben}"
+api_key="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY}"
+input_file="${1:?Please provide file path as argument}"
 
 if [ ! -f "${input_file}" ]; then
-  echo "Datei nicht gefunden: ${input_file}"
+  echo "File not found: ${input_file}"
   exit 1
 fi
 
-echo "→ Extrahiere Rechnungsdaten aus: ${input_file}"
+echo "→ Extracting invoice data from: ${input_file}"
 
 response=$(curl -s -X POST "${api_base}/job/add/workflow" \
   -H "Authorization: Bearer ${api_key}" \
@@ -25,17 +25,17 @@ import sys, json
 
 data = json.load(sys.stdin)
 if data.get('status') != 'success':
-    print('Fehler:', json.dumps(data, indent=2))
+    print('Error:', json.dumps(data, indent=2))
     sys.exit(1)
 
 pages = data.get('result', {}).get('pages_idp', [])
 if not pages:
-    print('Keine IDP-Daten gefunden')
+    print('No IDP data found')
     sys.exit(1)
 
 fields = pages[0].get('suggested_fields', {})
-print(f'Job-ID: {data.get(\"job_id\", \"—\")}')
-print(f'Felder gefunden: {len(fields)}')
+print(f'Job ID: {data.get(\"job_id\", \"—\")}')
+print(f'Fields found: {len(fields)}')
 print()
 for name, info in sorted(fields.items()):
     if info.get('type') == 'table':

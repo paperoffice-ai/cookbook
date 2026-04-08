@@ -1,39 +1,45 @@
 #!/usr/bin/env bash
-# PaperOffice AI — DSGVO-konforme Anonymisierung von PDF-Dokumenten
+# PaperOffice AI — GDPR-compliant anonymization of documents
+#
+# Template: document_anonymize | Param: file (not file_1!)
+# Categories: all, names, addresses, phone, email, iban, tax_id
 
 api_base="https://api.paperoffice.ai/latest"
-api_key="${PAPEROFFICE_API_KEY:?Bitte PAPEROFFICE_API_KEY setzen}"
-input_file="${1:?Bitte Dateipfad als Argument übergeben}"
+api_key="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY}"
+input_file="${1:?Please provide file path as argument}"
+redact_categories="${2:-all}"
 
-# PDF hochladen und anonymisieren
+echo "→ Anonymizing: ${input_file} (categories: ${redact_categories})"
+
 response=$(curl -s "${api_base}/job/add/workflow" \
   -H "Authorization: Bearer ${api_key}" \
-  -F "file_1=@${input_file}" \
-  -F "template=pdf_anonymize" \
+  -F "template=document_anonymize" \
+  -F "file=@${input_file}" \
+  -F "redact_categories=${redact_categories}" \
   -F "priority=900")
 
 status=$(echo "${response}" | python3 -c "import sys,json; print(json.load(sys.stdin).get('status',''))")
 echo "Status: ${status}"
 
 if [ "${status}" != "success" ]; then
-  echo "Fehler:"
+  echo "Error:"
   echo "${response}" | python3 -m json.tool
   exit 1
 fi
 
-# Anonymisierte PDF herunterladen
 download_url=$(echo "${response}" | python3 -c "
 import sys, json
-files = json.load(sys.stdin).get('result', {}).get('files', [])
-if files: print(files[0])
+result = json.load(sys.stdin).get('result', {})
+urls = result.get('anonymized_pdf', result.get('files', []))
+if urls: print(urls[0])
 ")
 
 if [ -n "${download_url}" ]; then
   curl -s "${download_url}" \
     -H "Authorization: Bearer ${api_key}" \
-    -o "anonymisiert.pdf"
-  echo "Heruntergeladen: anonymisiert.pdf"
+    -o "anonymized.pdf"
+  echo "Downloaded: anonymized.pdf"
 else
-  echo "Fehler: Keine Download-URL erhalten"
+  echo "Error: No download URL received"
   exit 1
 fi

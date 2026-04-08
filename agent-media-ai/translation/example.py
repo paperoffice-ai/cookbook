@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-PaperOffice AI — Textübersetzung
-Übersetzt Texte zwischen 100+ Sprachen (3 Qualitätsstufen)
+PaperOffice AI — Text Translation
+Translates text between 100+ languages (3 quality tiers)
 
-Verwendung:
+Usage:
     export PAPEROFFICE_API_KEY=po_sk_xxx
     python example.py "Hello World" de
     python example.py "Hello World" de auto ultra
@@ -24,9 +24,9 @@ def translate_text(
     tier: str = "premium",
     token: str = API_KEY,
 ) -> dict:
-    """Übersetzt Text über die PaperOffice Translation-API."""
+    """Translates text via the PaperOffice Translation API."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.post(
         f"{BASE_URL}/translate/text",
@@ -43,9 +43,9 @@ def translate_text(
 
 
 def list_languages(token: str = API_KEY) -> dict:
-    """Gibt die Liste unterstützter Sprachen zurück."""
+    """Returns the list of supported languages."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.get(
         f"{BASE_URL}/translate/languages",
@@ -65,10 +65,10 @@ if __name__ == "__main__":
 
     result = data.get("data", {})
     print(f"Status:       {data.get('status', 'N/A')}")
-    print(f"Übersetzung:  {result.get('translation', 'N/A')}")
-    print(f"Quellsprache: {result.get('source_language', 'N/A')}")
-    print(f"Zielsprache:  {result.get('target_language', 'N/A')}")
+    print(f"Translation:  {result.get('translation', 'N/A')}")
+    print(f"Source lang:  {result.get('source_language', 'N/A')}")
+    print(f"Target lang:  {result.get('target_language', 'N/A')}")
     print(f"Tier:         {result.get('tier', 'N/A')}")
-    print(f"Zeichen:      {result.get('characters', 'N/A')}")
+    print(f"Characters:   {result.get('characters', 'N/A')}")
     print()
     print(json.dumps(data, indent=2, ensure_ascii=False))

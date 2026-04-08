@@ -1,6 +1,6 @@
-# Knowledge Base Suche — Semantische Artikelsuche
+# Knowledge Base Search — Semantic Article Search
 
-Durchsucht Knowledge-Base-Artikel mittels semantischer Suche. Anders als Keyword-Suche findet die semantische Suche auch Treffer, die den gleichen Sinn haben, aber andere Worte verwenden.
+Searches knowledge base articles using semantic search. Unlike keyword search, semantic search also finds matches that have the same meaning but use different words.
 
 ## Endpoint
 
@@ -8,36 +8,36 @@ Durchsucht Knowledge-Base-Artikel mittels semantischer Suche. Anders als Keyword
 POST https://api.paperoffice.ai/latest/knowledge/search
 ```
 
-**Authentifizierung:** Bearer Token
+**Authentication:** Bearer Token
 
-## Parameter
+## Parameters
 
-| Parameter | Typ | Pflicht | Beschreibung |
+| Parameter | Type | Required | Description |
 |---|---|---|---|
-| `query` | string | ✅ | Suchanfrage in natürlicher Sprache |
-| `kb_id` | int | ❌ | Suche auf eine bestimmte KB einschränken |
-| `limit` | int | ❌ | Max. Anzahl Ergebnisse (Standard: 5) |
+| `query` | string | ✅ | Search query in natural language |
+| `kb_id` | int | ❌ | Restrict search to a specific KB |
+| `limit` | int | ❌ | Max. number of results (default: 5) |
 
-## Ausführen
+## How to Run
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
 
-# Bash — einfache Suche
-bash example.sh "Wie funktioniert OCR?"
+# Bash — simple search
+bash example.sh "How does OCR work?"
 
-# Bash — Suche in bestimmter KB mit Limit
-bash example.sh "Wie funktioniert OCR?" 9 3
+# Bash — search in specific KB with limit
+bash example.sh "How does OCR work?" 9 3
 
 # Python
 pip install requests
-python3 example.py "Wie funktioniert OCR?"
+python3 example.py "How does OCR work?"
 
 # Node.js (v18+)
-node example.js "Wie funktioniert OCR?"
+node example.js "How does OCR work?"
 ```
 
-## Erwartete Antwort
+## Expected Response
 
 ```json
 {
@@ -45,14 +45,14 @@ node example.js "Wie funktioniert OCR?"
     "results": [
         {
             "article_id": 1,
-            "title": "OCR-Grundlagen",
-            "snippet": "Optical Character Recognition (OCR) wandelt Bilder von Text in maschinenlesbaren Text um...",
+            "title": "OCR Basics",
+            "snippet": "Optical Character Recognition (OCR) converts images of text into machine-readable text...",
             "score": 0.92
         },
         {
             "article_id": 5,
-            "title": "Dokumentenverarbeitung",
-            "snippet": "Die Dokumentenverarbeitung nutzt OCR als ersten Schritt, um Text aus gescannten Dokumenten...",
+            "title": "Document Processing",
+            "snippet": "Document processing uses OCR as a first step to extract text from scanned documents...",
             "score": 0.78
         }
     ]
@@ -61,23 +61,23 @@ node example.js "Wie funktioniert OCR?"
 
 ## Scoring
 
-| Score-Bereich | Bedeutung |
+| Score Range | Meaning |
 |---|---|
-| 0.90 – 1.00 | Sehr hohe Relevanz — direkte Treffer |
-| 0.70 – 0.89 | Hohe Relevanz — thematisch passend |
-| 0.50 – 0.69 | Mittlere Relevanz — verwandtes Thema |
-| < 0.50 | Geringe Relevanz — nur entfernt verwandt |
+| 0.90 – 1.00 | Very high relevance — direct matches |
+| 0.70 – 0.89 | High relevance — topically relevant |
+| 0.50 – 0.69 | Medium relevance — related topic |
+| < 0.50 | Low relevance — only distantly related |
 
-## Semantisch vs. Keyword
+## Semantic vs. Keyword
 
-| Suchanfrage | Keyword-Suche | Semantische Suche |
+| Search Query | Keyword Search | Semantic Search |
 |---|---|---|
-| „Wie scanne ich Dokumente?" | Findet nur Artikel mit „scanne" oder „Dokumente" | Findet auch Artikel über OCR, Dokumentenverarbeitung, IDP |
-| „Rechnung verarbeiten" | Findet nur exakte Wortübereinstimmungen | Findet auch Artikel über Invoice Processing, Belegerfassung |
+| "How do I scan documents?" | Only finds articles containing "scan" or "documents" | Also finds articles about OCR, document processing, IDP |
+| "Process invoice" | Only finds exact word matches | Also finds articles about invoice processing, receipt capture |
 
-## Anwendungsfälle
+## Use Cases
 
-- **Helpdesk-KI:** Passende FAQ-Artikel für Kundenanfragen finden
-- **Chatbot:** Kontextrelevante Wissensartikel als Grundlage für Antworten
-- **Interne Suche:** Mitarbeitern relevante Dokumentation bereitstellen
-- **RAG-Pipeline:** Retrieval-Augmented Generation mit Knowledge-Base-Kontext
+- **Helpdesk AI:** Find relevant FAQ articles for customer inquiries
+- **Chatbot:** Use context-relevant knowledge articles as a basis for answers
+- **Internal search:** Provide employees with relevant documentation
+- **RAG pipeline:** Retrieval-Augmented Generation with knowledge base context

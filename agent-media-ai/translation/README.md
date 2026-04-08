@@ -1,8 +1,8 @@
-# Textübersetzung
+# Text Translation
 
-Übersetzt Texte zwischen über 100 Sprachen. Drei Qualitätsstufen verfügbar: `basic` (schnell), `premium` (ausgewogen) und `ultra` (höchste Qualität). Automatische Quellsprach-Erkennung.
+Translates text between over 100 languages. Three quality tiers available: `basic` (fast), `premium` (balanced) and `ultra` (highest quality). Automatic source language detection.
 
-## Voraussetzungen
+## Prerequisites
 
 ```bash
 export PAPEROFFICE_API_KEY=po_sk_xxx
@@ -15,7 +15,7 @@ export PAPEROFFICE_API_KEY=po_sk_xxx
 bash example.sh "Hello World" de
 bash example.sh "Bonjour le monde" de fr premium
 
-# Python (benötigt: pip install requests)
+# Python (requires: pip install requests)
 python example.py "Hello World" de
 python example.py "Hello World" de auto ultra
 
@@ -26,36 +26,36 @@ node example.js "Hello World" de auto ultra
 
 ## Endpoints
 
-### Textübersetzung
+### Text Translation
 
 ```
 POST https://api.paperoffice.ai/latest/translate/text
 ```
 
-### Unterstützte Sprachen abfragen
+### List Supported Languages
 
 ```
 GET https://api.paperoffice.ai/latest/translate/languages
 ```
 
-## Parameter (Textübersetzung)
+## Parameters (Text Translation)
 
-| Parameter | Typ | Pflicht | Default | Beschreibung |
+| Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `text` | string | ✅ | — | Zu übersetzender Text |
-| `target_language` | string | ✅ | — | Zielsprache (z.B. `de`, `en`, `fr`, `es`) |
-| `source_language` | string | — | `auto` | Quellsprache (`auto` = automatische Erkennung) |
-| `tier` | string | — | `premium` | Qualitätsstufe: `basic`, `premium` oder `ultra` |
+| `text` | string | ✅ | — | Text to translate |
+| `target_language` | string | ✅ | — | Target language (e.g. `de`, `en`, `fr`, `es`) |
+| `source_language` | string | — | `auto` | Source language (`auto` = automatic detection) |
+| `tier` | string | — | `premium` | Quality tier: `basic`, `premium` or `ultra` |
 
-## Qualitätsstufen
+## Quality Tiers
 
-| Tier | Geschwindigkeit | Qualität | Empfehlung |
+| Tier | Speed | Quality | Recommendation |
 |---|---|---|---|
-| `basic` | ⚡ Schnell | Gut | Bulk-Übersetzungen, Vorschau |
-| `premium` | ⚡ Schnell | Sehr gut | Standard für die meisten Anwendungsfälle |
-| `ultra` | 🐢 Langsamer | Exzellent | Veröffentlichungen, rechtliche Texte |
+| `basic` | ⚡ Fast | Good | Bulk translations, preview |
+| `premium` | ⚡ Fast | Very good | Standard for most use cases |
+| `ultra` | 🐢 Slower | Excellent | Publications, legal texts |
 
-## Response-Beispiel
+## Response Example
 
 ```json
 {
@@ -70,8 +70,8 @@ GET https://api.paperoffice.ai/latest/translate/languages
 }
 ```
 
-## Tipps
+## Tips
 
-- **Automatische Erkennung:** `source_language=auto` erkennt die Quellsprache zuverlässig
-- **Kosten:** `basic` ist am günstigsten, `ultra` am teuersten — wähle passend zum Anwendungsfall
-- **Sprachen-Liste:** `GET /translate/languages` gibt alle unterstützten Sprach-Codes zurück
+- **Automatic detection:** `source_language=auto` reliably detects the source language
+- **Cost:** `basic` is the cheapest, `ultra` the most expensive — choose according to use case
+- **Language list:** `GET /translate/languages` returns all supported language codes

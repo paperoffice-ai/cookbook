@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# PaperOffice AI — Async Job-Polling (Submit → Poll → Ergebnis)
+# PaperOffice AI — Async Job Polling (Submit → Poll → Result)
 
 api_base="https://api.paperoffice.ai/latest"
-api_key="${PAPEROFFICE_API_KEY:?Bitte PAPEROFFICE_API_KEY setzen}"
-input_file="${1:?Bitte Dateipfad als Argument übergeben}"
+api_key="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY}"
+input_file="${1:?Error: Please provide file path as argument}"
 
-# Schritt 1: Job einreichen (priority=500 → async)
-echo ">>> Job einreichen..."
+# Step 1: Submit job (priority=500 → async)
+echo ">>> Submitting job..."
 submit_response=$(curl -s "${api_base}/job/add/paperoffice_aiocr___generate" \
   -H "Authorization: Bearer ${api_key}" \
   -F "file_1=@${input_file}" \
@@ -20,15 +20,15 @@ print(data.get('job_id', ''))
 ")
 
 if [ -z "${job_id}" ]; then
-  echo "Fehler: Keine job_id erhalten"
+  echo "Error: No job_id received"
   echo "${submit_response}" | python3 -m json.tool
   exit 1
 fi
 
-echo "Job eingereicht: ${job_id}"
+echo "Job submitted: ${job_id}"
 
-# Schritt 2: Status pollen bis fertig
-echo ">>> Warte auf Ergebnis..."
+# Step 2: Poll status until completed
+echo ">>> Waiting for result..."
 max_attempts=30
 attempt=0
 
@@ -45,21 +45,21 @@ data = json.load(sys.stdin)
 print(data.get('status', 'unknown'))
 ")
 
-  echo "  Versuch ${attempt}/${max_attempts}: ${status}"
+  echo "  Attempt ${attempt}/${max_attempts}: ${status}"
 
   if [ "${status}" = "completed" ]; then
     echo ""
-    echo "--- Ergebnis ---"
+    echo "--- Result ---"
     echo "${poll_response}" | python3 -m json.tool
     exit 0
   fi
 
   if [ "${status}" = "failed" ] || [ "${status}" = "error" ]; then
-    echo "Job fehlgeschlagen!"
+    echo "Job failed!"
     echo "${poll_response}" | python3 -m json.tool
     exit 1
   fi
 done
 
-echo "Timeout: Job nach ${max_attempts} Versuchen nicht fertig"
+echo "Timeout: Job not completed after ${max_attempts} attempts"
 exit 1

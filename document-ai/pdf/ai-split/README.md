@@ -1,6 +1,6 @@
-# PDF AI Split — Intelligentes Splitting mit KI-Erkennung
+# PDF AI Split — Intelligent splitting with AI detection
 
-Teilt ein mehrseitiges PDF automatisch in logische Einzeldokumente auf. Die KI erkennt Dokumentgrenzen (z.B. wo eine Rechnung endet und ein Lieferschein beginnt) und benennt die Teildokumente intelligent.
+Splits a multi-page PDF automatically into logical individual documents. The AI detects document boundaries (e.g., where an invoice ends and a delivery note begins) and names the sub-documents intelligently.
 
 ## Endpoint
 
@@ -8,43 +8,43 @@ Teilt ein mehrseitiges PDF automatisch in logische Einzeldokumente auf. Die KI e
 POST https://api.paperoffice.ai/latest/job/add/workflow
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter             | Wert              | Beschreibung                                    |
+| Parameter             | Value             | Description                                     |
 |-----------------------|-------------------|-------------------------------------------------|
-| `file_1`              | Datei             | Das zu splittende PDF                           |
-| `template`            | `pdf_ai_split`    | Workflow-Template für KI-Split                  |
-| `naming_instruction`  | Text              | Anweisung zur Benennung der Teildokumente       |
-| `priority`            | `900`             | Synchrone Verarbeitung (≥900 = sofort)          |
+| `file_1`              | File              | The PDF to split                                |
+| `template`            | `pdf_ai_split`    | Workflow template for AI split                  |
+| `naming_instruction`  | Text              | Instruction for naming sub-documents            |
+| `priority`            | `900`             | Synchronous processing (≥900 = immediate)       |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
-chmod +x example.sh && ./example.sh /pfad/zur/datei.pdf
+chmod +x example.sh && ./example.sh /path/to/file.pdf
 
 # Python
 pip install requests
-python3 example.py /pfad/zur/datei.pdf
+python3 example.py /path/to/file.pdf
 
 # Node.js (v18+)
-node example.js /pfad/zur/datei.pdf
+node example.js /path/to/file.pdf
 ```
 
-## naming_instruction — Beispiele
+## naming_instruction — Examples
 
-| Anweisung | Ergebnis |
-|-----------|----------|
-| `Benenne nach Dokumenttyp und Datum` | `Rechnung_2024-03-15_Mustermann_GmbH.pdf` |
-| `Verwende Rechnungsnummer als Dateiname` | `RE-2024-00142.pdf` |
-| `Benenne nach Absender und Typ` | `Telekom_Rechnung.pdf` |
-| `Nummeriere fortlaufend mit Präfix SCAN` | `SCAN_001.pdf` |
+| Instruction | Result |
+|-------------|--------|
+| `Name by document type and date` | `Invoice_2024-03-15_Mustermann_GmbH.pdf` |
+| `Use invoice number as filename` | `RE-2024-00142.pdf` |
+| `Name by sender and type` | `Telekom_Invoice.pdf` |
+| `Number sequentially with prefix SCAN` | `SCAN_001.pdf` |
 
-## Response-Struktur
+## Response structure
 
 ```json
 {
@@ -54,13 +54,13 @@ node example.js /pfad/zur/datei.pdf
   "result": {
     "documents": [
       {
-        "suggested_filename": "Rechnung_2024-03-15_Mustermann_GmbH.pdf",
-        "document_type": "Rechnung",
+        "suggested_filename": "Invoice_2024-03-15_Mustermann_GmbH.pdf",
+        "document_type": "Invoice",
         "page_range": "1-3",
         "pages": 3,
         "date": "2024-03-15",
         "sender": "Mustermann GmbH",
-        "reasoning": "Das Dokument ist eine Rechnung der Mustermann GmbH..."
+        "reasoning": "The document is an invoice from Mustermann GmbH..."
       }
     ],
     "files": [
@@ -71,37 +71,35 @@ node example.js /pfad/zur/datei.pdf
 }
 ```
 
-## Download der Teildokumente
+## Downloading sub-documents
 
-Die Download-URLs stehen in `result.files[]` — eine URL pro Dokument in `result.documents[]`:
+The download URLs are in `result.files[]` — one URL per document in `result.documents[]`:
 
 ```bash
 curl -s "https://api.paperoffice.ai/latest/job/download/ZBVXGX9A..." \
   -H "Authorization: Bearer ${PAPEROFFICE_API_KEY}" \
-  -o "Rechnung_2024-03-15.pdf"
+  -o "Invoice_2024-03-15.pdf"
 ```
 
-## Wichtige Felder pro Dokument
+## Key fields per document
 
-| Feld                  | Beschreibung                                          |
+| Field                 | Description                                           |
 |-----------------------|-------------------------------------------------------|
-| `suggested_filename`  | KI-generierter Dateiname basierend auf naming_instruction |
-| `document_type`       | Erkannter Dokumenttyp (Rechnung, Vertrag, etc.)       |
-| `page_range`          | Seitenbereich im Originaldokument                     |
-| `pages`               | Anzahl Seiten                                         |
-| `date`                | Erkanntes Dokumentdatum                               |
-| `sender`              | Erkannter Absender/Aussteller                         |
-| `reasoning`           | KI-Begründung für die Klassifizierung                 |
+| `suggested_filename`  | AI-generated filename based on naming_instruction     |
+| `document_type`       | Detected document type (invoice, contract, etc.)      |
+| `page_range`          | Page range in the original document                   |
+| `pages`               | Number of pages                                       |
+| `date`                | Detected document date                                |
+| `sender`              | Detected sender/issuer                                |
+| `reasoning`           | AI reasoning for the classification                   |
 
-## Typische Anwendungsfälle
+## Common use cases
 
-- **Posteingang digitalisieren** — Gescannte Stapel in Einzeldokumente aufteilen
-- **Rechnungsverarbeitung** — Sammel-PDFs vom Lieferanten in einzelne Rechnungen trennen
-- **Vertragsmanagement** — Mehrseitige Vertragspakete in Einzelverträge splitten
-- **Archivierung** — Große Scan-Batches automatisch kategorisieren und benennen
+- **Digitize incoming mail** — Split scanned stacks into individual documents
+- **Invoice processing** — Separate bulk PDFs from suppliers into individual invoices
+- **Contract management** — Split multi-page contract packages into individual contracts
+- **Archiving** — Automatically categorize and name large scan batches
 
-## Siehe auch
+## See also
 
-- [PDF Merge](../merge/) — Mehrere PDFs zusammenfügen
-- [PDF Convert](../convert/) — PDF in andere Formate konvertieren
-- [PDF Anonymize](../anonymize/) — DSGVO-konforme Anonymisierung
+- [PDF Anonymize](../anonymize/) — GDPR-compliant anonymization

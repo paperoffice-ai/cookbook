@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — VPN/Proxy/Tor-Erkennung"""
+"""PaperOffice AI — VPN/Proxy/Tor detection"""
 import os
 import sys
 import requests
@@ -9,9 +9,9 @@ API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
 def detect_anonymity(ip: str = None, token: str = API_KEY) -> dict:
-    """Erkennt VPN, Proxy, Tor, Datacenter und Relay für eine IP-Adresse."""
+    """Detects VPN, proxy, Tor, datacenter, and relay for an IP address."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     payload = {}
     if ip:

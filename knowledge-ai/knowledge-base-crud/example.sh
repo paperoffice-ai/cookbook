@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# PaperOffice AI — Knowledge Base CRUD-Operationen
+# PaperOffice AI — Knowledge Base CRUD Operations
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Bitte PAPEROFFICE_API_KEY setzen (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
 BASE_URL="https://api.paperoffice.ai/latest/knowledge"
 
-# Hilfsfunktion für API-Aufrufe
+# Helper function for API calls
 api_get() {
   curl -s -X GET "${BASE_URL}/$1" \
     -H "Authorization: Bearer ${API_KEY}"
@@ -18,14 +18,14 @@ api_post() {
     "$@"
 }
 
-echo "=== 1. Bestehende Knowledge Bases auflisten ==="
+echo "=== 1. List existing knowledge bases ==="
 api_get "kb_list" | python3 -m json.tool
 
 echo ""
-echo "=== 2. Neue Knowledge Base erstellen ==="
+echo "=== 2. Create new knowledge base ==="
 CREATE_RESPONSE=$(api_post "kb_create" \
   -F "name=Cookbook-Test-KB" \
-  -F "description=Testdaten für Cookbook-Beispiel" \
+  -F "description=Test data for cookbook example" \
   -F "primary_language=de")
 
 echo "${CREATE_RESPONSE}" | python3 -m json.tool
@@ -33,7 +33,7 @@ echo "${CREATE_RESPONSE}" | python3 -m json.tool
 KB_ID=$(echo "${CREATE_RESPONSE}" | python3 -c "
 import sys,json
 d=json.load(sys.stdin)
-# Verschiedene Antwortformate unterstützen
+# Support different response formats
 kb_id = ''
 if 'data' in d and isinstance(d['data'], dict):
     kb_id = str(d['data'].get('id', ''))
@@ -43,9 +43,9 @@ print(kb_id)
 " 2>/dev/null || echo "")
 
 if [ -z "${KB_ID}" ]; then
-  echo "⚠ KB erstellt, aber keine KB-ID in Antwort. Überspringe Artikel-Operationen."
+  echo "⚠ KB created, but no KB ID in response. Skipping article operations."
   echo ""
-  echo "=== Fallback: Bestehende KBs anzeigen ==="
+  echo "=== Fallback: Show existing KBs ==="
   api_get "kb_list" | python3 -c "
 import sys,json
 d=json.load(sys.stdin)
@@ -54,29 +54,29 @@ for kb in d.get('data',[]):
 "
   exit 0
 fi
-echo "→ KB-ID: ${KB_ID}"
+echo "→ KB ID: ${KB_ID}"
 
 echo ""
-echo "=== 3. Artikel zur KB hinzufügen ==="
+echo "=== 3. Add articles to KB ==="
 api_post "article_create" \
   -F "kb_id=${KB_ID}" \
-  -F "title=Erste Schritte mit PaperOffice" \
-  -F "content=PaperOffice AI bietet intelligente Dokumentenverarbeitung, OCR und Knowledge Management." \
-  -F "category=Einführung" | python3 -m json.tool
+  -F "title=Getting Started with PaperOffice" \
+  -F "content=PaperOffice AI provides intelligent document processing, OCR and knowledge management." \
+  -F "category=Introduction" | python3 -m json.tool
 
 api_post "article_create" \
   -F "kb_id=${KB_ID}" \
-  -F "title=API-Authentifizierung" \
-  -F "content=Alle API-Aufrufe benötigen einen Bearer Token im Authorization-Header." \
-  -F "category=Technik" | python3 -m json.tool
+  -F "title=API Authentication" \
+  -F "content=All API calls require a Bearer Token in the Authorization header." \
+  -F "category=Technical" | python3 -m json.tool
 
 echo ""
-echo "=== 4. Artikel auflisten ==="
+echo "=== 4. List articles ==="
 api_get "article_list?kb_id=${KB_ID}" | python3 -m json.tool
 
 echo ""
-echo "=== 5. Aufräumen — KB löschen ==="
+echo "=== 5. Cleanup — Delete KB ==="
 api_post "kb_delete" -F "kb_id=${KB_ID}" | python3 -m json.tool
 
 echo ""
-echo "✓ CRUD-Zyklus abgeschlossen."
+echo "✓ CRUD cycle completed."

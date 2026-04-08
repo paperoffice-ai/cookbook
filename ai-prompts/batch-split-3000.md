@@ -1,6 +1,6 @@
-# Batch PDF Split — 3000 Seiten
+# Batch PDF Split — 3000 Pages
 
-**Tool:** Beliebiges AI-Tool | **Output:** Batch Processor für 3000-Seiten PDFs
+**Tool:** Any AI Tool | **Output:** Batch Processor for 3000-page PDFs
 
 ## Prompt
 
@@ -17,17 +17,17 @@ Create a batch processor that:
 Use locale=de_DE for German document types.
 ```
 
-## Was du bekommst
+## What you get
 
-Ein Batch-Processor der:
-- Einen Ordner mit großen PDFs durcharbeitet
-- Jedes PDF via AI in Einzeldokumente splittet
-- Intelligente Dateinamen generiert (Dokumenttyp + Datum + Absender)
-- Async-Modus mit Polling für große Dateien nutzt
-- Deutsche Dokumenttypen korrekt erkennt
+A batch processor that:
+- Processes a folder of large PDFs
+- Splits each PDF into individual documents via AI
+- Generates smart filenames (document type + date + sender)
+- Uses async mode with polling for large files
+- Correctly recognizes German document types
 
-## Tipps
+## Tips
 
-- `priority < 900` für async Verarbeitung (empfohlen bei großen PDFs)
-- `naming_instruction` als Freitext: z.B. `"Dokumenttyp_Datum_Absender"`
-- `locale=de_DE` für deutsche Dokumenttyp-Erkennung
+- `priority < 900` for async processing (recommended for large PDFs)
+- `naming_instruction` as free text: e.g. `"Dokumenttyp_Datum_Absender"`
+- `locale=de_DE` for German document type recognition

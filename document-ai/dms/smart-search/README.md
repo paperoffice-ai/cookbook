@@ -1,6 +1,6 @@
-# Intelligente Dokumentensuche (Smart Search)
+# Smart document search (Smart Search)
 
-Durchsucht das DMS mit **semantischer KI-Suche**. Die Smart Search versteht Bedeutung und Kontext — nicht nur exakte Schlüsselwörter.
+Searches the DMS with **semantic AI search**. Smart Search understands meaning and context — not just exact keywords.
 
 ## Endpoint
 
@@ -8,39 +8,39 @@ Durchsucht das DMS mit **semantischer KI-Suche**. Die Smart Search versteht Bede
 POST https://api.paperoffice.ai/latest/documents/search
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter        | Pflicht | Beschreibung                                        |
-|------------------|---------|-----------------------------------------------------|
-| `global_search`  | Ja      | Suchbegriff (semantisch + Volltext)                  |
-| `workspace_name` | Nein    | Suche auf einen Workspace beschränken                |
-| `limit`          | Nein    | Maximale Ergebnisanzahl (Standard: 10)               |
-| `offset`         | Nein    | Ergebnisse ab Position (für Paginierung)             |
+| Parameter        | Required | Description                                         |
+|------------------|----------|-----------------------------------------------------|
+| `global_search`  | Yes      | Search term (semantic + full-text)                   |
+| `workspace_name` | No       | Restrict search to a specific workspace              |
+| `limit`          | No       | Maximum number of results (default: 10)              |
+| `offset`         | No       | Results starting from position (for pagination)      |
 
-**Wichtig:** Der Suchparameter heißt `global_search` (nicht `search_query`).
+**Important:** The search parameter is called `global_search` (not `search_query`).
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
-bash example.sh "Vertragsbedingungen"
-bash example.sh "Rechnung 2026" "Buchhaltung" 5
+bash example.sh "contract terms"
+bash example.sh "invoice 2026" "Accounting" 5
 
 # Python
 pip install requests
-python3 example.py "Vertragsbedingungen"
-python3 example.py "Rechnung 2026" "Buchhaltung"
+python3 example.py "contract terms"
+python3 example.py "invoice 2026" "Accounting"
 
 # Node.js
-node example.js "Vertragsbedingungen"
-node example.js "Rechnung 2026" "Buchhaltung" 5
+node example.js "contract terms"
+node example.js "invoice 2026" "Accounting" 5
 ```
 
-## Response-Struktur
+## Response structure
 
 ```json
 {
@@ -48,42 +48,42 @@ node example.js "Rechnung 2026" "Buchhaltung" 5
   "results": [
     {
       "id": 1234,
-      "filename": "rahmenvertrag_2026.pdf",
+      "filename": "framework_agreement_2026.pdf",
       "score": 0.94,
-      "snippet": "Die Vertragsbedingungen sehen eine Laufzeit von...",
-      "workspace": "Buchhaltung"
+      "snippet": "The contract terms provide for a duration of...",
+      "workspace": "Accounting"
     }
   ],
   "total": 42
 }
 ```
 
-## Suchsyntax
+## Search syntax
 
-Die Smart Search unterstützt verschiedene Suchmodi:
+Smart Search supports different search modes:
 
-| Modus                | Beispiel                           | Beschreibung                       |
-|----------------------|------------------------------------|------------------------------------|
-| Semantische Suche    | "Kündigungsfristen im Mietvertrag" | Findet inhaltlich passende Stellen |
-| Stichwortsuche       | "IBAN DE89"                        | Exakter Textabgleich               |
-| Kombinierte Suche    | "Rechnung über 5000 Euro"          | Semantik + Schlüsselwörter         |
+| Mode              | Example                              | Description                        |
+|-------------------|--------------------------------------|------------------------------------|
+| Semantic search   | "termination clauses in lease"       | Finds contextually matching parts  |
+| Keyword search    | "IBAN DE89"                          | Exact text matching                |
+| Combined search   | "invoice over 5000 euros"            | Semantics + keywords               |
 
-## Semantische Suche
+## Semantic search
 
-Die KI versteht:
+The AI understands:
 
-- **Synonyme**: "Gehalt" findet auch "Vergütung", "Lohn", "Entgelt"
-- **Kontext**: "Kündigungsfrist" findet auch Passagen über Vertragsbeendigung
-- **Mehrsprachig**: Deutsche Suche findet auch englische Dokumente und umgekehrt
+- **Synonyms**: "salary" also finds "compensation", "wages", "remuneration"
+- **Context**: "termination period" also finds passages about contract ending
+- **Multilingual**: English queries also find German documents and vice versa
 
-## Filter
+## Filters
 
-- **Workspace-Filter**: Suche auf einen bestimmten Workspace einschränken
-- **Paginierung**: Mit `limit` und `offset` durch große Ergebnismengen blättern
+- **Workspace filter**: Restrict search to a specific workspace
+- **Pagination**: Browse through large result sets with `limit` and `offset`
 
-## Tipps
+## Tips
 
-- Natürliche Fragen liefern oft bessere Ergebnisse als einzelne Stichwörter
-- `global_search` kombiniert Volltextsuche mit semantischer Suche automatisch
-- Für präzise Ergebnisse: Workspace-Filter nutzen
-- Score-Werte > 0.8 gelten als sehr gute Treffer
+- Natural questions often yield better results than single keywords
+- `global_search` automatically combines full-text search with semantic search
+- For precise results: use workspace filter
+- Score values > 0.8 are considered very good matches

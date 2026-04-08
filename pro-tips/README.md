@@ -1,52 +1,54 @@
 # Pro Tips
 
-## Kanonische Endpoints
+## Canonical Endpoints
 
-PaperOffice AI hat zwei Endpoint-Muster:
+PaperOffice AI has two endpoint patterns:
 
-### 1. Job-basierte Endpoints (Dateiverarbeitung)
+### 1. Job-based Endpoints (File Processing)
 
 ```bash
 POST https://api.paperoffice.ai/latest/job/add/{pipeline}
 ```
 
-| Pipeline | Zweck |
+| Pipeline | Purpose |
 |---|---|
 | `workflow` | IDP, PDF Split/Merge/Convert/Anonymize |
 | `paperoffice_aiocr___generate` | AI-OCR |
 | `paperoffice_voice___tts` | Text-to-Speech |
 | `paperoffice_voice___stt` | Speech-to-Text |
-| `paperoffice_imagestudio___generate` | Bildgenerierung |
-| `paperoffice_imagestudio___remove_bg` | Hintergrund entfernen |
+| `paperoffice_imagestudio___generate` | Image Generation |
+| `paperoffice_imagestudio___remove_bg` | Background Removal |
 
-### 2. Dedizierte REST-Endpoints
+### 2. Dedicated REST Endpoints
 
-| Endpoint | Zweck |
+| Endpoint | Purpose |
 |---|---|
-| `POST /translate/text` | Übersetzung |
-| `GET /translate/languages` | Sprachliste |
-| `POST /vat/validate` | USt-ID Prüfung |
-| `GET /vat/rates` | EU-Steuersätze (GRATIS) |
-| `POST /fakeemail/check` | Fake-Email-Erkennung |
+| `POST /translate/text` | Translation |
+| `GET /translate/languages` | Language List |
+| `POST /vat/validate` | VAT ID Validation |
+| `GET /vat/rates` | EU Tax Rates (FREE) |
+| `POST /fakeemail/check` | Fake Email Detection |
 | `POST /fingerprint/verify` | Device Fingerprint |
-| `POST /geocoding/forward` | Adresse → Koordinaten |
-| `POST /geocoding/reverse` | Koordinaten → Adresse |
+| `POST /geocoding/forward` | Address → Coordinates |
+| `POST /geocoding/reverse` | Coordinates → Address |
 | `POST /ip2location/full` | IP → Geolocation |
-| `POST /ip2location/vpn` | VPN/Proxy-Erkennung |
-| `POST /currency_exchange/get_rates` | Wechselkurse |
-| `POST /location2weather` | Wetter (GRATIS) |
-| `POST /documents/search` | DMS-Suche |
-| `POST /documents/upload` | DMS-Upload |
-| `GET /webhooks/list` | Webhook-Liste |
-| `POST /webhooks/subscribe` | Webhook registrieren |
+| `POST /ip2location/vpn` | VPN/Proxy Detection |
+| `POST /currency_exchange/get_rates` | Exchange Rates |
+| `POST /location2weather` | Weather (FREE) |
+| `POST /documents/search` | DMS Search |
+| `POST /documents/upload` | DMS Upload |
+| `POST /documents/workspace_create` | Create Workspace |
+| `GET /documents/workspace_list` | Workspace List |
+| `GET /webhooks/list` | Webhook List |
+| `POST /webhooks/subscribe` | Register Webhook |
 | `GET /knowledge/kb_list` | Knowledge Bases |
-| `POST /knowledge/search` | KB-Suche |
+| `POST /knowledge/search` | KB Search |
 
 ---
 
 ## Sync vs Async
 
-| Priority | Modus | SLA | Verwendung |
+| Priority | Mode | SLA | Usage |
 |---|---|---|---|
 | `≥ 900` | **SYNC** | ~20s | Development & Testing |
 | `800–899` | ASYNC | 1 min | Urgent async |
@@ -54,42 +56,42 @@ POST https://api.paperoffice.ai/latest/job/add/{pipeline}
 | `0–399` | ASYNC | 12–72h | Batch / Background |
 
 ```python
-# Entwicklung: Sofort-Ergebnis
+# Development: Instant result
 data = {"priority": 900}
 
-# Produktion: Kosteneffizient
+# Production: Cost-efficient
 data = {"priority": 500}
 ```
 
-**Sync (priority ≥ 900):** Antwort enthält sofort das Ergebnis.
-**Async (priority < 900):** Antwort enthält `job_id`, dann pollen:
+**Sync (priority ≥ 900):** Response contains the result immediately.
+**Async (priority < 900):** Response contains `job_id`, then poll:
 
 ```bash
-# Status abfragen
+# Check status
 curl -s "https://api.paperoffice.ai/latest/job/get/{job_id}" \
   -H "Authorization: Bearer $PAPEROFFICE_API_KEY"
 ```
 
 ---
 
-## Credit-System
+## Credit System
 
-Jeder API-Call verbraucht Credits. Höhere Priority = höhere Kosten.
+Every API call consumes credits. Higher priority = higher cost.
 
-| Priority | Multiplier | Beispiel (10-Credit-Job) |
+| Priority | Multiplier | Example (10-credit job) |
 |---|---|---|
 | 500 (default) | 1.0x | 10 Credits |
 | 700 | ~1.16x | ~12 Credits |
 | 900 (sync) | ~1.33x | ~13 Credits |
 
-**Gratis-Endpoints** (keine Credits):
+**Free endpoints** (no credits):
 - `GET /vat/rates`
 - `POST /location2weather`
 - `GET /health`
 
 ---
 
-## Response-Strukturen
+## Response Structures
 
 ### OCR
 
@@ -103,14 +105,14 @@ print(page_1["confidence_avg"])
 print(page_1["language"]["primary"])
 ```
 
-### IDP (Rechnungsextraktion)
+### IDP (Invoice Extraction)
 
 ```python
 result = response.json()["result"]
 fields = result["pages_idp"][0]["suggested_fields"]
 
 invoice_nr = fields["_invoice_number"]["value"]         # "2024-001"
-total = fields["_total_amount"]["value_raw"]             # "1469.06" (normalisiert)
+total = fields["_total_amount"]["value_raw"]             # "1469.06" (normalized)
 vat = fields["_vat_amount"]["value_raw"]                 # "234.56"
 confidence = fields["_total_amount"]["source_boxes_confidence"]  # "high"
 ```
@@ -152,13 +154,13 @@ characters = data["characters"]
 
 ---
 
-## Beste TTS-Stimmen
+## Best TTS Voices
 
-| Sprache | Stimme | Qualität |
+| Language | Voice | Quality |
 |---|---|---|
-| Deutsch | **Nadja** | Sehr natürlich |
-| Englisch | **Joanna** | Natürlich |
-| Spanisch | **Lucia** | Natürlich |
+| German | **Nadja** | Very natural |
+| English | **Joanna** | Natural |
+| Spanish | **Lucia** | Natural |
 
 ```python
 data = {
@@ -173,9 +175,9 @@ data = {
 
 ---
 
-## Authentifizierung
+## Authentication
 
-**Bearer Token für fast alle Endpoints erforderlich.**
+**Bearer token required for almost all endpoints.**
 
 ```bash
 export PAPEROFFICE_API_KEY="po_sk_xxx"
@@ -184,12 +186,12 @@ curl -X POST "https://api.paperoffice.ai/latest/..." \
   -H "Authorization: Bearer $PAPEROFFICE_API_KEY"
 ```
 
-| Token-Typ | Prefix | Verwendung |
+| Token Type | Prefix | Usage |
 |---|---|---|
-| System Key | `po_sk_` | Server-to-Server, voller Zugriff |
-| User Token | `po_ut_` | User-scoped, abhängig von Lizenz |
+| System Key | `po_sk_` | Server-to-server, full access |
+| User Token | `po_ut_` | User-scoped, depends on license |
 
-**VISITOR-Mode** (kein Token): Nur `GET /health`, `/ip2location/*`, `/currency_exchange/*`, `GET /vat/rates`.
+**VISITOR Mode** (no token): Only `GET /health`, `/ip2location/*`, `/currency_exchange/*`, `GET /vat/rates`.
 
 ---
 
@@ -218,7 +220,7 @@ curl -X POST "https://api.paperoffice.ai/latest/..." \
 
 ---
 
-## Retry-Strategie (HTTP 429)
+## Retry Strategy (HTTP 429)
 
 ```python
 import time
@@ -230,36 +232,36 @@ def api_call_with_retry(url, headers, data=None, files=None, max_retries=5):
         if r.status_code != 429:
             return r
         wait = int(r.headers.get("Retry-After", 2 ** attempt))
-        print(f"Rate limited, warte {wait}s...")
+        print(f"Rate limited, waiting {wait}s...")
         time.sleep(wait)
-    raise Exception("Rate limit nach {max_retries} Versuchen überschritten")
+    raise Exception(f"Rate limit exceeded after {max_retries} attempts")
 ```
 
 ---
 
-## VISITOR-Endpoints (kein Token)
+## VISITOR Endpoints (no token)
 
-Diese Endpoints funktionieren ohne Bearer Token (IP-basiertes Ratelimit):
+These endpoints work without a Bearer token (IP-based rate limit):
 
 | Endpoint | Limit |
 |---|---|
-| `GET /health` | Unbegrenzt |
-| `POST /ip2location/full` | ~100 Requests/Tag |
-| `POST /ip2location/vpn` | ~100 Requests/Tag |
-| `POST /currency_exchange/get_rates` | ~100 Requests/Tag |
-| `GET /vat/rates` | Gratis, unbegrenzt |
+| `GET /health` | Unlimited |
+| `POST /ip2location/full` | ~100 Requests/day |
+| `POST /ip2location/vpn` | ~100 Requests/day |
+| `POST /currency_exchange/get_rates` | ~100 Requests/day |
+| `GET /vat/rates` | Free, unlimited |
 
-> **Empfehlung:** Auch für VISITOR-Endpoints einen Bearer Token verwenden, um IP-Ratelimits zu umgehen.
+> **Recommendation:** Use a Bearer token even for VISITOR endpoints to bypass IP rate limits.
 
 ---
 
-## Wichtige Parameter-Hinweise
+## Important Parameter Notes
 
-| Parameter | Richtig | Falsch |
+| Parameter | Correct | Incorrect |
 |---|---|---|
-| STT Datei-Upload | `file_1` | `file` |
+| STT File Upload | `file_1` | `file` |
 | Fingerprint ID | `visitorId` | `fingerprint_id` |
-| DMS Suche | `global_search` | `search_query` |
-| Image Gen Breite | `width` | `size` |
-| Weather Koordinaten | `lat` + `lon` | `city` |
+| DMS Search | `global_search` | `search_query` |
+| Image Gen Size | `width`, `height` | `size` |
+| Weather Coordinates | `lat` + `lon` | `city`, `lng` |
 | Workspace | `workspace_name` | `metadata` |

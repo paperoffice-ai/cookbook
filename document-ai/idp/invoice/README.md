@@ -1,6 +1,6 @@
-# Rechnungs-Extraktion (IDP Invoice)
+# Invoice Extraction (IDP Invoice)
 
-Extrahiert **28+ strukturierte Felder** aus Rechnungen — Rechnungsnummer, Beträge, Lieferant, IBAN, Positionen und mehr. Jedes Feld enthält Konfidenz-Angaben und Bounding Boxes.
+Extracts **28+ structured fields** from invoices — invoice number, amounts, supplier, IBAN, line items, and more. Each field includes confidence scores and bounding boxes.
 
 ## Endpoint
 
@@ -8,100 +8,100 @@ Extrahiert **28+ strukturierte Felder** aus Rechnungen — Rechnungsnummer, Betr
 POST https://api.paperoffice.ai/latest/job/add/workflow
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter         | Wert       | Beschreibung                         |
+| Parameter         | Value      | Description                          |
 |-------------------|------------|--------------------------------------|
-| `file_1`          | Datei      | PDF oder Bild der Rechnung           |
-| `model`           | `premium`  | Extraktionsqualität (basic/premium/ultra) |
-| `idp_collection`  | `invoice`  | Rechnungs-Extraktion aktivieren      |
-| `priority`        | `900`      | Synchrone Verarbeitung (≥900)        |
+| `file_1`          | File       | PDF or image of the invoice          |
+| `model`           | `premium`  | Extraction quality (basic/premium/ultra) |
+| `idp_collection`  | `invoice`  | Enable invoice extraction            |
+| `priority`        | `900`      | Synchronous processing (≥900)        |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
 # Bash
-bash example.sh rechnung.pdf
+bash example.sh invoice.pdf
 
 # Python
 pip install requests
-python3 example.py rechnung.pdf
+python3 example.py invoice.pdf
 
 # Node.js
 npm install form-data
-node example.js rechnung.pdf
+node example.js invoice.pdf
 ```
 
-## Verfügbare Rechnungsfelder
+## Available invoice fields
 
-Die IDP-Engine extrahiert folgende Felder (Prefix `_`):
+The IDP engine extracts the following fields (prefix `_`):
 
-### Kopfdaten
+### Header data
 
-| Feld                     | Typ      | Beschreibung                        |
+| Field                    | Type     | Description                         |
 |--------------------------|----------|-------------------------------------|
-| `_invoice_number`        | string   | Rechnungsnummer                     |
-| `_invoice_date`          | date     | Rechnungsdatum                      |
-| `_invoice_due_date`      | date     | Fälligkeitsdatum                    |
-| `_invoice_type`          | string   | Rechnungsart (Rechnung/Gutschrift)  |
-| `_invoice_description`   | string   | Beschreibung / Betreff              |
-| `_purchase_order_number` | string   | Bestellnummer                       |
-| `_delivery_date`         | date     | Lieferdatum                         |
+| `_invoice_number`        | string   | Invoice number                      |
+| `_invoice_date`          | date     | Invoice date                        |
+| `_invoice_due_date`      | date     | Due date                            |
+| `_invoice_type`          | string   | Invoice type (invoice/credit note)  |
+| `_invoice_description`   | string   | Description / subject               |
+| `_purchase_order_number` | string   | Purchase order number               |
+| `_delivery_date`         | date     | Delivery date                       |
 
-### Beträge
+### Amounts
 
-| Feld                     | Typ      | Beschreibung                        |
+| Field                    | Type     | Description                         |
 |--------------------------|----------|-------------------------------------|
-| `_total_amount`          | number   | Gesamtbetrag (brutto)               |
-| `_net_amount`            | number   | Nettobetrag                         |
-| `_vat_amount`            | number   | Umsatzsteuer-Betrag                 |
-| `_vat_rate`              | number   | USt-Satz in Prozent                 |
-| `_discount_amount`       | number   | Rabatt-Betrag                       |
-| `_currency`              | string   | Währung (EUR, USD, etc.)            |
+| `_total_amount`          | number   | Total amount (gross)                |
+| `_net_amount`            | number   | Net amount                          |
+| `_vat_amount`            | number   | VAT amount                          |
+| `_vat_rate`              | number   | VAT rate in percent                 |
+| `_discount_amount`       | number   | Discount amount                     |
+| `_currency`              | string   | Currency (EUR, USD, etc.)           |
 
-### Lieferant (Kreditor)
+### Supplier (creditor)
 
-| Feld                     | Typ      | Beschreibung                        |
+| Field                    | Type     | Description                         |
 |--------------------------|----------|-------------------------------------|
-| `_supplier_name`         | string   | Firmenname des Lieferanten          |
-| `_supplier_address`      | string   | Adresse des Lieferanten             |
-| `_supplier_vat_id`       | string   | USt-IdNr. des Lieferanten           |
-| `_supplier_tax_id`       | string   | Steuernummer des Lieferanten        |
-| `_supplier_email`        | string   | E-Mail des Lieferanten              |
-| `_supplier_phone`        | string   | Telefon des Lieferanten             |
+| `_supplier_name`         | string   | Supplier company name               |
+| `_supplier_address`      | string   | Supplier address                    |
+| `_supplier_vat_id`       | string   | Supplier VAT ID                     |
+| `_supplier_tax_id`       | string   | Supplier tax number                 |
+| `_supplier_email`        | string   | Supplier email                      |
+| `_supplier_phone`        | string   | Supplier phone                      |
 
-### Kunde (Debitor)
+### Customer (debtor)
 
-| Feld                     | Typ      | Beschreibung                        |
+| Field                    | Type     | Description                         |
 |--------------------------|----------|-------------------------------------|
-| `_customer_name`         | string   | Firmenname des Kunden               |
-| `_customer_address`      | string   | Adresse des Kunden                  |
-| `_customer_vat_id`       | string   | USt-IdNr. des Kunden                |
-| `_customer_number`       | string   | Kundennummer                        |
+| `_customer_name`         | string   | Customer company name               |
+| `_customer_address`      | string   | Customer address                    |
+| `_customer_vat_id`       | string   | Customer VAT ID                     |
+| `_customer_number`       | string   | Customer number                     |
 
-### Bankverbindung
+### Bank details
 
-| Feld                     | Typ      | Beschreibung                        |
+| Field                    | Type     | Description                         |
 |--------------------------|----------|-------------------------------------|
-| `_creditor_iban`         | string   | IBAN des Kreditors                  |
-| `_creditor_bic`          | string   | BIC/SWIFT des Kreditors             |
-| `_creditor_bank_name`    | string   | Bankname des Kreditors              |
-| `_payment_reference`     | string   | Zahlungsreferenz / Verwendungszweck |
-| `_payment_terms`         | string   | Zahlungsbedingungen                 |
+| `_creditor_iban`         | string   | Creditor IBAN                       |
+| `_creditor_bic`          | string   | Creditor BIC/SWIFT                  |
+| `_creditor_bank_name`    | string   | Creditor bank name                  |
+| `_payment_reference`     | string   | Payment reference                   |
+| `_payment_terms`         | string   | Payment terms                       |
 
-### Positionen (Tabelle)
+### Line items (table)
 
-| Feld                     | Typ      | Beschreibung                        |
+| Field                    | Type     | Description                         |
 |--------------------------|----------|-------------------------------------|
-| `_line_items`            | table    | Einzelpositionen der Rechnung       |
+| `_line_items`            | table    | Individual invoice line items       |
 
-Die Tabelle `_line_items` kann pro Zeile enthalten: Beschreibung, Menge, Einzelpreis, Gesamtpreis, USt-Satz.
+The `_line_items` table can contain per row: description, quantity, unit price, total price, VAT rate.
 
-## Response-Struktur
+## Response structure
 
 ```json
 {
@@ -132,20 +132,20 @@ Die Tabelle `_line_items` kann pro Zeile enthalten: Beschreibung, Menge, Einzelp
 }
 ```
 
-## Feld-Metadaten
+## Field metadata
 
-Jedes Feld enthält:
+Each field contains:
 
-| Eigenschaft               | Beschreibung                              |
+| Property                  | Description                               |
 |---------------------------|-------------------------------------------|
-| `type`                    | Datentyp (string, number, date, table)    |
-| `value`                   | Formatierter Wert (z.B. "1.469,06")      |
-| `value_raw`               | Rohwert für Weiterverarbeitung ("1469.06")|
-| `source_boxes`            | Positionen im Dokument (Bounding Boxes)   |
-| `source_boxes_confidence` | Konfidenz: high, medium, low              |
+| `type`                    | Data type (string, number, date, table)   |
+| `value`                   | Formatted value (e.g. "1.469,06")         |
+| `value_raw`               | Raw value for further processing ("1469.06") |
+| `source_boxes`            | Positions in the document (bounding boxes)|
+| `source_boxes_confidence` | Confidence: high, medium, low             |
 
-## Tipps
+## Tips
 
-- **`value_raw`** für numerische Weiterverarbeitung nutzen (Punkt als Dezimaltrenner)
-- **`source_boxes_confidence`** bei "low" → manuelles Review empfohlen
-- **`model=ultra`** für komplexe mehrseitige Rechnungen mit vielen Positionen
+- Use **`value_raw`** for numerical processing (dot as decimal separator)
+- When **`source_boxes_confidence`** is "low" → manual review recommended
+- Use **`model=ultra`** for complex multi-page invoices with many line items

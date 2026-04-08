@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Geocoding (Adresse → Koordinaten und umgekehrt)"""
+"""PaperOffice AI — Geocoding (address → coordinates and vice versa)"""
 import os
 import sys
 import requests
@@ -10,9 +10,9 @@ API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
 def geocode_forward(address: str, lang: str = "de", token: str = API_KEY) -> dict:
-    """Wandelt eine Adresse in Koordinaten um."""
+    """Converts an address into coordinates."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.post(
         FORWARD_URL,
@@ -24,9 +24,9 @@ def geocode_forward(address: str, lang: str = "de", token: str = API_KEY) -> dic
 
 
 def geocode_reverse(lat: float, lng: float, lang: str = "de", token: str = API_KEY) -> dict:
-    """Wandelt Koordinaten in eine Adresse um."""
+    """Converts coordinates into an address."""
     if not token:
-        raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
+        raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.post(
         REVERSE_URL,
@@ -43,11 +43,11 @@ if __name__ == "__main__":
     print(f"=== Forward: {address} ===")
     fwd = geocode_forward(address)
     if fwd.get("found"):
-        print(f"Lat: {fwd.get('lat')}")
-        print(f"Lng: {fwd.get('lng')}")
-        print(f"Adresse: {fwd.get('display_name')}")
+        print(f"Lat:     {fwd.get('lat')}")
+        print(f"Lng:     {fwd.get('lng')}")
+        print(f"Address: {fwd.get('display_name')}")
 
     print(f"\n=== Reverse: 52.52, 13.41 ===")
     rev = geocode_reverse(52.52, 13.41)
     if rev.get("found"):
-        print(f"Adresse: {rev.get('display_name')}")
+        print(f"Address: {rev.get('display_name')}")

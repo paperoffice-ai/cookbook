@@ -1,10 +1,10 @@
 # Claude — Invoice Pipeline
 
-**Tool:** Claude | **Output:** Komplettes Python-Script mit Bounding Box Verification
+**Tool:** Claude | **Output:** Complete Python script with Bounding Box Verification
 
 ## Prompt
 
-Kopiere diesen Prompt direkt in Claude:
+Copy this prompt directly into Claude:
 
 ```
 Read this API documentation:
@@ -20,17 +20,17 @@ Important: Use file_1 for uploads, model=premium.
 Handle both sync (priority>=900) and async modes.
 ```
 
-## Was du bekommst
+## What you get
 
-Claude generiert ein vollständiges Python-Script das:
-- Einen Ordner mit Rechnungs-PDFs durchiteriert
-- Jede Rechnung via PaperOffice IDP extrahiert
-- Source Boxes für visuelles Review bereitstellt
-- Ergebnisse als CSV exportiert
-- Sync/Async-Modus korrekt handhabt
+Claude generates a complete Python script that:
+- Iterates through a folder of invoice PDFs
+- Extracts each invoice via PaperOffice IDP
+- Provides source boxes for visual review
+- Exports results as CSV
+- Correctly handles sync/async modes
 
-## Tipps
+## Tips
 
-- Füge `model=premium` hinzu für die beste Extraktionsqualität
-- `priority >= 900` = synchrone Antwort, `< 900` = async mit Polling
-- Bearer Token erforderlich (`export PAPEROFFICE_API_KEY=po_sk_xxx`)
+- Add `model=premium` for the best extraction quality
+- `priority >= 900` = synchronous response, `< 900` = async with polling
+- Bearer token required (`export PAPEROFFICE_API_KEY=po_sk_xxx`)

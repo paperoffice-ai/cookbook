@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * PaperOffice AI — Textübersetzung
- * Übersetzt Texte zwischen 100+ Sprachen (3 Qualitätsstufen)
+ * PaperOffice AI — Text Translation
+ * Translates text between 100+ languages (3 quality tiers)
  *
- * Verwendung:
+ * Usage:
  *     export PAPEROFFICE_API_KEY=po_sk_xxx
  *     node example.js "Hello World" de
  *     node example.js "Hello World" de auto ultra
@@ -19,7 +19,7 @@ async function translate_text(
   tier = "premium",
   token = API_KEY
 ) {
-  if (!token) throw new Error("PAPEROFFICE_API_KEY nicht gesetzt");
+  if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
   const params = new URLSearchParams({
     text,
@@ -42,7 +42,7 @@ async function translate_text(
 }
 
 async function list_languages(token = API_KEY) {
-  if (!token) throw new Error("PAPEROFFICE_API_KEY nicht gesetzt");
+  if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
   const response = await fetch(`${BASE_URL}/translate/languages`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -62,11 +62,11 @@ async function list_languages(token = API_KEY) {
   const result = data.data || {};
 
   console.log(`Status:       ${data.status || "N/A"}`);
-  console.log(`Übersetzung:  ${result.translation || "N/A"}`);
-  console.log(`Quellsprache: ${result.source_language || "N/A"}`);
-  console.log(`Zielsprache:  ${result.target_language || "N/A"}`);
+  console.log(`Translation:  ${result.translation || "N/A"}`);
+  console.log(`Source lang:  ${result.source_language || "N/A"}`);
+  console.log(`Target lang:  ${result.target_language || "N/A"}`);
   console.log(`Tier:         ${result.tier || "N/A"}`);
-  console.log(`Zeichen:      ${result.characters || "N/A"}`);
+  console.log(`Characters:   ${result.characters || "N/A"}`);
   console.log();
   console.log(JSON.stringify(data, null, 2));
 })();

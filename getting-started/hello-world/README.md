@@ -1,6 +1,6 @@
 # Hello World — Health Check
 
-Der einfachste API-Call überhaupt: Prüfe ob die PaperOffice AI API erreichbar ist.
+The simplest API call of all: Check whether the PaperOffice AI API is reachable.
 
 ## Endpoint
 
@@ -8,9 +8,9 @@ Der einfachste API-Call überhaupt: Prüfe ob die PaperOffice AI API erreichbar 
 GET https://api.paperoffice.ai/latest/health
 ```
 
-**Authentifizierung:** Keine — dieser Endpoint ist öffentlich (VISITOR-Level).
+**Authentication:** None — this endpoint is public (VISITOR level).
 
-## Ausführen
+## How to run
 
 ```bash
 # Bash
@@ -24,7 +24,7 @@ python3 example.py
 node example.js
 ```
 
-## Erwartete Antwort
+## Expected response
 
 ```json
 {
@@ -34,6 +34,6 @@ node example.js
 }
 ```
 
-## Wofür?
+## What is it for?
 
-Dieser Call eignet sich perfekt als Smoke-Test in CI/CD-Pipelines oder als erster Schritt, um die Konnektivität zur API zu verifizieren — ganz ohne API-Key.
+This call is perfect as a smoke test in CI/CD pipelines or as a first step to verify connectivity to the API — without any API key.

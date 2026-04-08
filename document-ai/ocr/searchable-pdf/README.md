@@ -1,6 +1,6 @@
-# Searchable PDF — Durchsuchbare PDF aus Scans erzeugen
+# Searchable PDF — Generate searchable PDF from scans
 
-Verwandle gescannte PDFs und Bilder in durchsuchbare PDFs mit unsichtbarer Textschicht. Ideal für die Archivierung — das Originaldokument bleibt visuell unverändert, ist aber volltextdurchsuchbar.
+Transform scanned PDFs and images into searchable PDFs with an invisible text layer. Ideal for archiving — the original document remains visually unchanged but becomes full-text searchable.
 
 ## Endpoint
 
@@ -8,46 +8,46 @@ Verwandle gescannte PDFs und Bilder in durchsuchbare PDFs mit unsichtbarer Texts
 POST https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate
 ```
 
-**Authentifizierung:** Bearer Token (API-Key erforderlich)
+**Authentication:** Bearer Token (API key required)
 
-## Parameter
+## Parameters
 
-| Parameter               | Wert   | Beschreibung                              |
+| Parameter               | Value  | Description                               |
 |------------------------|--------|-------------------------------------------|
-| `file_1`               | Datei  | Das zu verarbeitende Dokument             |
-| `ocr_mode`             | `text` | Text-Extraktion als Basis                 |
-| `output_searchable_pdf`| `true` | Durchsuchbare PDF zusätzlich erzeugen     |
-| `priority`             | `900`  | Synchrone Verarbeitung (sofort)           |
+| `file_1`               | File   | The document to process                   |
+| `ocr_mode`             | `text` | Text extraction as basis                  |
+| `output_searchable_pdf`| `true` | Additionally generate searchable PDF      |
+| `priority`             | `900`  | Synchronous processing (immediate)        |
 
-## Ausführen
+## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY="dein_api_key"
+export PAPEROFFICE_API_KEY="your_api_key"
 
-# Bash — Ergebnis wird als searchable_output.pdf gespeichert
-chmod +x example.sh && ./example.sh /pfad/zur/datei.pdf
+# Bash — Result is saved as searchable_output.pdf
+chmod +x example.sh && ./example.sh /path/to/file.pdf
 
-# Bash — mit eigenem Ausgabepfad
-./example.sh /pfad/zur/datei.pdf /pfad/zur/ausgabe.pdf
+# Bash — with custom output path
+./example.sh /path/to/file.pdf /path/to/output.pdf
 
 # Python
 pip install requests
-python3 example.py /pfad/zur/datei.pdf ausgabe.pdf
+python3 example.py /path/to/file.pdf output.pdf
 
 # Node.js (v18+)
-node example.js /pfad/zur/datei.pdf ausgabe.pdf
+node example.js /path/to/file.pdf output.pdf
 ```
 
-## Wann Searchable PDF verwenden?
+## When to use Searchable PDF?
 
-- **Archivierung** — GoBD/DSGVO-konforme Langzeitarchivierung mit Volltextsuche
-- **DMS-Import** — Dokumente durchsuchbar ins DMS einpflegen
-- **Compliance** — Originallayout beibehalten, gleichzeitig durchsuchbar machen
-- **Scan-Nachbearbeitung** — Papier-Scans für digitale Workflows aufbereiten
+- **Archiving** — GoBD/GDPR-compliant long-term archiving with full-text search
+- **DMS import** — Import searchable documents into your DMS
+- **Compliance** — Preserve original layout while making it searchable
+- **Scan post-processing** — Prepare paper scans for digital workflows
 
-## Response-Struktur
+## Response structure
 
-Die Response enthält sowohl den extrahierten Text als auch einen Download-Link für die durchsuchbare PDF:
+The response contains both the extracted text and a download link for the searchable PDF:
 
 ```json
 {
@@ -58,7 +58,7 @@ Die Response enthält sowohl den extrahierten Text als auch einen Download-Link 
     "output": {
       "pages": {
         "00001": {
-          "ocr_text": "Text der Seite...",
+          "ocr_text": "Text of the page...",
           "confidence_avg": 0.9954
         }
       },
@@ -68,7 +68,7 @@ Die Response enthält sowohl den extrahierten Text als auch einen Download-Link 
       "summary": {
         "total_pages": 1,
         "avg_confidence": 1,
-        "poaiocr_extracted_fulltext": "***Page 1 of 1***\n\nDer extrahierte Text...",
+        "poaiocr_extracted_fulltext": "***Page 1 of 1***\n\nThe extracted text...",
         "processing_engine": "paperoffice_ai_ocr_neural_v3.0"
       }
     },
@@ -77,23 +77,23 @@ Die Response enthält sowohl den extrahierten Text als auch einen Download-Link 
 }
 ```
 
-## Zusätzliche Felder
+## Additional fields
 
-| Feld | Beschreibung |
-|------|-------------|
-| `output.searchable_pdf_url` | Direkte Download-URL für die durchsuchbare PDF |
-| `output.download_token` | Alternativ: Token für Download über `/job/download/{token}` |
+| Field | Description |
+|-------|-------------|
+| `output.searchable_pdf_url` | Direct download URL for the searchable PDF |
+| `output.download_token` | Alternative: Token for download via `/job/download/{token}` |
 
-## Workflow: Scan → Archiv
+## Workflow: Scan → Archive
 
 ```
-1. Scan hochladen (file_1)
-2. OCR + Searchable PDF erzeugen (output_searchable_pdf=true)
-3. Durchsuchbare PDF herunterladen
-4. Im DMS/Archiv ablegen → Volltextsuche funktioniert sofort
+1. Upload scan (file_1)
+2. Generate OCR + searchable PDF (output_searchable_pdf=true)
+3. Download searchable PDF
+4. Store in DMS/archive → full-text search works immediately
 ```
 
-## Siehe auch
+## See also
 
-- [Text-Mode](../text-mode/) — Nur reiner Text (ohne PDF-Erzeugung)
-- [Complete-Mode](../complete-mode/) — Text + Bounding Boxes + Tabellen
+- [Text-Mode](../text-mode/) — Plain text only (without PDF generation)
+- [Complete-Mode](../complete-mode/) — Text + bounding boxes + tables

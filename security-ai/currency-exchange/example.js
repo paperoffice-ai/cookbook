@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** PaperOffice AI — Wechselkurse abfragen (VISITOR-fähig, optional mit Token) */
+/** PaperOffice AI — Query exchange rates (VISITOR-capable, optionally with token) */
 
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 const API_URL = "https://api.paperoffice.ai/latest/currency_exchange/get_rates";
@@ -27,9 +27,9 @@ const amount = parseFloat(process.argv[4]) || 100;
 
 const data = await get_exchange_rates(from_cur, to_cur, amount);
 
-console.log(`Basis:     ${data.base}`);
-console.log(`Betrag:    ${data.amount}`);
-console.log(`Währungen: ${data.currencies_count}`);
+console.log(`Base:       ${data.base}`);
+console.log(`Amount:     ${data.amount}`);
+console.log(`Currencies: ${data.currencies_count}`);
 
 const top_currencies = ["USD", "GBP", "CHF", "JPY", "CNY"];
 for (const cur of top_currencies) {
