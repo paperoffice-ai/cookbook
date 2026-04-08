@@ -19,6 +19,13 @@ subscribe_response=$(curl -s "${api_base}/webhooks/subscribe" \
 
 echo "${subscribe_response}" | python3 -m json.tool
 
+subscription_id=$(echo "${subscribe_response}" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+data = d.get('data', d)
+print(data.get('subscription_id', data.get('id', '')))
+" 2>/dev/null || echo "")
+
 # Step 2: List all webhooks
 echo ""
 echo ">>> Listing webhooks..."
@@ -28,11 +35,16 @@ list_response=$(curl -s "${api_base}/webhooks/list" \
 echo "${list_response}" | python3 -m json.tool
 
 # Step 3: Send test event
-echo ""
-echo ">>> Sending test event..."
-test_response=$(curl -s -X POST "${api_base}/webhooks/test" \
-  -H "Authorization: Bearer ${api_key}" \
-  -H "Content-Type: application/json" \
-  -d "{\"url\": \"${webhook_url}\"}")
+if [ -n "${subscription_id}" ]; then
+  echo ""
+  echo ">>> Sending test event to subscription ${subscription_id}..."
+  test_response=$(curl -s -X POST "${api_base}/webhooks/test" \
+    -H "Authorization: Bearer ${api_key}" \
+    -H "Content-Type: application/json" \
+    -d "{\"subscription_id\": \"${subscription_id}\"}")
 
-echo "${test_response}" | python3 -m json.tool
+  echo "${test_response}" | python3 -m json.tool
+else
+  echo ""
+  echo ">>> Skipping test: no subscription_id received from subscribe response."
+fi

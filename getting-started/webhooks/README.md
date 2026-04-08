@@ -8,8 +8,8 @@ Instead of constantly polling the job status, you can register webhooks and get 
 |---|---|---|
 | Subscribe | POST | `/webhooks/subscribe` |
 | List | GET | `/webhooks/list` |
-| Update | PUT | `/webhooks/update` |
-| Delete | DELETE | `/webhooks/delete` |
+| Update | POST | `/webhooks/update` |
+| Delete | POST | `/webhooks/delete` |
 | Test | POST | `/webhooks/test` |
 
 **Authentication:** Bearer Token for all endpoints

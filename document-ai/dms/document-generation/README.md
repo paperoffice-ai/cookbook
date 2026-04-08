@@ -182,7 +182,7 @@ node example.js "invoice_standard" pdf
 {
   "status": "success",
   "document": {
-    "download_url": "https://api.paperoffice.ai/latest/documents/download/abc123",
+    "download_url": "https://api.paperoffice.ai/latest/job/download/abc123_token",
     "format": "pdf",
     "pages": 2,
     "pofid": "pof_abc123"

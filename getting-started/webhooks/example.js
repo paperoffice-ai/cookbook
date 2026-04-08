@@ -37,6 +37,15 @@ async function list_webhooks() {
   return response.json();
 }
 
+async function test_webhook(subscription_id) {
+  const response = await fetch(`${api_base}/webhooks/test`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ subscription_id }),
+  });
+  return response.json();
+}
+
 function verify_signature(payload, signature) {
   const expected = createHmac("sha256", webhook_secret)
     .update(payload)
@@ -58,11 +67,20 @@ const sub_result = await subscribe_webhook(webhook_url, [
 ]);
 console.log(sub_result);
 
+const sub_data = sub_result.data || sub_result;
+const sub_id = sub_data.subscription_id || sub_data.id || "";
+
 console.log("\n>>> Listing webhooks...");
 const webhooks = await list_webhooks();
 console.log(`Total: ${webhooks.total ?? 0}`);
 for (const sub of webhooks.subscriptions ?? []) {
   console.log(`  - ${sub.name}: ${sub.url}`);
+}
+
+if (sub_id) {
+  console.log(`\n>>> Testing webhook (subscription_id=${sub_id})...`);
+  const test_result = await test_webhook(sub_id);
+  console.log(test_result);
 }
 
 // --- Express-like receiver (optionally with: node example.js serve) ---

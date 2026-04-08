@@ -36,6 +36,16 @@ def list_webhooks():
     return response.json()
 
 
+def test_webhook(subscription_id):
+    """Send a test event to a registered webhook."""
+    response = requests.post(
+        f"{api_base}/webhooks/test",
+        headers={**headers, "Content-Type": "application/json"},
+        json={"subscription_id": subscription_id},
+    )
+    return response.json()
+
+
 def verify_signature(payload_body, signature):
     """Verify webhook signature with HMAC-SHA256."""
     expected = hmac.new(
@@ -54,11 +64,19 @@ if __name__ == "__main__":
     result = subscribe_webhook(webhook_url, ["job.completed", "job.failed"])
     print(result)
 
+    sub_data = result.get("data", result)
+    sub_id = sub_data.get("subscription_id", sub_data.get("id", ""))
+
     print("\n>>> Listing webhooks...")
     webhooks = list_webhooks()
     print(f"Total: {webhooks.get('total', 0)}")
     for sub in webhooks.get("subscriptions", []):
         print(f"  - {sub.get('name')}: {sub.get('url')}")
+
+    if sub_id:
+        print(f"\n>>> Testing webhook (subscription_id={sub_id})...")
+        test_result = test_webhook(sub_id)
+        print(test_result)
 
     # --- Flask-based receiver (optionally start with: python example.py serve) ---
     if len(sys.argv) > 1 and sys.argv[1] == "serve":
