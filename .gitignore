@@ -3,27 +3,31 @@
 *.key
 *.pem
 
-# OS
-.DS_Store
-Thumbs.db
-
-# IDEs
-.idea/
-.vscode/
-*.swp
-*.swo
-
 # Python
 __pycache__/
 *.pyc
 *.pyo
 .venv/
 venv/
+env/
 
-# Node
+# Node.js
 node_modules/
 
-# Output
-*.csv
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Downloaded results / test output
 *.mp3
 *.wav
+*.ogg
+output_*.pdf
+result_*.json
+classification_log.csv
