@@ -12,7 +12,7 @@ async function extract_contract(pdf_path, token = api_key) {
   const form = new FormData();
   form.append("file_1", fs.createReadStream(pdf_path));
   form.append("model", "premium");
-  form.append("idp_collection", "contract");
+  form.append("idp_collection", "legal_document");
   form.append("priority", "900");
 
   const response = await fetch(api_url, {

@@ -265,5 +265,5 @@ These endpoints work without a Bearer token (IP-based rate limit):
 | Fingerprint ID | `visitorId` | `fingerprint_id` |
 | DMS Search | `global_search` | `search_query` |
 | Image Gen Size | `width`, `height` | `size` |
-| Weather Coordinates | `lat` + `lon` | `city`, `lng` |
+| Weather (by coords) | `lat` + `lon` | `lng` (use `lon`!) |
 | Workspace | `workspace_name` | `metadata` |

@@ -12,7 +12,7 @@ async function extract_identity(file_path, token = api_key) {
   const form = new FormData();
   form.append("file_1", fs.createReadStream(file_path));
   form.append("model", "premium");
-  form.append("idp_collection", "identity");
+  form.append("idp_collection", "identity_document");
   form.append("priority", "900");
 
   const response = await fetch(api_url, {

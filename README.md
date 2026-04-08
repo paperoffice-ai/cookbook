@@ -61,8 +61,8 @@ Native AI tool integration for Cursor, Claude, ChatGPT.
 | [Invoice](document-ai/idp/invoice/) | Extract invoice fields (28+ fields) | `invoice` |
 | [Custom Fields](document-ai/idp/custom-fields/) | Define custom extraction fields | `idp_fields` |
 | [Receipt](document-ai/idp/receipt/) | Read receipt/ticket | `receipt` |
-| [Contract](document-ai/idp/contract/) | Contract analysis (parties, duration, value) | `contract` |
-| [Identity Document](document-ai/idp/identity-document/) | ID card/passport (name, number, expiry) | `identity` |
+| [Contract](document-ai/idp/contract/) | Contract analysis (parties, duration, value) | `legal_document` |
+| [Identity Document](document-ai/idp/identity-document/) | ID card/passport (name, number, expiry) | `identity_document` |
 | [DATEV Export](document-ai/idp/datev-export/) | IDP results → DATEV accounting entry | `invoice` + CSV |
 
 ### Document AI — OCR

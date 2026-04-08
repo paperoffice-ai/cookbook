@@ -16,7 +16,7 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 |---|---|---|---|---|
 | `file_1` | file | **Yes** | — | Scan or photo of the ID document |
 | `model` | string | **Yes** | — | 9 variants: `basic`, `premium`, `ultra` + `-per`/`-per-max` for more pages (see [Model tiers](../invoice/#model-tiers-9-variants)) |
-| `idp_collection` | string | No | — | Must be `identity` for this recipe |
+| `idp_collection` | string | No | — | Must be `identity_document` for this recipe |
 | `idp_fields` | string | No | — | Additional custom fields as JSON (see [Custom Fields](../custom-fields/)) |
 | `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
 

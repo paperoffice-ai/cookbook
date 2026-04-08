@@ -27,7 +27,7 @@ def extract_contract(pdf_path: str, token: str = api_key) -> dict:
             files={"file_1": f},
             data={
                 "model": "premium",
-                "idp_collection": "contract",
+                "idp_collection": "legal_document",
                 "priority": 900,
             },
         )

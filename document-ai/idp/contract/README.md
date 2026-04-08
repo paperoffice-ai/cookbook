@@ -16,7 +16,7 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 |---|---|---|---|---|
 | `file_1` | file | **Yes** | — | PDF of the contract |
 | `model` | string | **Yes** | — | 9 variants: `basic`, `premium`, `ultra` + `-per`/`-per-max` for more pages (see [Model tiers](../invoice/#model-tiers-9-variants)) |
-| `idp_collection` | string | No | — | Must be `contract` for this recipe |
+| `idp_collection` | string | No | — | Must be `legal_document` for this recipe (covers contracts, agreements, legal texts) |
 | `idp_fields` | string | No | — | Additional custom fields as JSON (see [Custom Fields](../custom-fields/)) |
 | `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
 

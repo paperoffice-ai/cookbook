@@ -38,9 +38,14 @@ print(f"Pages:      {summary.get('total_pages')}")
 print(f"Confidence: {summary.get('avg_confidence')}")
 print(f"Duration:   {result.get('duration_ms')} ms")
 
-# Download searchable PDF
-pdf_url = output.get("searchable_pdf_url") or output.get("download_url")
-download_token = output.get("download_token")
+# Download searchable PDF (check multiple possible field locations)
+pdf_url = (
+    output.get("searchable_pdf_url")
+    or summary.get("searchable_pdf_url")
+    or summary.get("searchable_pdf_path")
+    or output.get("download_url")
+)
+download_token = output.get("download_token") or summary.get("download_token")
 
 if pdf_url:
     print(f"PDF download: {pdf_url}")

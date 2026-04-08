@@ -208,23 +208,26 @@ Additional response fields:
 
 | Field | Description |
 |---|---|
-| `output.searchable_pdf_url` | Direct download URL |
+| `output.searchable_pdf_url` or `output.summary.searchable_pdf_path` | Direct download URL |
 | `output.download_token` | Token for `/job/download/{token}` |
 
-## Post-processing endpoints
+## Additional OCR parameters
 
-After an OCR job completes, you can retrieve results in different formats:
+These optional parameters can be added to the main OCR request to control result format:
 
-### Get structured JSON
+### Get structured JSON with bounding boxes
 
-Retrieve OCR result as structured JSON, optionally for a specific page or with bounding boxes:
+Add these parameters to your OCR job request alongside `file_1` and `ocr_mode`:
 
 ```bash
 curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate" \
   -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
+  -F "file_1=@document.pdf" \
+  -F "ocr_mode=text" \
   -F "locale=en_US" \
   -F "page=1" \
-  -F "include_bounding_boxes=true"
+  -F "include_bounding_boxes=true" \
+  -F "priority=900"
 ```
 
 | Parameter | Type | Default | Description |

@@ -91,10 +91,15 @@ The response contains both the extracted text AND a download link for the search
 
 ## Searchable PDF fields
 
+The PDF download URL can appear in different response locations depending on the API version:
+
 | Field | Description |
 |---|---|
 | `output.searchable_pdf_url` | Direct download URL for the searchable PDF |
-| `output.download_token` | Alternative: Token for download via `/job/download/{token}` |
+| `output.summary.searchable_pdf_path` | Alternative location (same URL, different path) |
+| `output.download_token` | Token for download via `/job/download/{token}` |
+
+> **Tip:** The code examples check all possible field locations automatically for maximum compatibility.
 
 ## Download the searchable PDF
 

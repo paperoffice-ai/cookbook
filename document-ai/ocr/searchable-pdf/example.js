@@ -45,8 +45,12 @@ console.log(`Pages:      ${summary.total_pages}`);
 console.log(`Confidence: ${summary.avg_confidence}`);
 console.log(`Duration:   ${data?.result?.duration_ms} ms`);
 
-const pdf_url = output.searchable_pdf_url ?? output.download_url;
-const download_token = output.download_token;
+const pdf_url =
+  output.searchable_pdf_url ??
+  summary.searchable_pdf_url ??
+  summary.searchable_pdf_path ??
+  output.download_url;
+const download_token = output.download_token ?? summary.download_token;
 
 if (pdf_url) {
   console.log(`PDF download: ${pdf_url}`);

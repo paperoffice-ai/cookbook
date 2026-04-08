@@ -17,7 +17,7 @@ response=$(curl -s -X POST "${api_base}/job/add/workflow" \
   -H "Authorization: Bearer ${api_key}" \
   -F "file_1=@${input_file}" \
   -F "model=premium" \
-  -F "idp_collection=contract" \
+  -F "idp_collection=legal_document" \
   -F "priority=900")
 
 echo "${response}" | python3 -c "

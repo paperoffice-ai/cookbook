@@ -27,7 +27,7 @@ def extract_identity(file_path: str, token: str = api_key) -> dict:
             files={"file_1": f},
             data={
                 "model": "premium",
-                "idp_collection": "identity",
+                "idp_collection": "identity_document",
                 "priority": 900,
             },
         )
