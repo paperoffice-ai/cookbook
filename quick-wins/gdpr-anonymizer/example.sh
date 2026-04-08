@@ -17,7 +17,7 @@ fi
 
 echo "→ DSGVO Anonymisierung (Preview) für: $INPUT_FILE"
 
-curl -s -X POST "https://api.paperoffice.ai/latest/job" \
+curl -s -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
   -H "Authorization: Bearer ${API_KEY}" \
   -F "file=@${INPUT_FILE}" \
   -F "template=document_anonymize_preview" \

@@ -9,7 +9,7 @@
  */
 const fs = require("fs");
 
-const API_URL = "https://api.paperoffice.ai/latest/job";
+const API_URL = "https://api.paperoffice.ai/latest/job/add/workflow";
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
 async function split_pdf(pdf_path, locale = "de_DE", token = API_KEY) {
@@ -35,10 +35,16 @@ async function split_pdf(pdf_path, locale = "de_DE", token = API_KEY) {
 
 (async () => {
   const pdf = process.argv[2] || "sammel_dokument.pdf";
-  const result = await split_pdf(pdf);
+  const data = await split_pdf(pdf);
 
-  const docs = result?.job_result?.documents_created || [];
-  docs.forEach((doc) => {
-    console.log(`${doc.suggested_filename}: Seiten ${doc.page_range}`);
-  });
+  if (data.status !== "success") {
+    console.error(`Fehler: ${data.message || "Unbekannt"}`);
+    process.exit(1);
+  }
+
+  const result = data.result || {};
+  console.log(`Status: ${data.status}`);
+  console.log(`Schritte: ${result.total_steps || "N/A"}`);
+  console.log(`Dauer: ${result.duration_ms || "N/A"}ms`);
+  console.log(JSON.stringify(result, null, 2));
 })();

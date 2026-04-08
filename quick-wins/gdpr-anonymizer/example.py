@@ -11,7 +11,7 @@ import os
 import sys
 import requests
 
-API_URL = "https://api.paperoffice.ai/latest/job"
+API_URL = "https://api.paperoffice.ai/latest/job/add/workflow"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
@@ -49,13 +49,14 @@ def anonymize_preview(
 
 if __name__ == "__main__":
     file = sys.argv[1] if len(sys.argv) > 1 else "dokument.pdf"
-    result = anonymize_preview(file, whitelist="PaperOffice")
+    data = anonymize_preview(file, whitelist="PaperOffice")
 
-    boxes = (
-        result.get("job_result", {})
-        .get("workflow_output", {})
-        .get("simplified_boxes", [])
-    )
+    result = data.get("result", {})
+    boxes = result.get("simplified_boxes", [])
+    pii = result.get("detected_pii", {})
+    redacted = pii.get("redact_box_ids", [])
+
     print(f"Gefunden: {len(boxes)} sensible Elemente")
+    print(f"Zum Schwärzen markiert: {len(redacted)}")
     for box in boxes:
         print(f"  → {box}")

@@ -9,9 +9,10 @@ Verwendung:
 """
 import os
 import sys
+import json
 import requests
 
-API_URL = "https://api.paperoffice.ai/latest/job"
+API_URL = "https://api.paperoffice.ai/latest/voice/tts"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
@@ -35,7 +36,7 @@ def text_to_speech(
             "output_format": output_format,
             "output": "url",
             "speed": str(speed),
-            "priority": 999,
+            "priority": 900,
         },
     )
     response.raise_for_status()
@@ -45,5 +46,8 @@ def text_to_speech(
 if __name__ == "__main__":
     text = sys.argv[1] if len(sys.argv) > 1 else "Hallo, das ist ein Test der Sprachausgabe."
     voice = sys.argv[2] if len(sys.argv) > 2 else "Nadja"
-    result = text_to_speech(text, voice)
-    print(f"Audio: {result.get('job_result', {}).get('audio_url', 'N/A')}")
+    data = text_to_speech(text, voice)
+
+    print(f"Status: {data.get('status', 'N/A')}")
+    print(f"Verarbeitungszeit: {data.get('processing_time', 'N/A')}")
+    print(json.dumps(data, indent=2, ensure_ascii=False))

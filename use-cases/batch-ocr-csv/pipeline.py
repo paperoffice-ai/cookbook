@@ -13,7 +13,7 @@ import csv
 from pathlib import Path
 import requests
 
-API_URL = "https://api.paperoffice.ai/latest/job"
+API_URL = "https://api.paperoffice.ai/latest/job/add/workflow"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 SUPPORTED_EXTENSIONS = {".pdf", ".png", ".jpg", ".jpeg", ".tiff", ".webp"}
@@ -49,15 +49,19 @@ def batch_ocr_to_csv(
                 data={"ocr_mode": "complete", "priority": 900},
             )
             response.raise_for_status()
-            result = response.json().get("job_result", {})
+
+            result = response.json().get("result", {})
+            fulltext = result.get("fulltext", "")
+            aiocr = result.get("pages_aiocr", {})
+            summary = aiocr.get("summary", {})
 
             results.append(
                 {
                     "filename": file_path.name,
-                    "pages": result.get("page_count", 1),
-                    "text_length": len(result.get("text", "")),
-                    "text_preview": result.get("text", "")[:500],
-                    "confidence": result.get("confidence", 0),
+                    "pages": summary.get("total_pages", 1),
+                    "text_length": len(fulltext),
+                    "text_preview": fulltext[:500],
+                    "avg_confidence": summary.get("avg_confidence", 0),
                 }
             )
         except Exception as e:

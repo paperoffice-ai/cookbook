@@ -25,12 +25,14 @@ npm install form-data
 node example.js invoice.pdf
 ```
 
-## Was sind Bounding Boxes?
+## Was sind Source Boxes?
 
-Jedes extrahierte Feld enthält ein `bbox`-Array `[x1, y1, x2, y2]` mit den Pixel-Koordinaten im Dokument. Perfekt für:
+Jedes extrahierte Feld enthält `source_boxes` mit Positionen im Dokument. Perfekt für:
 - Verification UI (Feld im PDF highlighten)
-- Confidence-Checks (niedrige Confidence → manuelles Review)
+- Confidence-Checks (`source_boxes_confidence`: high/medium/low → manuelles Review)
 - Audit Trail (nachvollziehbar, woher der Wert stammt)
+
+IDP-Felder nutzen `_`-Prefix: `_invoice_number`, `_total_amount`, `_supplier_name`, etc.
 
 ## API-Details
 

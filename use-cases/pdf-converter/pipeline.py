@@ -10,9 +10,10 @@ Verwendung:
 """
 import os
 import sys
+import json
 import requests
 
-API_URL = "https://api.paperoffice.ai/latest/job"
+API_URL = "https://api.paperoffice.ai/latest/job/add/workflow"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 VALID_FORMATS = {"word", "powerpoint", "pdfa", "webp"}
@@ -20,11 +21,10 @@ VALID_FORMATS = {"word", "powerpoint", "pdfa", "webp"}
 
 def convert_pdf(
     pdf_path: str, target_format: str, token: str = API_KEY
-) -> str:
+) -> dict:
     """
     Konvertiert PDF in ein anderes Format.
     target_format: 'word', 'powerpoint', 'pdfa', 'webp'
-    Gibt die Download-URL zurück.
     """
     if not token:
         raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
@@ -42,12 +42,21 @@ def convert_pdf(
         },
     )
     response.raise_for_status()
-    return response.json().get("job_result", {}).get("output_url", "")
+
+    data = response.json()
+    if data.get("status") != "success":
+        print(f"Fehler: {data.get('message', 'Unbekannt')}")
+        return data
+
+    result = data.get("result", {})
+    print(f"Status: {data['status']}")
+    print(f"Dauer: {result.get('duration_ms', 'N/A')}ms")
+    return data
 
 
 if __name__ == "__main__":
     pdf = sys.argv[1] if len(sys.argv) > 1 else "report.pdf"
     fmt = sys.argv[2] if len(sys.argv) > 2 else "word"
 
-    url = convert_pdf(pdf, fmt)
-    print(f"✓ Konvertiert ({fmt}): {url}")
+    data = convert_pdf(pdf, fmt)
+    print(json.dumps(data.get("result", {}), indent=2, ensure_ascii=False))

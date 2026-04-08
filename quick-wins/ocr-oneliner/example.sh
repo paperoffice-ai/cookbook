@@ -18,7 +18,7 @@ fi
 echo "→ OCR für: $INPUT_FILE"
 
 # ocr_mode: complete (+Tabellen), grid (+Bounding Boxes), text (nur Text)
-curl -s -X POST "https://api.paperoffice.ai/latest/job" \
+curl -s -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
   -H "Authorization: Bearer ${API_KEY}" \
   -F "file_1=@${INPUT_FILE}" \
   -F "ocr_mode=complete" \

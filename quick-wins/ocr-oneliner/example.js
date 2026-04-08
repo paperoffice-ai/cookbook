@@ -9,7 +9,7 @@
  */
 const fs = require("fs");
 
-const API_URL = "https://api.paperoffice.ai/latest/job";
+const API_URL = "https://api.paperoffice.ai/latest/job/add/workflow";
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
 async function ocr(file_path, mode = "complete", token = API_KEY) {
@@ -34,5 +34,5 @@ async function ocr(file_path, mode = "complete", token = API_KEY) {
 (async () => {
   const file = process.argv[2] || "document.png";
   const result = await ocr(file);
-  console.log(result?.job_result?.text || "");
+  console.log(result?.result?.fulltext || "");
 })();

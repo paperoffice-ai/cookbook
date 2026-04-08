@@ -12,13 +12,13 @@ VOICE="${2:-Nadja}"
 
 echo "→ TTS mit Stimme '${VOICE}': ${TEXT}"
 
-curl -s -X POST "https://api.paperoffice.ai/latest/job" \
+curl -s -X POST "https://api.paperoffice.ai/latest/voice/tts" \
   -H "Authorization: Bearer ${API_KEY}" \
   -F "text=${TEXT}" \
   -F "voice=${VOICE}" \
   -F "output_format=mp3" \
   -F "output=url" \
   -F "speed=1.0" \
-  -F "priority=999" | python3 -m json.tool
+  -F "priority=900" | python3 -m json.tool
 
 # Stimmen: Nadja, Thomas, Anna, Hans (DE) + 100+ internationale Stimmen

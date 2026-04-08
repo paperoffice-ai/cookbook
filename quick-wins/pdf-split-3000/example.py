@@ -9,9 +9,10 @@ Verwendung:
 """
 import os
 import sys
+import json
 import requests
 
-API_URL = "https://api.paperoffice.ai/latest/job"
+API_URL = "https://api.paperoffice.ai/latest/job/add/workflow"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
@@ -37,8 +38,14 @@ def split_pdf(pdf_path: str, locale: str = "de_DE", token: str = API_KEY) -> dic
 
 if __name__ == "__main__":
     pdf = sys.argv[1] if len(sys.argv) > 1 else "sammel_dokument.pdf"
-    result = split_pdf(pdf)
+    data = split_pdf(pdf)
 
-    docs = result.get("job_result", {}).get("documents_created", [])
-    for doc in docs:
-        print(f"{doc['suggested_filename']}: Seiten {doc['page_range']}")
+    if data.get("status") != "success":
+        print(f"Fehler: {data.get('message', 'Unbekannt')}")
+        sys.exit(1)
+
+    result = data.get("result", {})
+    print(f"Status: {data['status']}")
+    print(f"Schritte: {result.get('total_steps', 'N/A')}")
+    print(f"Dauer: {result.get('duration_ms', 'N/A')}ms")
+    print(json.dumps(result, indent=2, ensure_ascii=False))

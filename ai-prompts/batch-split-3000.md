@@ -10,7 +10,7 @@ https://api.paperoffice.ai/latest/docs/postman
 
 Create a batch processor that:
 1. Takes a folder of large PDFs (up to 3000 pages each)
-2. Uses POST /job with template=pdf_ai_split
+2. Uses POST /job/add/workflow with template=pdf_ai_split
 3. Uses naming_instruction for smart filenames
 4. Handles async jobs with polling (priority<900)
 

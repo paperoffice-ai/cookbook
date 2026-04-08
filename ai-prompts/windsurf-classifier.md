@@ -12,7 +12,7 @@ https://api.paperoffice.ai/latest/docs/postman
 
 Build a document classifier that:
 1. Watches a folder for new PDFs
-2. Uses OCR (POST /job, ocr_mode=complete) to extract text
+2. Uses OCR (POST /job/add/workflow, ocr_mode=complete) to extract text
 3. Classifies into: invoice, contract, receipt, correspondence
 4. Moves files to category subfolders
 5. Logs results to classification_log.csv

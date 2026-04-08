@@ -17,12 +17,13 @@ fi
 
 echo "→ Extrahiere Rechnungsdaten aus: $INPUT_FILE"
 
-curl -s -X POST "https://api.paperoffice.ai/latest/job" \
+curl -s -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
   -H "Authorization: Bearer ${API_KEY}" \
   -F "file_1=@${INPUT_FILE}" \
   -F "model=premium" \
   -F "idp_collection=invoice" \
   -F "priority=900" | python3 -m json.tool
 
-# Response enthält Bounding Boxes pro Feld:
-# → "vendor": {"value": "Acme Corp", "bbox": [x1, y1, x2, y2]}
+# Response-Struktur:
+# → result.pages_idp[0].suggested_fields._invoice_number.value
+# → result.pages_idp[0].suggested_fields._total_amount.source_boxes

@@ -1,5 +1,21 @@
 # Pro Tips
 
+## API-Endpoint
+
+**Alle Datei-basierten Jobs laufen über `/job/add/workflow`:**
+
+```bash
+POST https://api.paperoffice.ai/latest/job/add/workflow
+```
+
+TTS (Text-to-Speech) hat einen eigenen Endpoint:
+
+```bash
+POST https://api.paperoffice.ai/latest/voice/tts
+```
+
+---
+
 ## Sync vs Async
 
 | Priority | Modus | SLA | Verwendung |
@@ -21,18 +37,66 @@ data={"priority": 500}
 
 ---
 
-## Bounding Boxes
+## Response-Struktur
 
-IDP-Responses enthalten `bbox` für jedes extrahierte Feld — ein Array `[x1, y1, x2, y2]` mit Pixel-Koordinaten.
+Alle Workflow-Responses folgen diesem Schema:
 
-```python
-field = result["job_result"]["fields"]["vendor"]
-print(field["value"])       # "Acme Corp"
-print(field["bbox"])        # [120, 340, 450, 370]
-print(field["confidence"])  # 0.97
+```json
+{
+  "status": "success",
+  "job_id": "poai-job_900_...",
+  "result": {
+    "fulltext": "... extrahierter Text ...",
+    "pages_idp": [{ "suggested_fields": { ... } }],
+    "pages_aiocr": { "summary": { ... }, "pages": { ... } },
+    "pages_images": ["https://..."],
+    "steps": [{ "id": "ocr", "status": "completed", "duration_ms": 285 }],
+    "total_steps": 2,
+    "duration_ms": 3272
+  },
+  "timing": { "actual_ms": 3319, "performance": "57.1x faster than expected" }
+}
 ```
 
-Perfekt für Verification UIs: Feld im PDF highlighten, Confidence-basiertes Review.
+---
+
+## IDP-Felder (Source Boxes)
+
+IDP-Responses enthalten `suggested_fields` mit `source_boxes` pro extrahiertem Feld:
+
+```python
+result = response.json()
+idp_page = result["result"]["pages_idp"][0]
+fields = idp_page["suggested_fields"]
+
+invoice_number = fields["_invoice_number"]
+print(invoice_number["value"])                    # "RE-2024-001"
+print(invoice_number["source_boxes"])             # [...]
+print(invoice_number["source_boxes_confidence"])  # "high"
+
+total = fields["_total_amount"]
+print(total["value"])  # 1234.56
+```
+
+Verfügbare Invoice-Felder: `_invoice_number`, `_invoice_date`, `_supplier_name`, `_customer_name`, `_total_amount`, `_net_amount`, `_vat_amount`, `_creditor_iban`, `_creditor_bic`, `_payment_due_date`, `_line_items` (Tabelle), etc.
+
+---
+
+## OCR-Text
+
+```python
+result = response.json()
+
+# Volltext aller Seiten
+fulltext = result["result"]["fulltext"]
+
+# Pro Seite
+pages = result["result"]["pages_aiocr"]["pages"]
+page_1 = pages["00001"]
+print(page_1["ocr_text"])
+print(page_1["bounding_boxes"])
+print(page_1["confidence_avg"])
+```
 
 ---
 
@@ -46,7 +110,7 @@ data={
     "speed": "1.0",
     "output_format": "mp3",
     "output": "url",
-    "priority": 999,   # TTS immer sync
+    "priority": 900,
 }
 ```
 

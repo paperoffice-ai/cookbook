@@ -8,7 +8,7 @@
  *     node example.js "Hallo Welt" Nadja
  */
 
-const API_URL = "https://api.paperoffice.ai/latest/job";
+const API_URL = "https://api.paperoffice.ai/latest/voice/tts";
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
 async function text_to_speech(
@@ -27,7 +27,7 @@ async function text_to_speech(
   form.append("output_format", output_format);
   form.append("output", "url");
   form.append("speed", String(speed));
-  form.append("priority", "999");
+  form.append("priority", "900");
 
   const response = await fetch(API_URL, {
     method: "POST",
@@ -42,6 +42,9 @@ async function text_to_speech(
 (async () => {
   const text = process.argv[2] || "Hallo, das ist ein Test der Sprachausgabe.";
   const voice = process.argv[3] || "Nadja";
-  const result = await text_to_speech(text, voice);
-  console.log(`Audio: ${result?.job_result?.audio_url || "N/A"}`);
+  const data = await text_to_speech(text, voice);
+
+  console.log(`Status: ${data.status || "N/A"}`);
+  console.log(`Verarbeitungszeit: ${data.processing_time || "N/A"}`);
+  console.log(JSON.stringify(data, null, 2));
 })();

@@ -9,7 +9,7 @@
  */
 const fs = require("fs");
 
-const API_URL = "https://api.paperoffice.ai/latest/job";
+const API_URL = "https://api.paperoffice.ai/latest/job/add/workflow";
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
 async function anonymize_preview(
@@ -40,10 +40,14 @@ async function anonymize_preview(
 
 (async () => {
   const file = process.argv[2] || "dokument.pdf";
-  const result = await anonymize_preview(file, "all", "PaperOffice");
+  const data = await anonymize_preview(file, "all", "PaperOffice");
 
-  const boxes =
-    result?.job_result?.workflow_output?.simplified_boxes || [];
+  const result = data?.result || {};
+  const boxes = result.simplified_boxes || [];
+  const pii = result.detected_pii || {};
+  const redacted = pii.redact_box_ids || [];
+
   console.log(`Gefunden: ${boxes.length} sensible Elemente`);
+  console.log(`Zum Schwärzen markiert: ${redacted.length}`);
   boxes.forEach((box) => console.log(`  → ${JSON.stringify(box)}`));
 })();

@@ -11,7 +11,7 @@ import os
 import sys
 import requests
 
-API_URL = "https://api.paperoffice.ai/latest/job"
+API_URL = "https://api.paperoffice.ai/latest/job/add/workflow"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
@@ -36,4 +36,4 @@ def ocr(file_path: str, mode: str = "complete", token: str = API_KEY) -> dict:
 if __name__ == "__main__":
     file = sys.argv[1] if len(sys.argv) > 1 else "document.png"
     result = ocr(file)
-    print(result.get("job_result", {}).get("text", ""))
+    print(result.get("result", {}).get("fulltext", ""))

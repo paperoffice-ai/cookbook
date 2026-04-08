@@ -14,12 +14,12 @@ import csv
 from pathlib import Path
 import requests
 
-API_URL = "https://api.paperoffice.ai/latest/job"
+API_URL = "https://api.paperoffice.ai/latest/job/add/workflow"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
 def process_invoice(pdf_path: str, token: str = API_KEY) -> dict:
-    """Extrahiert Rechnungsfelder mit Bounding Boxes für Verification."""
+    """Extrahiert Rechnungsfelder mit Source Boxes für Verification."""
     if not token:
         raise ValueError("PAPEROFFICE_API_KEY nicht gesetzt")
 
@@ -35,19 +35,27 @@ def process_invoice(pdf_path: str, token: str = API_KEY) -> dict:
     )
     response.raise_for_status()
 
-    invoice = response.json().get("job_result", {})
-    fields = invoice.get("fields", {})
+    result = response.json().get("result", {})
+    idp_pages = result.get("pages_idp", [])
+    if not idp_pages:
+        return {}
 
-    for field_name, data in fields.items():
-        if data.get("confidence", 0) < 0.9:
-            bbox = data.get("bbox", [])
-            print(f"  ⚠ Review nötig: {field_name} (Confidence < 90%) @ bbox {bbox}")
+    fields = idp_pages[0].get("suggested_fields", {})
+
+    for field_name, info in fields.items():
+        if info.get("type") == "table":
+            continue
+        confidence = info.get("source_boxes_confidence", "low")
+        if confidence == "low":
+            boxes = info.get("source_boxes", [])
+            print(f"  ⚠ Review nötig: {field_name} (confidence: {confidence}, boxes: {len(boxes)})")
 
     return {
-        "vendor": fields.get("vendor", {}).get("value", ""),
-        "amount": fields.get("total", {}).get("value", ""),
-        "date": fields.get("date", {}).get("value", ""),
-        "iban": fields.get("iban", {}).get("value", ""),
+        "supplier": fields.get("_supplier_name", {}).get("value", ""),
+        "amount": fields.get("_total_amount", {}).get("value", ""),
+        "date": fields.get("_invoice_date", {}).get("value", ""),
+        "iban": fields.get("_creditor_iban", {}).get("value", ""),
+        "invoice_number": fields.get("_invoice_number", {}).get("value", ""),
     }
 
 

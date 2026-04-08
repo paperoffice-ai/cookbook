@@ -9,7 +9,7 @@
  */
 const fs = require("fs");
 
-const API_URL = "https://api.paperoffice.ai/latest/job";
+const API_URL = "https://api.paperoffice.ai/latest/job/add/workflow";
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
 async function extract_invoice(pdf_path, token = API_KEY) {
@@ -34,10 +34,18 @@ async function extract_invoice(pdf_path, token = API_KEY) {
 
 (async () => {
   const pdf = process.argv[2] || "invoice.pdf";
-  const result = await extract_invoice(pdf);
+  const data = await extract_invoice(pdf);
 
-  const fields = result?.job_result?.fields || {};
-  for (const [name, data] of Object.entries(fields)) {
-    console.log(`${name}: ${data.value} @ bbox [${data.bbox}]`);
+  const idp_pages = data?.result?.pages_idp || [];
+  if (!idp_pages.length) {
+    console.log("Keine IDP-Daten gefunden");
+    process.exit(1);
+  }
+
+  const fields = idp_pages[0]?.suggested_fields || {};
+  for (const [name, info] of Object.entries(fields)) {
+    if (info.type === "table") continue;
+    const boxes = info.source_boxes || [];
+    console.log(`${name}: ${info.value} (source_boxes: ${boxes.length})`);
   }
 })();

@@ -56,16 +56,20 @@ def handle_webhook():
 
     if event_type == "job.completed":
         print(f"✓ Job fertig: {event.get('job_id')}")
-        process_result(event.get("job_result", {}))
+        process_result(event.get("result", {}))
     elif event_type == "job.failed":
         print(f"✗ Job fehlgeschlagen: {event.get('job_id')}")
 
     return "OK", 200
 
 
-def process_result(job_result: dict):
+def process_result(result: dict):
     """Verarbeitet das Ergebnis eines abgeschlossenen Jobs."""
-    print(f"  Ergebnis: {list(job_result.keys())}")
+    fulltext = result.get("fulltext", "")
+    idp = result.get("pages_idp", [])
+    print(f"  Volltext: {len(fulltext)} Zeichen")
+    print(f"  IDP-Seiten: {len(idp)}")
+    print(f"  Ergebnis-Keys: {list(result.keys())}")
 
 
 if __name__ == "__main__":

@@ -12,8 +12,8 @@ https://api.paperoffice.ai/latest/docs/postman
 
 Create a Python script that:
 1. Takes a folder of invoice PDFs
-2. Extracts all fields using POST /job with idp_collection=invoice
-3. Returns bounding boxes for verification (bbox array)
+2. Extracts all fields using POST /job/add/workflow with idp_collection=invoice
+3. Returns source_boxes for verification (position data per field)
 4. Exports to CSV
 
 Important: Use file_1 for uploads, model=premium.
@@ -25,7 +25,7 @@ Handle both sync (priority>=900) and async modes.
 Claude generiert ein vollständiges Python-Script das:
 - Einen Ordner mit Rechnungs-PDFs durchiteriert
 - Jede Rechnung via PaperOffice IDP extrahiert
-- Bounding Boxes für visuelles Review bereitstellt
+- Source Boxes für visuelles Review bereitstellt
 - Ergebnisse als CSV exportiert
 - Sync/Async-Modus korrekt handhabt
 

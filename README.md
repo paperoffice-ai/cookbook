@@ -72,6 +72,20 @@ End-to-End Workflows für echte Probleme.
 
 ---
 
+## API-Endpoints
+
+| Endpoint | Zweck |
+|---|---|
+| `POST /job/add/workflow` | Alle Datei-basierten Jobs (OCR, IDP, PDF-Split, Anonymisierung) |
+| `POST /voice/tts` | Text-to-Speech |
+
+```bash
+# Beispiel: OCR
+curl -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
+  -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
+  -F "file_1=@scan.png" -F "ocr_mode=complete" -F "priority=900"
+```
+
 ## Authentifizierung
 
 **Ein Bearer Token ist für alle Job-Endpoints erforderlich.**

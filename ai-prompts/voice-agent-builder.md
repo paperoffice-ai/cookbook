@@ -13,9 +13,10 @@ Create a voice agent that:
 2. Processes the text
 3. Generates audio response (Text-to-Speech)
 
-Use POST /job with:
-- TTS: voice=Nadja, output_format=mp3, output=url
-- Use priority=999 for sync TTS response.
+Use POST /voice/tts with:
+- voice=Nadja, output_format=mp3, output=url
+- Use priority=900 for sync TTS response.
+- Bearer token required for all endpoints.
 ```
 
 ## Was du bekommst
