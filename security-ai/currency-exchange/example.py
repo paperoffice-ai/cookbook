@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """PaperOffice AI — Wechselkurse abfragen (VISITOR-fähig, kein Token nötig)"""
+import os
 import sys
 import requests
 

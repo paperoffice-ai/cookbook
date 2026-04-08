@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-/** PaperOffice AI — Wechselkurse abfragen (VISITOR-fähig, kein Token nötig) */
+/** PaperOffice AI — Wechselkurse abfragen (VISITOR-fähig, optional mit Token) */
 
+const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 const API_URL = "https://api.paperoffice.ai/latest/currency_exchange/get_rates";
 
 async function get_exchange_rates(from_currency = "EUR", to_currency = null, amount = 1) {
