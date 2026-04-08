@@ -1,6 +1,6 @@
 # Searchable PDF — Generate searchable PDF from scans
 
-Transform scanned PDFs and images into searchable PDFs with an invisible text layer. Ideal for archiving — the original document remains visually unchanged but becomes full-text searchable.
+Transform scanned PDFs and images into **searchable PDFs** with an invisible OCR text layer ("sandwich PDF"). The original document remains visually unchanged but becomes full-text searchable. Can be combined with **any OCR mode**.
 
 ## Endpoint
 
@@ -8,16 +8,26 @@ Transform scanned PDFs and images into searchable PDFs with an invisible text la
 POST https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate
 ```
 
-**Authentication:** Bearer Token (API key required)
+**Authentication:** Bearer Token required
 
 ## Parameters
 
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `file_1` | file | **Yes** | — | Document to process (PNG, JPG, TIFF, BMP, WEBP, PDF) |
-| `ocr_mode` | string | No | `text` | OCR mode (`text` or `complete`) |
+| `ocr_mode` | string | No | `text` | Any mode: `text`, `grid`, `complete` |
 | `output_searchable_pdf` | bool | **Yes** | — | Must be `true` for this recipe |
 | `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
+
+> **Key insight:** `output_searchable_pdf=true` is an **add-on** that works with ALL OCR modes. You get the normal OCR result (text, bounding boxes, tables — depending on mode) PLUS a downloadable searchable PDF.
+
+## Combination matrix
+
+| OCR mode | You get text | + bounding boxes | + tables | + searchable PDF |
+|---|---|---|---|---|
+| `text` + `output_searchable_pdf=true` | ✅ | — | — | ✅ |
+| `grid` + `output_searchable_pdf=true` | ✅ | ✅ | — | ✅ |
+| `complete` + `output_searchable_pdf=true` | ✅ | ✅ | ✅ | ✅ |
 
 ## How to run
 
@@ -47,7 +57,7 @@ node example.js /path/to/file.pdf output.pdf
 
 ## Response structure
 
-The response contains both the extracted text and a download link for the searchable PDF:
+The response contains both the extracted text AND a download link for the searchable PDF:
 
 ```json
 {
@@ -59,7 +69,9 @@ The response contains both the extracted text and a download link for the search
       "pages": {
         "00001": {
           "ocr_text": "Text of the page...",
-          "confidence_avg": 0.9954
+          "confidence_avg": 0.9954,
+          "char_count": 212,
+          "language": { "primary": "en", "confidence": 0.95 }
         }
       },
       "ocr_mode": "text",
@@ -77,21 +89,48 @@ The response contains both the extracted text and a download link for the search
 }
 ```
 
-## Additional fields
+## Searchable PDF fields
 
 | Field | Description |
-|-------|-------------|
+|---|---|
 | `output.searchable_pdf_url` | Direct download URL for the searchable PDF |
 | `output.download_token` | Alternative: Token for download via `/job/download/{token}` |
+
+## Download the searchable PDF
+
+```bash
+curl -s "https://api.paperoffice.ai/latest/job/download/YOUR_TOKEN" \
+  -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
+  -o "searchable.pdf"
+```
 
 ## Workflow: Scan → Archive
 
 ```
 1. Upload scan (file_1)
-2. Generate OCR + searchable PDF (output_searchable_pdf=true)
-3. Download searchable PDF
+2. OCR + searchable PDF (output_searchable_pdf=true)
+3. Download searchable PDF via searchable_pdf_url
 4. Store in DMS/archive → full-text search works immediately
 ```
+
+## Advanced: Searchable PDF + bounding boxes
+
+Combine searchable PDF generation with full OCR analysis:
+
+```bash
+curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate" \
+  -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
+  -F "file_1=@scan.pdf" \
+  -F "ocr_mode=complete" \
+  -F "output_searchable_pdf=true" \
+  -F "priority=900"
+```
+
+This returns:
+- Full text with per-page confidence
+- **Bounding boxes** for every text region
+- **Tables** as structured data
+- **Downloadable searchable PDF**
 
 ## See also
 

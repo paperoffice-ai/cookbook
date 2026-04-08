@@ -69,17 +69,20 @@ node example.js receipt.pdf
         "_store_name": {
           "type": "string",
           "value": "REWE Markt GmbH",
+          "source_boxes": [0, 1],
           "source_boxes_confidence": "high"
         },
         "_total_amount": {
           "type": "number",
           "value": "23,47",
           "value_raw": "23.47",
+          "source_boxes": [15],
           "source_boxes_confidence": "high"
         },
         "_payment_method": {
           "type": "string",
           "value": "EC-Karte",
+          "source_boxes": [18],
           "source_boxes_confidence": "high"
         }
       }
@@ -87,6 +90,28 @@ node example.js receipt.pdf
   }
 }
 ```
+
+## Field metadata & bounding boxes
+
+Every extracted field contains traceability metadata:
+
+| Property | Type | Description |
+|---|---|---|
+| `type` | string | Data type: `string`, `number`, `date`, `table` |
+| `value` | string | Formatted value (e.g. `"23,47"`) |
+| `value_raw` | string | Raw value for processing (e.g. `"23.47"`) |
+| `source_boxes` | array | Bounding box IDs showing WHERE in the document the value was found |
+| `source_boxes_confidence` | string | Extraction confidence: `high`, `medium`, `low` |
+
+> **`source_boxes`** contains integer IDs referencing OCR bounding box positions on the page (x, y, width, height). Use these for visual highlighting in validation UIs or targeted redaction.
+
+### Confidence levels
+
+| Level | Meaning | Action |
+|---|---|---|
+| `high` | AI is confident | Use directly |
+| `medium` | Likely correct | Flag for review in critical workflows |
+| `low` | Uncertain | Manual review required |
 
 ## Common use cases
 

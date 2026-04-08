@@ -96,16 +96,19 @@ node example.js contract.pdf
         "_party_a_name": {
           "type": "string",
           "value": "Acme Corporation",
+          "source_boxes": [2, 3],
           "source_boxes_confidence": "high"
         },
         "_duration": {
           "type": "string",
           "value": "24 Monate",
+          "source_boxes": [28],
           "source_boxes_confidence": "high"
         },
         "_notice_period": {
           "type": "string",
           "value": "3 Monate zum Quartalsende",
+          "source_boxes": [35, 36],
           "source_boxes_confidence": "medium"
         }
       }
@@ -114,8 +117,31 @@ node example.js contract.pdf
 }
 ```
 
+## Field metadata & bounding boxes
+
+Every extracted field contains traceability metadata:
+
+| Property | Type | Description |
+|---|---|---|
+| `type` | string | Data type: `string`, `number`, `date` |
+| `value` | string | Formatted value |
+| `value_raw` | string | Raw value for processing |
+| `source_boxes` | array | Bounding box IDs showing WHERE in the document the value was found |
+| `source_boxes_confidence` | string | Extraction confidence: `high`, `medium`, `low` |
+
+> **`source_boxes`** contains integer IDs referencing OCR bounding box positions on the page (x, y, width, height). Use these for visual highlighting in validation UIs or targeted redaction.
+
+### Confidence levels
+
+| Level | Meaning | Action |
+|---|---|---|
+| `high` | AI is confident | Use directly |
+| `medium` | Likely correct | Flag for review in critical workflows |
+| `low` | Uncertain | Manual review required |
+
 ## Tips
 
 - **`model=ultra`** recommended for multi-page contracts with complex clauses
 - Combine with **Custom Fields** (`idp_fields`) for industry-specific clauses
-- When `source_boxes_confidence` is low → plan for manual review
+- When `source_boxes_confidence` is `"low"` → plan for manual review
+- Use `source_boxes` IDs for building contract review UIs that highlight extracted clauses

@@ -150,20 +150,47 @@ The `_line_items` table can contain per row: description, quantity, unit price, 
 }
 ```
 
-## Field metadata
+## Field metadata & bounding boxes
 
-Each field contains:
+Every extracted field contains metadata that traces exactly WHERE in the document the value was found:
 
-| Property                  | Description                               |
-|---------------------------|-------------------------------------------|
-| `type`                    | Data type (string, number, date, table)   |
-| `value`                   | Formatted value (e.g. "1.469,06")         |
-| `value_raw`               | Raw value for further processing ("1469.06") |
-| `source_boxes`            | Positions in the document (bounding boxes)|
-| `source_boxes_confidence` | Confidence: high, medium, low             |
+| Property | Type | Description |
+|---|---|---|
+| `type` | string | Data type: `string`, `number`, `date`, `table` |
+| `value` | string | Formatted value (e.g. `"1.469,06"`) |
+| `value_raw` | string | Raw value for processing (e.g. `"1469.06"`) |
+| `source_boxes` | array | **Bounding box IDs** referencing positions in the document |
+| `source_boxes_confidence` | string | Extraction confidence: `high`, `medium`, `low` |
+
+### How source_boxes work
+
+The `source_boxes` array contains **integer IDs** that reference OCR bounding boxes on the page. Each ID maps to a text region with pixel coordinates (x, y, width, height):
+
+```json
+{
+  "_invoice_number": {
+    "type": "string",
+    "value": "2024-001",
+    "value_raw": "2024-001",
+    "source_boxes": [0, 1],
+    "source_boxes_confidence": "high"
+  }
+}
+```
+
+> `source_boxes: [0, 1]` means the invoice number was found in OCR bounding boxes #0 and #1. These IDs can be used for visual highlighting, validation UIs, or targeted redaction.
+
+### Confidence levels
+
+| Level | Meaning | Recommended action |
+|---|---|---|
+| `high` | AI is confident in the extraction | Use directly |
+| `medium` | Likely correct, some uncertainty | Flag for review in critical workflows |
+| `low` | Uncertain, may be incorrect | Manual review required |
 
 ## Tips
 
 - Use **`value_raw`** for numerical processing (dot as decimal separator)
-- When **`source_boxes_confidence`** is "low" → manual review recommended
+- When **`source_boxes_confidence`** is `"low"` → manual review recommended
 - Use **`model=ultra`** for complex multi-page invoices with many line items
+- Use `source_boxes` IDs for building validation UIs that highlight found values

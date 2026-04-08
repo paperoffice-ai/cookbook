@@ -104,11 +104,13 @@ node example.js contract.pdf
         "vertragsnummer": {
           "type": "string",
           "value": "V-2024-00815",
+          "source_boxes": [3, 4],
           "source_boxes_confidence": "high"
         },
         "kuendigungsfrist": {
           "type": "string",
           "value": "3 Monate zum Quartalsende",
+          "source_boxes": [12],
           "source_boxes_confidence": "medium"
         }
       }
@@ -116,3 +118,24 @@ node example.js contract.pdf
   }
 }
 ```
+
+## Field metadata & bounding boxes
+
+Every extracted field contains traceability metadata:
+
+| Property | Type | Description |
+|---|---|---|
+| `type` | string | Data type matching your field definition |
+| `value` | string | Extracted value |
+| `source_boxes` | array | Bounding box IDs showing WHERE in the document the value was found |
+| `source_boxes_confidence` | string | Extraction confidence: `high`, `medium`, `low` |
+
+> **`source_boxes`** contains integer IDs referencing OCR bounding box positions on the page (x, y, width, height). These enable visual highlighting and targeted redaction.
+
+### Confidence levels
+
+| Level | Meaning | Action |
+|---|---|---|
+| `high` | AI is confident | Use directly |
+| `medium` | Likely correct | Flag for review |
+| `low` | Uncertain | Manual review required |

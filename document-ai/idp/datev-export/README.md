@@ -18,12 +18,13 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 
 ## Parameters
 
-| Parameter         | Value      | Description                          |
-|-------------------|------------|--------------------------------------|
-| `file_1`          | File       | PDF of the invoice                   |
-| `model`           | `premium`  | Extraction quality                   |
-| `idp_collection`  | `invoice`  | Invoice extraction                   |
-| `priority`        | `900`      | Synchronous processing (≥900)        |
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `file_1` | file | **Yes** | — | PDF of the invoice |
+| `model` | string | **Yes** | — | `basic` (OCR+Vision), `premium` (+AI Thinking), `ultra` (+AI Reasoning) |
+| `idp_collection` | string | No | — | Must be `invoice` (or `invoice:de` for German output) |
+| `idp_fields` | string | No | — | Additional custom fields as JSON |
+| `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
 
 ## How to run
 
@@ -101,8 +102,20 @@ Umsatz (ohne Soll/Haben-Kz);Soll/Haben-Kennzeichen;Konto;Gegenkonto;BU-Schlüsse
 - **Validation**: Verify IBAN/VAT ID against PaperOffice validation APIs
 - **DATEV XML**: Use DATEV XML format instead of CSV for more complex scenarios
 
+## Field metadata & bounding boxes
+
+The underlying IDP extraction provides traceability for every field:
+
+| Property | Type | Description |
+|---|---|---|
+| `source_boxes` | array | Bounding box IDs showing WHERE in the invoice the value was found |
+| `source_boxes_confidence` | string | Extraction confidence: `high`, `medium`, `low` |
+
+> Use `source_boxes_confidence` to flag low-confidence amounts for manual review before importing into DATEV.
+
 ## Tips
 
 - Use **`value_raw`** for amounts (dot as decimal separator, DATEV-compliant)
 - DATEV expects the document date in **DDMM** format (without year, as defined in the header)
 - For credit notes, set `Soll/Haben-Kennzeichen` to `H`
+- When `source_boxes_confidence` is `"low"` for amount fields → always review before booking
