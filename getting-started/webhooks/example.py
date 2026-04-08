@@ -12,7 +12,7 @@ if not api_key:
     sys.exit("Error: PAPEROFFICE_API_KEY not set")
 
 headers = {"Authorization": f"Bearer {api_key}"}
-webhook_secret = "my_webhook_secret_123"
+webhook_secret = os.environ.get("PAPEROFFICE_WEBHOOK_SECRET", "YOUR_WEBHOOK_SECRET")
 
 
 def subscribe_webhook(url, events):

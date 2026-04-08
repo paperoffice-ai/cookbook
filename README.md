@@ -4,7 +4,7 @@ Production-ready Recipes for the [PaperOffice AI API](https://paperoffice.ai) 鈥
 
 **Copy. Paste. Ship.**
 
-> 44 Recipes 路 3 Languages (Bash, Python, Node.js) 路 All live tested
+> 38 Recipes 路 3 Languages (Bash, Python, Node.js) 路 All live tested
 
 ---
 
@@ -20,14 +20,14 @@ curl -s "https://api.paperoffice.ai/latest/health" | python3 -m json.tool
 # 3. First OCR
 curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate" \
   -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
-  -F "file_1=@dokument.pdf" -F "ocr_mode=text" -F "priority=900"
+  -F "file_1=@document.pdf" -F "ocr_mode=text" -F "priority=900"
 ```
 
 Or with Python / Node.js:
 
 ```bash
 pip install requests
-python getting-started/first-ocr/example.py dokument.pdf
+python getting-started/first-ocr/example.py document.pdf
 ```
 
 ---

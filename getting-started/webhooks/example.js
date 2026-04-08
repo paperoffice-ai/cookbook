@@ -14,7 +14,7 @@ const headers = {
   Authorization: `Bearer ${api_key}`,
   "Content-Type": "application/json",
 };
-const webhook_secret = "my_webhook_secret_123";
+const webhook_secret = process.env.PAPEROFFICE_WEBHOOK_SECRET || "YOUR_WEBHOOK_SECRET";
 
 async function subscribe_webhook(url, events) {
   const response = await fetch(`${api_base}/webhooks/subscribe`, {

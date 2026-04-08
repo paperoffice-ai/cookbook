@@ -14,7 +14,7 @@ subscribe_response=$(curl -s "${api_base}/webhooks/subscribe" \
     \"name\": \"my_first_webhook\",
     \"url\": \"${webhook_url}\",
     \"events\": [\"job.completed\", \"job.failed\"],
-    \"secret\": \"my_webhook_secret_123\"
+    \"secret\": \"${PAPEROFFICE_WEBHOOK_SECRET:-YOUR_WEBHOOK_SECRET}\"
   }")
 
 echo "${subscribe_response}" | python3 -m json.tool
