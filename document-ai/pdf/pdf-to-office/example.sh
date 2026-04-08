@@ -23,7 +23,7 @@ echo ">>> Submitting pdf2office job: ${input_file} → ${output_format}"
 
 submit_response=$(curl -s -X POST "${api_base}/job/add/paperoffice_dataripper___pdf2office" \
   -H "Authorization: Bearer ${api_key}" \
-  -F "files=@${input_file}" \
+  -F "file=@${input_file}" \
   -F "output_format=${output_format}" \
   -F "priority=500")
 
@@ -73,19 +73,14 @@ print(jr.get('status', d.get('job_status', 'unknown')))
   echo "  Attempt ${attempt}/${max_attempts}: ${job_status}"
 
   if [ "${job_status}" = "completed" ]; then
+    # Download URL is at job_result.output_files[0] (not inside result)
     download_url=$(echo "${poll_response}" | python3 -c "
 import sys, json
 d = json.load(sys.stdin)
-result = d.get('job_result', {}).get('result', {})
-files = result.get('files', result.get('output_files', []))
-if isinstance(files, list) and files:
-    f = files[0]
-    if isinstance(f, dict):
-        print(f.get('download_url', f.get('url', '')))
-    else:
-        print(f)
-elif isinstance(result.get('download_url'), str):
-    print(result['download_url'])
+jr = d.get('job_result', {})
+of = jr.get('output_files', [])
+if of:
+    print(of[0])
 ")
 
     if [ -n "${download_url}" ]; then

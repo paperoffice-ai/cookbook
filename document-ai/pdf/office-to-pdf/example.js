@@ -30,7 +30,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 async function submit_job(file_path, prov = "native") {
   const buffer = readFileSync(file_path);
   const form = new FormData();
-  form.append("files", new Blob([buffer]), basename(file_path));
+  form.append("file", new Blob([buffer]), basename(file_path));
   form.append("provider", prov);
   form.append("priority", "500");
 
@@ -63,22 +63,14 @@ async function poll_job(job_id, max_attempts = 60) {
 }
 
 async function download_result(job_result, output_path) {
-  const result = job_result.result ?? {};
-  const files = result.files ?? result.output_files ?? [];
-
-  let url = null;
-  if (Array.isArray(files) && files.length > 0) {
-    const entry = files[0];
-    url = typeof entry === "string" ? entry : entry?.download_url ?? entry?.url;
-  }
-  url = url ?? result.download_url;
-
-  if (!url) {
-    console.log("Warning: No download URL found. Result keys:", Object.keys(result));
+  // Download URL is at job_result.output_files[0], not inside "result"
+  const output_files = job_result.output_files ?? [];
+  if (!output_files.length) {
+    console.log("Warning: No output_files in job_result. Keys:", Object.keys(job_result));
     return;
   }
 
-  const dl = await fetch(url, { headers });
+  const dl = await fetch(output_files[0], { headers });
   const buffer = Buffer.from(await dl.arrayBuffer());
   writeFileSync(output_path, buffer);
   console.log(`Saved as: ${output_path} (${buffer.length} bytes)`);

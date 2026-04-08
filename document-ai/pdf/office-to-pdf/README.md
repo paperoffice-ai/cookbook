@@ -14,7 +14,7 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_dataripper___office2p
 
 | Parameter  | Value     | Description                                              |
 |------------|-----------|----------------------------------------------------------|
-| `files`    | File      | Office document to convert                               |
+| `file`     | File      | Office document to convert (singular!)                   |
 | `provider` | `native`  | Conversion engine (see below)                            |
 | `priority` | `500`     | **Must be async** — native conversion requires a Windows VM |
 
@@ -79,12 +79,16 @@ This recipe uses **async processing** because native MS Office conversion runs o
   "job_status": "completed",
   "job_result": {
     "status": "completed",
-    "result": {
-      "files": ["https://api.paperoffice.ai/latest/job/download/..."]
-    }
+    "message": "DataRipper-Job processed successfully (1 files)",
+    "output_files": [
+      "https://api.paperoffice.ai/latest/job/download/..."
+    ],
+    "result": "{\"success\": true, \"output_files\": [...], \"files_count\": 1, \"job_type\": \"office2pdf\", \"processing_time\": 31.5}"
   }
 }
 ```
+
+> **Note:** `result` is a JSON **string** (not an object). Download URLs are in `job_result.output_files`, not inside `result`.
 
 ## Why native MS Office?
 

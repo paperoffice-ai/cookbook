@@ -35,7 +35,7 @@ def submit_job(file_path: str, prov: str = "native") -> dict:
         response = requests.post(
             f"{api_base}/job/add/paperoffice_dataripper___office2pdf",
             headers=headers,
-            files=[("files", f)],
+            files=[("file", (os.path.basename(file_path), f))],
             data={"provider": prov, "priority": "500"},
         )
     response.raise_for_status()
@@ -66,25 +66,17 @@ def poll_job(job_id: str, max_attempts: int = 60, initial_interval: int = 5) -> 
 
 
 def download_result(job_result: dict, output_path: str):
-    """Download converted PDF from job result."""
-    result = job_result.get("result", {})
-    files = result.get("files", result.get("output_files", []))
+    """Download converted PDF from job result.
 
-    url = None
-    if isinstance(files, list) and files:
-        entry = files[0]
-        if isinstance(entry, dict):
-            url = entry.get("download_url") or entry.get("url")
-        elif isinstance(entry, str):
-            url = entry
-    if not url:
-        url = result.get("download_url")
-
-    if not url:
-        print("Warning: No download URL found in response")
-        print(f"Result keys: {list(result.keys())}")
+    Download URL is at job_result["output_files"][0], not inside "result".
+    """
+    output_files = job_result.get("output_files", [])
+    if not output_files:
+        print("Warning: No output_files in job_result")
+        print(f"Available keys: {list(job_result.keys())}")
         return
 
+    url = output_files[0]
     dl = requests.get(url, headers=headers)
     with open(output_path, "wb") as f:
         f.write(dl.content)
