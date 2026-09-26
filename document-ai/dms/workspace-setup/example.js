@@ -7,13 +7,13 @@ const api_key = process.env.PAPEROFFICE_API_KEY || "";
 async function workspace_create(name, description = "", token = api_key) {
   if (!token) throw new Error("PAPEROFFICE_API_KEY not set");
 
-  const response = await fetch(`${api_base}/documents/workspace-create`, {
+  const response = await fetch(`${api_base}/documents/workspaces-create`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: new URLSearchParams({ name, description }),
+    body: new URLSearchParams({ name, description, type: "ablage" }),
   });
 
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
