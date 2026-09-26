@@ -17,7 +17,7 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate
 | `file_1` | file | **Yes** | — | Document to process (PNG, JPG, TIFF, BMP, WEBP, PDF) |
 | `ocr_mode` | string | No | `text` | Any mode: `text`, `grid`, `complete` |
 | `output_searchable_pdf` | bool | **Yes** | — | Must be `true` for this recipe |
-| `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
+| `processing_lane` | string | No | workspace default | Start-SLA: `no_sla` … `instant`. `instant` returns the result inline when it finishes in time; otherwise HTTP 202 with `job_id` — poll `GET /job/get/{job_id}` |
 
 > **Key insight:** `output_searchable_pdf=true` is an **add-on** that works with ALL OCR modes. You get the normal OCR result (text, bounding boxes, tables — depending on mode) PLUS a downloadable searchable PDF.
 
@@ -128,7 +128,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___gene
   -F "file_1=@scan.pdf" \
   -F "ocr_mode=complete" \
   -F "output_searchable_pdf=true" \
-  -F "priority=900"
+  -F "processing_lane=instant"
 ```
 
 This returns:
