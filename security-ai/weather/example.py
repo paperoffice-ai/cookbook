@@ -5,7 +5,7 @@ import sys
 import json
 import requests
 
-API_URL = "https://api.paperoffice.ai/latest/location2weather"
+API_URL = "https://api.paperoffice.ai/latest/weather"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
@@ -14,10 +14,10 @@ def get_weather(lat: float, lon: float, lang: str = "de", token: str = API_KEY) 
     if not token:
         raise ValueError("PAPEROFFICE_API_KEY not set")
 
-    response = requests.post(
+    response = requests.get(
         API_URL,
         headers={"Authorization": f"Bearer {token}"},
-        data={"lat": lat, "lon": lon, "lang": lang},
+        params={"lat": lat, "lon": lon, "lang": lang},
     )
     response.raise_for_status()
     return response.json()
