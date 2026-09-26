@@ -36,10 +36,10 @@ POST https://api.paperoffice.ai/latest/job/add/{pipeline}
 | `POST /ip2location/full` | IP → Geolocation |
 | `POST /ip2location/vpn` | VPN/Proxy Detection |
 | `POST /currency_exchange/get_rates` | Exchange Rates |
-| `POST /location2weather` | Weather (FREE) |
+| `GET /weather` | Weather (FREE) |
 | `POST /documents/documents-list` | DMS Ultimate Search |
 | `POST /documents/document-put` | DMS Upload |
-| `POST /documents/workspace-create` | Create Workspace |
+| `POST /documents/workspaces-create` | Create Workspace |
 | `GET /documents/workspaces-list` | Workspace List |
 | `GET /webhooks/list` | Webhook List |
 | `POST /webhooks/subscribe` | Register Webhook |
@@ -59,14 +59,14 @@ POST https://api.paperoffice.ai/latest/job/add/{pipeline}
 
 ```python
 # Development: Instant result
-data = {"priority": 900}
+data = {"processing_lane": "instant"}
 
 # Production: Cost-efficient
-data = {"priority": 500}
+data = {"processing_lane": "sla_1h"}
 ```
 
-**Sync (priority ≥ 900):** Response contains the result immediately.
-**Async (priority < 900):** Response contains `job_id`, then poll:
+**HTTP 200:** the response contains `result` — the job finished inside the wait window.
+**HTTP 202:** the job is still running; the body carries `job_id` and `poll_url`. Poll until `job_status` is `completed`:
 
 ```bash
 # Check status
@@ -78,17 +78,22 @@ curl -s "https://api.paperoffice.ai/latest/job/get/{job_id}" \
 
 ## Credit System
 
-Every API call consumes credits. Higher priority = higher cost.
+Every API call consumes credits. The Start-SLA lane sets the factor; rejected requests cost nothing.
 
-| Priority | Multiplier | Example (10-credit job) |
+| `processing_lane` | Factor | Guarantee |
 |---|---|---|
-| 500 (default) | 1.0x | 10 Credits |
-| 700 | ~1.16x | ~12 Credits |
-| 900 (sync) | ~1.33x | ~13 Credits |
+| `no_sla` (default) | ×1 | fair use |
+| `sla_24h` | ×1.5 | start within 24 h |
+| `sla_12h` | ×2 | start within 12 h |
+| `sla_6h` | ×3 | start within 6 h |
+| `sla_1h` | ×4 | start within 1 h |
+| `instant` | ×5 | interactive start |
+
+The guarantee is the start of processing, not its completion.
 
 **Free endpoints** (no credits):
 - `GET /vat/rates`
-- `POST /location2weather`
+- `GET /weather`
 - `GET /health`
 
 ---
@@ -171,7 +176,7 @@ data = {
     "speed": "1.0",
     "output_format": "mp3",
     "output": "url",
-    "priority": 900,
+    "processing_lane": "instant",
 }
 ```
 
@@ -182,16 +187,18 @@ data = {
 **Bearer token required for almost all endpoints.**
 
 ```bash
-export PAPEROFFICE_API_KEY="po_sk_xxx"
+export PAPEROFFICE_API_KEY="po_ut_xxx"
 
 curl -X POST "https://api.paperoffice.ai/latest/..." \
   -H "Authorization: Bearer $PAPEROFFICE_API_KEY"
 ```
 
-| Token Type | Prefix | Usage |
-|---|---|---|
-| System Key | `po_sk_` | Server-to-server, full access |
-| User Token | `po_ut_` | User-scoped, depends on license |
+| Token Type | Prefix | REST API | MCP |
+|---|---|---|---|
+| User Token | `po_ut_` | yes | yes |
+| Group Token | `po_gt_` | yes — limited to the group's workspaces | yes |
+| System Key | `po_sk_` | yes — server-to-server, full account | **rejected** |
+| Publishable Key | `po_pk_` | browser widgets only | **rejected** |
 
 **VISITOR Mode** (no token): Only `GET /health`, `/ip2location/*`, `/currency_exchange/*`, `GET /vat/rates`.
 
@@ -201,11 +208,12 @@ curl -X POST "https://api.paperoffice.ai/latest/..." \
 
 | Client | URL |
 |---|---|
-| Cursor IDE | `https://mcp.paperoffice.ai/cursor` |
-| Claude Desktop | `https://mcp.paperoffice.ai/claude` |
-| ChatGPT / OpenAI | `https://mcp.paperoffice.ai/openai` |
-| Standard MCP | `https://mcp.paperoffice.ai/mcp` |
-| Universal | `https://mcp.paperoffice.ai/` |
+| Cursor / Windsurf | `https://mcp.paperoffice.ai/cursor` |
+| Claude Desktop / Anthropic Directory | `https://mcp.paperoffice.ai/claude` |
+| ChatGPT | `https://mcp.paperoffice.ai/chatgpt` |
+| Grok | `https://mcp.paperoffice.ai/grok` |
+| Headless DMS (canonical) | `https://mcp.paperoffice.ai/dms` |
+| Everything, all modules | `https://mcp.paperoffice.ai/mcp-full` |
 
 ```json
 {
@@ -213,7 +221,7 @@ curl -X POST "https://api.paperoffice.ai/latest/..." \
     "paperoffice": {
       "url": "https://mcp.paperoffice.ai/cursor",
       "headers": {
-        "Authorization": "Bearer YOUR_API_KEY"
+        "Authorization": "Bearer po_ut_..."
       }
     }
   }
