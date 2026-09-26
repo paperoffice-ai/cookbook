@@ -17,7 +17,7 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate
 | `file_1` | file | **Yes** | — | Document to process (see supported formats) |
 | `ocr_mode` | string | No | `text` | `text`, `grid`, `complete` (see modes comparison) |
 | `output_searchable_pdf` | bool | No | `false` | Additionally generate searchable PDF (sandwich PDF) |
-| `priority` | int | No | `900` | `≥ 900` = synchronous, `< 900` = async (poll with job ID) |
+| `processing_lane` | string | No | workspace default | Start-SLA: `no_sla`, `sla_24h`, `sla_12h`, `sla_6h`, `sla_1h`, `instant`. `instant` returns the result inline when it finishes in time; otherwise HTTP 202 with `job_id` — poll `GET /job/get/{job_id}` |
 
 > **Note:** The file parameter is `file_1`, **not** `file`!
 
@@ -201,7 +201,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___gene
   -F "file_1=@scan.pdf" \
   -F "ocr_mode=text" \
   -F "output_searchable_pdf=true" \
-  -F "priority=900"
+  -F "processing_lane=instant"
 ```
 
 Additional response fields:
@@ -227,7 +227,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___gene
   -F "locale=en_US" \
   -F "page=1" \
   -F "include_bounding_boxes=true" \
-  -F "priority=900"
+  -F "processing_lane=instant"
 ```
 
 | Parameter | Type | Default | Description |
