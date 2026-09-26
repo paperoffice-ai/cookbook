@@ -2,7 +2,7 @@
 # PaperOffice AI — Knowledge Base CRUD Operations
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_ut_xxx)}"
 BASE_URL="https://api.paperoffice.ai/latest/knowledge"
 
 # Helper function for API calls
