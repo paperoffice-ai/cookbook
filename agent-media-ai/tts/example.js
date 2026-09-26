@@ -4,10 +4,28 @@
  * Converts text to natural speech (100+ voices)
  *
  * Usage:
- *     export PAPEROFFICE_API_KEY=po_sk_xxx
+ *     export PAPEROFFICE_API_KEY=po_ut_xxx
  *     node example.js "Hallo Welt" Nadja mp3
  */
 
+
+/** HTTP 202 means the job is still running: follow job/get until it is completed. */
+async function wait_for_result(data, token, api_base = "https://api.paperoffice.ai/latest", timeout_ms = 180000) {
+  if (data.result || !data.job_id) return data;
+  const deadline = Date.now() + timeout_ms;
+  while (Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, 2000));
+    const poll = await (await fetch(`${api_base}/job/get/${data.job_id}`, { headers: { Authorization: `Bearer ${token}` } })).json();
+    if (poll.job_status === "completed" || poll.result || poll.job_result) {
+      if (!poll.result && poll.job_result) poll.result = poll.job_result; // same payload, different key
+      return poll;
+    }
+    if (poll.job_status === "failed" || poll.job_status === "error" || poll.status === "error") {
+      throw new Error(`job failed: ${poll.message}`);
+    }
+  }
+  throw new Error(`job ${data.job_id} not finished after ${timeout_ms / 1000}s`);
+}
 const BASE_URL = "https://api.paperoffice.ai/latest";
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
@@ -28,7 +46,7 @@ async function text_to_speech(
   form.append("output_format", output_format);
   form.append("output", "url");
   form.append("speed", String(speed));
-  form.append("priority", "900");
+  form.append("processing_lane", "instant");
 
   const response = await fetch(
     `${BASE_URL}/job/add/paperoffice_voice___tts`,
@@ -40,7 +58,7 @@ async function text_to_speech(
   );
 
   if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
-  return response.json();
+  return wait_for_result(await response.json(), token);
 }
 
 (async () => {
