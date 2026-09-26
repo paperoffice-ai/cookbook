@@ -1,6 +1,6 @@
 # Async Job Polling — Submit, Poll, Result
 
-For larger files or lower priorities, the PaperOffice AI API works asynchronously. This workflow demonstrates the 3-step process: Submit job → Poll status → Retrieve result.
+For larger files or SLA lanes below `instant`, the PaperOffice AI API works asynchronously. This workflow demonstrates the 3-step process: Submit job → Poll status → Retrieve result.
 
 ## Endpoints
 
@@ -14,15 +14,16 @@ For larger files or lower priorities, the PaperOffice AI API works asynchronousl
 
 ## Sync vs. Async
 
-The `priority` parameter controls the processing mode:
+`processing_lane` is the Start-SLA — a guarantee for when processing starts, not when it completes:
 
-| Priority | Mode | Behavior | SLA |
+| `processing_lane` | Factor | Start guarantee | Typical response |
 |---|---|---|---|
-| `≥ 900` | **Synchronous** | Result directly in the response | ~20s |
-| `500–599` | **Async (standard)** | Returns `job_id`, poll for result | ~30 min |
-| `100–499` | **Async (low)** | Background queue, lower cost | Best effort |
+| `instant` | ×5 | interactive | HTTP 200 with `result`, or HTTP 202 with `job_id` when the wait window ends first |
+| `sla_1h` | ×4 | within 1 h | HTTP 202 with `job_id` — poll |
+| `sla_6h` / `sla_12h` / `sla_24h` | ×3 / ×2 / ×1.5 | within 6 / 12 / 24 h | HTTP 202 with `job_id` — poll |
+| `no_sla` (default) | ×1 | fair use | HTTP 202 with `job_id` — poll |
 
-> **Important:** Higher priority = faster processing but higher credit cost.
+> HTTP 202 is not an error. Follow `poll_url` (or `GET /job/get/{job_id}`) until `job_status` is `completed`.
 
 ## Step 1: Submit job
 
@@ -31,7 +32,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___gene
   -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
   -F "file_1=@document.pdf" \
   -F "ocr_mode=text" \
-  -F "priority=500"
+  -F "processing_lane=sla_1h"
 ```
 
 Response:
@@ -84,7 +85,8 @@ When `job_status` is `completed`:
   "job_status": "completed",
   "job_id": "poai-job_500_1775674797.5357_93d126ea",
   "job_result": {
-    "result": { },
+    "status": "success",
+    "output": { "summary": { "total_pages": 1, "total_lines": 40 }, "pages": [ ] },
     "output_files": [
       "https://api.paperoffice.ai/latest/job/download/..."
     ]
@@ -97,7 +99,7 @@ When `job_status` is `completed`:
 ## Polling flow diagram
 
 ```
-POST /job/add/... (priority=500)
+POST /job/add/... (processing_lane=sla_1h)
   └─→ {"status":"success", "job_id":"poai-job_500_abc123"}
 
 GET /job/get/poai-job_500_abc123
@@ -125,7 +127,7 @@ node example.js /path/to/file.pdf
 ## Tips
 
 - **Polling interval:** 2 seconds is a good starting value. For large files consider 5s.
-- **Timeout:** Abort after 300 seconds (5 min) for standard priority, 60s for high priority.
+- **Timeout:** For `instant` give up after about 60 s; for SLA lanes poll for as long as the lane promises (up to 24 h) or switch to webhooks.
 - **Exponential backoff:** Start at 2s, increase to 5s, 10s to reduce API calls.
 - **Webhooks:** For production use, consider [webhooks](../webhooks/) instead of polling.
 - **Download files:** Use `job_result.output_files[0]` for file-producing jobs (PDF, audio, images).
