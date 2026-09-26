@@ -181,14 +181,19 @@ node example.js "invoice_standard" pdf
 ```json
 {
   "status": "success",
-  "document": {
-    "download_url": "https://api.paperoffice.ai/latest/job/download/abc123_token",
-    "format": "pdf",
-    "pages": 2,
-    "pofid": "pof_abc123"
-  }
+  "document_id": 1164,
+  "pofid": "5ce2a929...POD3.AI256880.MT1790419639444.pdf",
+  "file_name": "Cookbook smoke doc.pdf",
+  "format": "pdf",
+  "mime_type": "application/pdf",
+  "file_size": 43034,
+  "charged_this_request": 10,
+  "idempotent_replay": false,
+  "ai_dms": { "mode": "ultra", "status": "queued" }
 }
 ```
+
+The PDF is stored in the workspace. Download it with `GET /documents/document-download/{pofid}`. Send an `idempotency_key` (8–128 characters): the same key with the same payload replays the stored document at no charge; the same key with a changed payload is rejected with `IDEMPOTENCY_CONFLICT`.
 
 ## Workflow: Template → Document → DMS
 
