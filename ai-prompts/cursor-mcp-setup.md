@@ -7,8 +7,9 @@
 Copy this prompt directly into Cursor:
 
 ```
-Read this API documentation:
-https://api.paperoffice.ai/latest/docs/postman
+Read this API guide first, completely:
+https://api.paperoffice.ai/latest/docs/llms.txt
+Use the Postman collection at https://api.paperoffice.ai/latest/docs/postman only for exact request and response samples.
 
 Help me set up the MCP Server for PaperOffice in Cursor.
 I want to use Document AI directly in my IDE.
