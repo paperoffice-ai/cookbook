@@ -32,7 +32,7 @@ A classification system that:
 
 ## Tips
 
-- Bearer token required (`export PAPEROFFICE_API_KEY=po_sk_xxx`)
+- Bearer token required (`export PAPEROFFICE_API_KEY=po_ut_xxx`)
 - `ocr_mode=complete` for text + tables
-- `priority=900` for synchronous response
+- `processing_lane=instant` for synchronous response
 - Classification can be rule-based (keywords) or AI-based
