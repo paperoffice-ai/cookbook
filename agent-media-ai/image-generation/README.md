@@ -41,7 +41,7 @@ node example.js "A sunset over mountains" premium 1
 | `guidance_scale` | float | No | `4.0` | Prompt adherence (1.0–20.0, higher = stricter) |
 | `precompile_prompt` | bool | No | `true` | AI prompt optimization (recommended) |
 | `output` | string | No | `url` | `url`, `base64`, `inline` |
-| `priority` | int | No | — | `≥ 900` for synchronous processing |
+| `processing_lane` | string | No | workspace default | Start-SLA; `instant` returns inline on 200, otherwise 202 with `job_id` |
 
 ## Model tiers & resolution limits
 
@@ -89,7 +89,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_imagestudio_
   -F "model=premium" \
   -F "width=1280" \
   -F "height=720" \
-  -F "priority=999"
+  -F "processing_lane=no_sla"
 ```
 
 ### High-quality with custom steps
@@ -103,7 +103,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_imagestudio_
   -F "height=1536" \
   -F "steps=25" \
   -F "guidance_scale=7.5" \
-  -F "priority=999"
+  -F "processing_lane=no_sla"
 ```
 
 ### Reproducible output with seed
@@ -115,7 +115,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_imagestudio_
   -F "model=premium" \
   -F "seed=42" \
   -F "precompile_prompt=false" \
-  -F "priority=999"
+  -F "processing_lane=no_sla"
 ```
 
 > **Note:** Set `precompile_prompt=false` when using a fixed seed, otherwise the AI-optimized prompt may differ between runs.
@@ -128,7 +128,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_imagestudio_
   -F "prompt=Futuristic cityscape at night, cyberpunk" \
   -F "model=premium" \
   -F "num_images=4" \
-  -F "priority=999"
+  -F "processing_lane=no_sla"
 ```
 
 > Each image in a batch is billed individually.
@@ -145,14 +145,14 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_imagestudio___remove_
 |---|---|---|---|---|
 | `file` | file | **Yes** | — | Image file (PNG, JPG, WEBP) — **note: `file`, not `file_1`!** |
 | `output` | string | No | `url` | `url`, `base64`, `inline` |
-| `priority` | int | No | — | `≥ 900` for synchronous processing |
+| `processing_lane` | string | No | workspace default | Start-SLA; `instant` returns inline on 200, otherwise 202 with `job_id` |
 
 ```bash
 curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_imagestudio___remove_bg" \
   -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
   -F "file=@photo.png" \
   -F "output=url" \
-  -F "priority=999"
+  -F "processing_lane=no_sla"
 ```
 
 ## Prompt Precompiler
