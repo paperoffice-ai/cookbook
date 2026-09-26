@@ -41,7 +41,7 @@ node example.js audio.mp3 de
 | `hotwords` | string | No | — | Comma-separated custom vocabulary (premium/ultra only) |
 | `min_speakers` | int | No | — | Minimum expected speakers (ultra only) |
 | `max_speakers` | int | No | — | Maximum expected speakers (ultra only) |
-| `priority` | int | No | `999` | `≥ 900` = synchronous (result inline) |
+| `processing_lane` | string | No | workspace default | Start-SLA: `no_sla` … `instant`. Inline result on 200, otherwise HTTP 202 with `job_id` |
 
 ## Quality tiers
 
@@ -129,7 +129,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_voice___stt"
   -F "file_1=@meeting.mp3" \
   -F "quality=premium" \
   -F "hotwords=PaperOffice,Kubernetes,GraphQL,OAuth2" \
-  -F "priority=999"
+  -F "processing_lane=no_sla"
 ```
 
 ## Speaker diarization example (ultra)
@@ -141,7 +141,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_voice___stt"
   -F "quality=ultra" \
   -F "min_speakers=2" \
   -F "max_speakers=4" \
-  -F "priority=999"
+  -F "processing_lane=no_sla"
 ```
 
 ## Tips
