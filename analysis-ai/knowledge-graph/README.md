@@ -1,41 +1,44 @@
-# Knowledge Graph — Query, Visualize, and Analyze
+# Knowledge Graph — Ask, Statistics, Partners
 
-Query and visualize the PaperOffice Knowledge Graph built from your DMS documents and connected data sources.
+Query the PaperOffice Knowledge Graph built from the documents in a workspace: ask questions with cited sources, read statistics, list business partners.
 
 ## Endpoints
 
 | Endpoint | Method | Purpose |
 |---|---|---|
-| `/knowledge_graph/universe` | POST | **Main endpoint** — query, visualize (Mermaid), GraphRAG |
-| `/knowledge_graph/stats` | GET | Graph statistics (node/edge counts) |
-| `/knowledge_graph/partners` | GET | Business partner network |
-| `/knowledge_graph/document_relations` | GET | Document relationship map |
-| `/document_intelligence/knowledge_graph/{document_id}` | GET | Per-document knowledge graph |
-| `/document_intelligence/knowledge_graph/{workspace_id}` | GET | Per-workspace knowledge graph |
+| `/knowledge_graph/ask` | POST | **Ask a question** — answer with `sources` (documents_id, file_name) |
+| `/knowledge_graph/stats` | GET | Graph statistics (`workspace_id`) |
+| `/knowledge_graph/partners` | GET | Business partner network (`workspace_id`) |
+| `/knowledge_graph/partner/{name}` | GET | One partner and all its documents |
+| `/knowledge_graph/business_case/{ref}` | GET | Business case by reference number (e.g. invoice number) |
+| `/knowledge_graph/timeline` | GET | Chronological document view |
+| `/knowledge_graph/universe` | GET | Universe view over all data sources (`format=mermaid` for a diagram) |
+| `/knowledge_graph/document/{id}` | GET | Relations of one document |
 
-**Authentication:** Bearer Token
+**Authentication:** Bearer token. Group tokens (`po_gt_`) must pass `workspace_id`.
 
-> **Note:** The knowledge graph is automatically built from documents in your DMS.
-> There is no separate "build" step — upload documents, and the graph grows.
+> The graph is built automatically when documents are processed. There is no separate build step.
 
-## Parameters — `/knowledge_graph/universe`
+## Parameters — `POST /knowledge_graph/ask`
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `question` | string | No | Natural language question (triggers GraphRAG query) |
-| `pofid` | string | No | PaperOffice File ID — scope the query to a specific document |
-| `max_hops` | int | No | Maximum relationship hops (default: `3`) |
-| `depth` | int | No | Graph traversal depth (for visualization) |
-| `format` | string | No | Output format: `mermaid` for diagram syntax |
-| `data_hints` | string | No | Additional context to guide the query |
+| `question` | string | Yes | Natural-language question (at least 5 characters, about documents/workspaces/partners) |
+| `workspace_id` | int | Yes for group tokens | Workspace to answer from |
+| `pofid` | string | No | Scope the question to one document |
+| `data_hints` | array | No | e.g. `["document"]` |
 
-### Usage patterns
+Response: `answer`, `routing` (`harvester_graph_rag` or `agent`), `sources[]`, `verified_facts[]`, `warnings[]`. Off-topic questions are rejected with `OUT_OF_DOMAIN_QUESTION_REJECTED`.
 
-| Action | Parameters |
-|---|---|
-| **Ask a question** | `question` (+ optional `pofid` to scope) |
-| **Get Mermaid diagram** | `format=mermaid` (+ optional `depth`) |
-| **GraphRAG ultra** | `question` + `pofid` + `data_hints` |
+## How to run
+
+```bash
+export PAPEROFFICE_API_KEY=po_ut_xxx
+
+bash example.sh 24 "Who issued invoice RE-2026-7834?"
+python3 example.py 24 "Who issued invoice RE-2026-7834?"
+node example.js 24 "Who issued invoice RE-2026-7834?"
+```
 
 ## Parameters — `/knowledge_graph/partners`
 
@@ -47,7 +50,7 @@ Query and visualize the PaperOffice Knowledge Graph built from your DMS document
 ## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY=po_sk_xxx
+export PAPEROFFICE_API_KEY=po_ut_xxx
 
 # Bash
 bash example.sh "Who is the CEO of Acme Corporation?"
