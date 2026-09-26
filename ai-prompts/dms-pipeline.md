@@ -9,7 +9,7 @@ Read this API documentation:
 https://api.paperoffice.ai/latest/docs/postman
 
 Build a Python DMS pipeline that:
-1. Creates a workspace via POST /documents/workspace-create (name, workspace_tier=standard)
+1. Creates a workspace via POST /documents/workspaces-create (name, type, workspace_tier=standard)
 2. Uploads PDF documents via POST /documents/document-put (file parameter, workspace_id)
 3. Searches using POST /documents/documents-list with:
    - global_search = search term (string)
