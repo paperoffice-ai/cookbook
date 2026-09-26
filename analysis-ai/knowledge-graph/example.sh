@@ -1,44 +1,20 @@
 #!/usr/bin/env bash
-# PaperOffice AI — Query and visualize knowledge graph
+# PaperOffice AI — Knowledge Graph: statistics, question, business partners
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
-BASE_URL="https://api.paperoffice.ai/latest/knowledge_graph"
-QUESTION="${1:-Who are the main business partners?}"
-POFID="${2:-}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_ut_xxx)}"
+WORKSPACE_ID="${1:?Usage: $0 <workspace_id> [question]}"
+QUESTION="${2:-Who are the main business partners?}"
+BASE="https://api.paperoffice.ai/latest/knowledge_graph"
 
-echo "=== 1. Graph statistics ==="
-curl -s -X GET "${BASE_URL}/stats" \
-  -H "Authorization: Bearer ${API_KEY}" | python3 -m json.tool
+echo "=== Graph statistics ==="
+curl -s -G "${BASE}/stats" -H "Authorization: Bearer ${API_KEY}" --data-urlencode "workspace_id=${WORKSPACE_ID}" | python3 -m json.tool | head -40
 
-echo ""
-echo "=== 2. Query knowledge graph ==="
-echo "Question: ${QUESTION}"
+echo; echo "=== Question: ${QUESTION} ==="
+curl -s -m 180 -X POST "${BASE}/ask" -H "Authorization: Bearer ${API_KEY}" -H "Content-Type: application/json" \
+  -d "$(python3 -c 'import json,sys;print(json.dumps({"question":sys.argv[1],"workspace_id":int(sys.argv[2])}))' "${QUESTION}" "${WORKSPACE_ID}")" \
+  | python3 -c 'import sys,json;d=json.load(sys.stdin);print("Answer: ",d.get("answer",""));print("Routing:",d.get("routing"));[print("  source:",s.get("file_name")) for s in d.get("sources",[])[:5]]'
 
-QUERY_ARGS=(-F "question=${QUESTION}" -F "max_hops=3")
-if [ -n "${POFID}" ]; then
-  QUERY_ARGS+=(-F "pofid=${POFID}")
-  echo "Scoped to document: ${POFID}"
-fi
-echo ""
-
-curl -s -X POST "${BASE_URL}/universe" \
-  -H "Authorization: Bearer ${API_KEY}" \
-  "${QUERY_ARGS[@]}" | python3 -m json.tool
-
-echo ""
-echo "=== 3. Get Mermaid visualization ==="
-
-MERMAID_ARGS=(-F "format=mermaid")
-if [ -n "${POFID}" ]; then
-  MERMAID_ARGS+=(-F "pofid=${POFID}")
-fi
-
-curl -s -X POST "${BASE_URL}/universe" \
-  -H "Authorization: Bearer ${API_KEY}" \
-  "${MERMAID_ARGS[@]}" | python3 -m json.tool
-
-echo ""
-echo "=== 4. Business partners ==="
-curl -s -X GET "${BASE_URL}/partners" \
-  -H "Authorization: Bearer ${API_KEY}" | python3 -m json.tool
+echo; echo "=== Business partners ==="
+curl -s -G "${BASE}/partners" -H "Authorization: Bearer ${API_KEY}" --data-urlencode "workspace_id=${WORKSPACE_ID}" \
+  | python3 -c 'import sys,json;[print("  -",p.get("name"),":",p.get("document_count"),"documents") for p in json.load(sys.stdin).get("partners",[])[:10]]'
