@@ -23,11 +23,12 @@ async function detect_anonymity(ip = null, token = API_KEY) {
 }
 
 const ip_addr = process.argv[2] || null;
-const data = await detect_anonymity(ip_addr);
+const response_data = await detect_anonymity(ip_addr);
+const data = response_data.vpn || response_data; // flags live under "vpn"
 
 console.log(`VPN:        ${data.is_vpn}`);
 console.log(`Proxy:      ${data.is_proxy}`);
 console.log(`Tor:        ${data.is_tor}`);
 console.log(`Datacenter: ${data.is_datacenter}`);
 console.log(`Relay:      ${data.is_relay}`);
-console.log(`Score:      ${data.score}%`);
+console.log(`Score:      ${data.score}`);
