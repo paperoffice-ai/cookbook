@@ -11,13 +11,14 @@
 Every prompt follows the same pattern:
 
 ```
-Read this API documentation:
-https://api.paperoffice.ai/latest/docs/postman
+Read this API guide first, completely:
+https://api.paperoffice.ai/latest/docs/llms.txt
+Use the Postman collection at https://api.paperoffice.ai/latest/docs/postman only for exact request and response samples.
 
 [Your goal here]
 ```
 
-The AI reads the full PaperOffice API spec (300+ tools, all parameters, all response formats) and generates a complete, working solution — no manual coding required.
+The AI reads the machine-readable API guide (300+ tools, auth, Start-SLA lanes, response envelopes) and generates a complete, working solution — no manual coding required.
 
 ---
 
@@ -58,8 +59,9 @@ Use this template:
 ## Prompt
 
 \`\`\`
-Read this API documentation:
-https://api.paperoffice.ai/latest/docs/postman
+Read this API guide first, completely:
+https://api.paperoffice.ai/latest/docs/llms.txt
+Use the Postman collection at https://api.paperoffice.ai/latest/docs/postman only for exact request and response samples.
 
 [Describe what you want to build]
 [Be specific about endpoints, parameters, and output format]
