@@ -6,7 +6,7 @@ Workspaces are the top-level organizational unit in the PaperOffice DMS. Each wo
 
 | Action | Method | Path |
 |---|---|---|
-| Create | POST | `/documents/workspace-create` |
+| Create | POST | `/documents/workspaces-create` |
 | List | GET | `/documents/workspaces-list` |
 
 **Authentication:** Bearer Token (API key required)
@@ -104,11 +104,12 @@ node example.js "Accounting" "Invoices and receipts"
 ## Example — Create compliance workspace
 
 ```bash
-curl -X POST "https://api.paperoffice.ai/latest/documents/workspace-create" \
+curl -X POST "https://api.paperoffice.ai/latest/documents/workspaces-create" \
   -H "Authorization: Bearer $PAPEROFFICE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Finance Archive 2026",
+    "type": "ablage",
     "description": "GoBD-compliant financial document archive",
     "workspace_tier": "compliance",
     "is_revision_secure": true,
@@ -129,6 +130,7 @@ curl -X POST "https://api.paperoffice.ai/latest/documents/workspace-create" \
   "workspace": {
     "id": 42,
     "name": "Finance Archive 2026",
+    "type": "ablage",
     "description": "GoBD-compliant financial document archive",
     "workspace_tier": "compliance",
     "is_revision_secure": true,
