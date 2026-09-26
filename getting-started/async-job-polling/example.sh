@@ -5,13 +5,13 @@ api_base="https://api.paperoffice.ai/latest"
 api_key="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY}"
 input_file="${1:?Error: Please provide file path as argument}"
 
-# Step 1: Submit job (priority=500 → async)
+# Step 1: Submit job (processing_lane=sla_1h → async)
 echo ">>> Submitting job..."
 submit_response=$(curl -s "${api_base}/job/add/paperoffice_aiocr___generate" \
   -H "Authorization: Bearer ${api_key}" \
   -F "file_1=@${input_file}" \
   -F "ocr_mode=text" \
-  -F "priority=500")
+  -F "processing_lane=sla_1h")
 
 job_id=$(echo "${submit_response}" | python3 -c "
 import sys, json
@@ -42,7 +42,7 @@ while [ ${attempt} -lt ${max_attempts} ]; do
   status=$(echo "${poll_response}" | python3 -c "
 import sys, json
 data = json.load(sys.stdin)
-print(data.get('status', 'unknown'))
+print(data.get('job_status', 'unknown'))  # queued | processing | completed | failed
 ")
 
   echo "  Attempt ${attempt}/${max_attempts}: ${status}"
