@@ -9,9 +9,9 @@ API_URL = "https://api.paperoffice.ai/latest/currency_exchange/get_rates"
 
 def get_exchange_rates(from_currency: str = "EUR", to_currency: str = None, amount: float = 1) -> dict:
     """Fetches current exchange rates for 172+ currencies."""
-    payload = {"from": from_currency, "amount": amount}
+    payload = {"base": from_currency, "amount": amount}
     if to_currency:
-        payload["to"] = to_currency
+        payload["symbols"] = to_currency
 
     headers = {}
     api_key = os.environ.get("PAPEROFFICE_API_KEY", "")
