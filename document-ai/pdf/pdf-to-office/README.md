@@ -16,7 +16,7 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_dataripper___pdf2offi
 |-----------------|----------|------------------------------------------------|
 | `file`          | File     | PDF file to convert (singular!)                |
 | `output_format` | `docx`   | Target format: `docx`, `xlsx`, or `pptx`       |
-| `priority`      | `500`    | **Must be async** — conversion needs processing time |
+| `processing_lane` | `sla_1h` | Async — the response carries a `job_id`; poll `GET /job/get/{job_id}` |
 
 > **Important:** The parameter is `output_format` — not `target_format`.
 
