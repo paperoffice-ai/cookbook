@@ -16,7 +16,7 @@ response=$(curl -s "${api_base}/job/add/workflow" \
   -F "template=document_anonymize" \
   -F "file=@${input_file}" \
   -F "redact_categories=${redact_categories}" \
-  -F "priority=900")
+  -F "processing_lane=instant")
 
 status=$(echo "${response}" | python3 -c "import sys,json; print(json.load(sys.stdin).get('status',''))")
 echo "Status: ${status}"
