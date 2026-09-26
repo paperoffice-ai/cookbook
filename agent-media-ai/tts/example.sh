@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_ut_xxx)}"
 BASE_URL="https://api.paperoffice.ai/latest"
 
 TEXT="${1:-Hallo, das ist ein Test der PaperOffice Sprachsynthese.}"
@@ -25,4 +25,4 @@ curl -s -X POST "${BASE_URL}/job/add/paperoffice_voice___tts" \
   -F "output_format=${FORMAT}" \
   -F "output=url" \
   -F "speed=1.0" \
-  -F "priority=900" | python3 -m json.tool
+  -F "processing_lane=instant" | python3 -m json.tool
