@@ -5,8 +5,9 @@
 ## Prompt
 
 ```
-Read this API documentation:
-https://api.paperoffice.ai/latest/docs/postman
+Read this API guide first, completely:
+https://api.paperoffice.ai/latest/docs/llms.txt
+Use the Postman collection at https://api.paperoffice.ai/latest/docs/postman only for exact request and response samples.
 
 Build a fraud detection system that:
 1. Checks device fingerprints
