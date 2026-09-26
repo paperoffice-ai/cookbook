@@ -10,11 +10,12 @@ workspace_desc="${2:-Automatically created workspace}"
 
 echo "→ Creating workspace: ${workspace_name}"
 
-create_response=$(curl -s -X POST "${api_base}/documents/workspace-create" \
+create_response=$(curl -s -X POST "${api_base}/documents/workspaces-create" \
   -H "Authorization: Bearer ${api_key}" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "name=${workspace_name}" \
-  -d "description=${workspace_desc}")
+  -d "description=${workspace_desc}" \
+  -d "type=ablage")
 
 echo "${create_response}" | python3 -c "
 import sys, json
