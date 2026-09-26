@@ -21,7 +21,7 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 | `custom_redact` | string | No | — | Additional terms to ALWAYS redact |
 | `custom_instructions` | string | No | — | Free-text AI instructions (e.g. "Also redact all prices") |
 | `pofid` | string | No | — | Alternative to `file`: use existing DMS document by POFID |
-| `priority` | int | No | `999` | `≥ 900` = synchronous (result inline) |
+| `processing_lane` | string | No | workspace default | Start-SLA: `no_sla` … `instant`. Inline result on 200, otherwise HTTP 202 with `job_id` |
 
 > **Important:** The file parameter is `file`, **not** `file_1`!
 
@@ -75,7 +75,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
   -F "file=@document.pdf" \
   -F "template=document_anonymize" \
   -F "redact_categories=all" \
-  -F "priority=999"
+  -F "processing_lane=no_sla"
 ```
 
 ### Approach 2: Preview + Apply (two-step with human review)
@@ -89,7 +89,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
   -F "template=document_anonymize_preview" \
   -F "redact_categories=contact" \
   -F "whitelist=PaperOffice,ACME Corp" \
-  -F "priority=900"
+  -F "processing_lane=instant"
 ```
 
 The response contains per-page preview images and `redact_box_ids`:
@@ -122,7 +122,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
     "boxes_by_page": {"00001": [0, 1, 5, 7]},
     "redact_color": "#000000",
     "output_pdf": true,
-    "priority": 999
+    "processing_lane": "no_sla"
   }'
 ```
 
@@ -134,7 +134,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
 | `boxes_by_page` | object | No | all boxes | JSON object: `{"00001": [0, 1, 2]}` — page number (5 digits) → array of box IDs to redact |
 | `redact_color` | string | No | `#000000` | Redaction fill color (hex) |
 | `output_pdf` | bool | No | `true` | `true` = output PDF, `false` = output redacted images |
-| `priority` | int | No | `999` | Priority |
+| `processing_lane` | string | No | workspace default | Start-SLA lane |
 
 > **When to use 2-step?** When you need human review before redacting, when you want to selectively remove only some detected PII, or when building a UI where users can approve/reject individual redactions.
 
