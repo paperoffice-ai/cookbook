@@ -382,6 +382,7 @@ node getting-started/first-ocr/example.js document.pdf
 | Using the API or the app, billing, account | [Help & FAQ](https://help.paperoffice.ai/) · [Support](https://paperoffice.ai/en/support/) |
 | A recipe in this repo that does not work | [GitHub Issues](https://github.com/paperoffice-ai/cookbook/issues) — include the endpoint, the `processing_lane`, and the `error_code` from the response |
 | MCP setup for Claude, ChatGPT, Cursor, Grok | [MCP documentation](https://paperoffice.ai/en/developer/mcp/) · [paperoffice-mcp-setup](https://github.com/paperoffice-ai/paperoffice-mcp-setup) |
+| Teaching an agent the procedures (not just the tools) | [paperoffice-skills](https://github.com/paperoffice-ai/paperoffice-skills) — Agent Skills for Claude Code, claude.ai and Cursor |
 | Reseller or integration partnership | [Partner program](https://paperoffice.ai/en/partner/) |
 
 Typical error codes: `401 NOT_AUTHENTICATED` → no Bearer header sent · `401 TOKEN_NOT_FOUND` → token wrong, revoked, or pasted with a typo · `403 GROUP_RESTRICTION` → the group behind your token lacks that module (use a User token or ask the account owner) · `403 WORKSPACE_ACCESS_DENIED` → the workspace belongs to another group · `402 INSUFFICIENT_CREDITS` → the account is out of credits, top up or use a cheaper `processing_lane` · `402 BUDGET_EXHAUSTED` → this token's own credit budget is reached, raise it under Account → API. The full table is in [llms.txt](https://api.paperoffice.ai/latest/docs/llms.txt).
