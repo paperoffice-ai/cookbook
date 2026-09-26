@@ -7,7 +7,7 @@ Output formats: docx (default), xlsx, pptx
 Always async — conversion requires processing time.
 
 Usage:
-    export PAPEROFFICE_API_KEY=po_sk_xxx
+    export PAPEROFFICE_API_KEY=po_ut_xxx
     python3 example.py invoice.pdf [docx|xlsx|pptx]
 """
 import os
@@ -35,7 +35,7 @@ def submit_job(file_path: str, fmt: str = "docx") -> dict:
             f"{api_base}/job/add/paperoffice_dataripper___pdf2office",
             headers=headers,
             files=[("file", (os.path.basename(file_path), f))],
-            data={"output_format": fmt, "priority": "500"},
+            data={"output_format": fmt, "processing_lane": "sla_1h"},
         )
     response.raise_for_status()
     return response.json()
