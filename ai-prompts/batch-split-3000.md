@@ -12,7 +12,7 @@ Create a batch processor that:
 1. Takes a folder of large PDFs (up to 3000 pages each)
 2. Uses POST /job/add/workflow with template=pdf_ai_split
 3. Uses naming_instruction for smart filenames
-4. Handles async jobs with polling (priority<900)
+4. Handles HTTP 202 responses with polling (`GET /job/get/{job_id}`)
 
 Use locale=de_DE for German document types.
 ```
@@ -28,6 +28,6 @@ A batch processor that:
 
 ## Tips
 
-- `priority < 900` for async processing (recommended for large PDFs)
+- `processing_lane = sla_1h` for large PDFs (response carries `job_id`; poll for the result)
 - `naming_instruction` as free text: e.g. `"Dokumenttyp_Datum_Absender"`
 - `locale=de_DE` for German document type recognition
