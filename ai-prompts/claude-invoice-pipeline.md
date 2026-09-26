@@ -17,7 +17,7 @@ Create a Python script that:
 4. Exports to CSV
 
 Important: Use file_1 for uploads, model=premium.
-Handle both sync (priority>=900) and async modes.
+Handle both HTTP 200 (inline result) and HTTP 202 (job_id, poll) responses.
 ```
 
 ## What you get
@@ -32,5 +32,5 @@ Claude generates a complete Python script that:
 ## Tips
 
 - Add `model=premium` for the best extraction quality
-- `priority >= 900` = synchronous response, `< 900` = async with polling
-- Bearer token required (`export PAPEROFFICE_API_KEY=po_sk_xxx`)
+- `processing_lane = instant` returns the result inline when it finishes in time; otherwise HTTP 202 with `job_id` — poll `GET /job/get/{job_id}`
+- Bearer token required (`export PAPEROFFICE_API_KEY=po_ut_xxx`)
