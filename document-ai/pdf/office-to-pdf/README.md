@@ -16,7 +16,7 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_dataripper___office2p
 |------------|-----------|----------------------------------------------------------|
 | `file`     | File      | Office document to convert (singular!)                   |
 | `provider` | `native`  | Conversion engine (see below)                            |
-| `priority` | `500`     | **Must be async** — native conversion requires a Windows VM |
+| `processing_lane` | `sla_1h` | Async — the response carries a `job_id`; poll `GET /job/get/{job_id}` |
 
 ### Provider options
 
