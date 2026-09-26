@@ -32,7 +32,7 @@ async function submit_job(file_path, prov = "native") {
   const form = new FormData();
   form.append("file", new Blob([buffer]), basename(file_path));
   form.append("provider", prov);
-  form.append("priority", "500");
+  form.append("processing_lane", "sla_1h");
 
   const response = await fetch(
     `${api_base}/job/add/paperoffice_dataripper___office2pdf`,
