@@ -71,7 +71,7 @@ def article_list(kb_id: int) -> dict:
     return r.json()
 
 
-def article_update(article_id: int, **kwargs) -> dict:
+def article_update(article_id: str, **kwargs) -> dict:
     """Update an article (title, content)."""
     payload = {"id": article_id, **kwargs}
     r = requests.post(
@@ -81,7 +81,7 @@ def article_update(article_id: int, **kwargs) -> dict:
     return r.json()
 
 
-def article_delete(article_id: int) -> dict:
+def article_delete(article_id: str) -> dict:
     """Delete an article."""
     r = requests.post(
         f"{BASE_URL}/delete",
@@ -123,7 +123,7 @@ if __name__ == "__main__":
         "PaperOffice AI provides intelligent document processing, OCR and knowledge management.",
         "Introduction",
     )
-    art1_id = art1.get("data", art1).get("id", art1.get("article_id"))
+    art1_id = art1.get("data", art1).get("knowledge_id")  # articles are addressed by knowledge_id (string)
     print(f"  Article 1: ID={art1_id}")
 
     art2 = article_create(
@@ -132,14 +132,15 @@ if __name__ == "__main__":
         "All API calls require a Bearer Token in the Authorization header.",
         "Technical",
     )
-    art2_id = art2.get("data", art2).get("id", art2.get("article_id"))
+    art2_id = art2.get("data", art2).get("knowledge_id")
     print(f"  Article 2: ID={art2_id}")
 
     # 5. List articles
     print("\n=== Articles in KB ===")
     articles = article_list(kb_id)
-    for art in articles.get("data", []):
-        print(f"  • [{art.get('id')}] {art.get('title')}")
+    for art in articles.get("data", {}).get("articles", []):
+        title = (art.get("content") or {}).get("en", {}).get("title") or (art.get("content") or {}).get("de", {}).get("title") or art.get("title")
+        print(f"  • [{art.get('knowledge_id')}] {title}")
 
     # 6. Update article
     if art1_id:
