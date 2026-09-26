@@ -16,7 +16,7 @@ Create a voice agent that:
 Use POST /job/add/paperoffice_voice___tts with:
 - voice=Nadja, language=de, output_format=mp3, output=url
 - language is REQUIRED (e.g. de, en, es, fr)
-- Use priority=900 for sync TTS response.
+- Use processing_lane=instant for sync TTS response.
 - For STT use POST /job/add/paperoffice_voice___stt with file_1 parameter.
 - Bearer token required for all endpoints.
 ```
@@ -31,6 +31,6 @@ A voice agent that:
 
 ## Tips
 
-- `priority=999` for guaranteed synchronous TTS response
+- `processing_lane=no_sla` for guaranteed synchronous TTS response
 - `output=url` returns a downloadable audio URL
 - `output=base64` for inline embedding
