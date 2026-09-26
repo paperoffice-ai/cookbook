@@ -20,7 +20,7 @@ curl_args=(
   -s -X POST "${api_base}/documents/document-put"
   -H "Authorization: Bearer ${api_key}"
   -F "file=@${input_file}"
-  -F "workspace_name=${workspace}"
+  -F "workspace_id=${workspace}"
 )
 
 if [ -n "${tags}" ]; then
@@ -35,11 +35,10 @@ data = json.load(sys.stdin)
 if data.get('status') != 'success':
     print('Error:', json.dumps(data, indent=2))
     sys.exit(1)
-doc = data.get('document', {})
-print(f'  ID:        {doc.get(\"id\", \"—\")}')
-print(f'  Filename:  {doc.get(\"filename\", \"—\")}')
-print(f'  Workspace: {doc.get(\"workspace\", \"—\")}')
-print(f'  Tags:      {doc.get(\"tags\", [])}')
-print(f'  Size:      {doc.get(\"size\", \"—\")}')
-print(f'  Created:   {doc.get(\"created_at\", \"—\")}')
+for doc in data.get('results', []):
+    print('  documents_id:', doc.get('documents_id', '-'))
+    print('  POFID:       ', doc.get('pofid', '-'))
+    print('  Filename:    ', doc.get('filename', '-'))
+    print('  Workspace:   ', doc.get('workspace_name', '-'), '(id', doc.get('workspace_id', '-'), ')')
+    print('  Size:        ', doc.get('size', '-'), 'bytes, pages:', doc.get('total_pages', '-'))
 "
