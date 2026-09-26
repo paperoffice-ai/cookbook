@@ -9,7 +9,7 @@ response=$(curl -s "${api_base}/job/add/paperoffice_aiocr___generate" \
   -H "Authorization: Bearer ${api_key}" \
   -F "file_1=@${input_file}" \
   -F "ocr_mode=text" \
-  -F "priority=900")
+  -F "processing_lane=instant")
 
 # Show full response
 echo "${response}" | python3 -m json.tool
