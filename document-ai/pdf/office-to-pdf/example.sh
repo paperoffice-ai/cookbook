@@ -26,7 +26,7 @@ submit_response=$(curl -s -X POST "${api_base}/job/add/paperoffice_dataripper___
   -H "Authorization: Bearer ${api_key}" \
   -F "file=@${input_file}" \
   -F "provider=${provider}" \
-  -F "priority=500")
+  -F "processing_lane=sla_1h")
 
 job_id=$(echo "${submit_response}" | python3 -c "
 import sys, json
