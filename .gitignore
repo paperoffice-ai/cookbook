@@ -31,3 +31,8 @@ Thumbs.db
 output_*.pdf
 result_*.json
 classification_log.csv
+generated.pdf
+searchable_output.pdf
+*.docx
+anonymized.pdf
+Rechnung_*.pdf
