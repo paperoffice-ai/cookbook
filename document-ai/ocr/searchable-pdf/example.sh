@@ -11,7 +11,7 @@ response=$(curl -s "${api_base}/job/add/paperoffice_aiocr___generate" \
   -F "file_1=@${input_file}" \
   -F "ocr_mode=text" \
   -F "output_searchable_pdf=true" \
-  -F "priority=900")
+  -F "processing_lane=instant")
 
 # Evaluate result and extract PDF URL (check multiple possible field locations)
 eval "$(echo "${response}" | python3 -c "
