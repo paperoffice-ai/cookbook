@@ -1,90 +1,57 @@
 #!/usr/bin/env node
-/** PaperOffice AI — Query and visualize knowledge graph */
+/** PaperOffice AI — Knowledge Graph: statistics, question, business partners */
 
 const BASE_URL = "https://api.paperoffice.ai/latest/knowledge_graph";
 const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 
-function headers() {
+function headers(json = false) {
   if (!API_KEY) throw new Error("PAPEROFFICE_API_KEY not set");
-  return { "Authorization": `Bearer ${API_KEY}` };
+  return { Authorization: `Bearer ${API_KEY}`, ...(json ? { "Content-Type": "application/json" } : {}) };
 }
 
-async function get_stats() {
-  const r = await fetch(`${BASE_URL}/stats`, { headers: headers() });
+async function get_stats(workspace_id) {
+  const r = await fetch(`${BASE_URL}/stats?workspace_id=${workspace_id}`, { headers: headers() });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
   return r.json();
 }
 
-async function query_graph(question, pofid = "", max_hops = 3) {
-  const params = new URLSearchParams({ question, max_hops: String(max_hops) });
-  if (pofid) params.set("pofid", pofid);
-
-  const r = await fetch(`${BASE_URL}/universe`, {
-    method: "POST",
-    headers: headers(),
-    body: params,
-  });
+async function ask(question, workspace_id, pofid = "") {
+  const body = { question, workspace_id };
+  if (pofid) body.pofid = pofid;
+  const r = await fetch(`${BASE_URL}/ask`, { method: "POST", headers: headers(true), body: JSON.stringify(body) });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
   return r.json();
 }
 
-async function get_mermaid(pofid = "", depth = 3) {
-  const params = new URLSearchParams({ format: "mermaid", depth: String(depth) });
-  if (pofid) params.set("pofid", pofid);
-
-  const r = await fetch(`${BASE_URL}/universe`, {
-    method: "POST",
-    headers: headers(),
-    body: params,
-  });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  return r.json();
-}
-
-async function get_partners(workspace_id = null, query = "") {
+async function get_partners(workspace_id, query = "") {
   const url = new URL(`${BASE_URL}/partners`);
-  if (workspace_id) url.searchParams.set("workspace_id", workspace_id);
+  url.searchParams.set("workspace_id", workspace_id);
   if (query) url.searchParams.set("query", query);
-
   const r = await fetch(url, { headers: headers() });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
   return r.json();
 }
 
-const question = process.argv[2] || "Who are the main business partners?";
-const pofid = process.argv[3] || "";
+const workspace_id = process.argv[2];
+if (!workspace_id) {
+  console.error("Usage: node example.js <workspace_id> [question] [pofid]");
+  process.exit(1);
+}
+const question = process.argv[3] || "Who are the main business partners?";
+const pofid = process.argv[4] || "";
 
-// 1. Graph statistics
 console.log("=== Graph statistics ===");
-const stats = await get_stats();
-console.log(JSON.stringify(stats, null, 2));
+console.log(JSON.stringify((await get_stats(workspace_id)).stats ?? {}, null, 2).slice(0, 800));
 
-// 2. Query the graph
-console.log(`\n=== Query: ${question} ===`);
-if (pofid) console.log(`Scoped to document: ${pofid}`);
-
-const result = await query_graph(question, pofid);
-console.log(`Answer:     ${result.answer || "?"}`);
-console.log(`Confidence: ${result.confidence || "?"}`);
-
-const relevant = result.relevant_nodes || [];
-if (relevant.length > 0) {
-  console.log(`\nRelevant nodes (${relevant.length}):`);
-  for (const node of relevant.slice(0, 10)) {
-    console.log(`  - ${node.label || node.id || "?"} (${node.type || "?"})`);
-  }
+console.log(`\n=== Question: ${question} ===`);
+const result = await ask(question, workspace_id, pofid);
+console.log(`Answer:  ${result.answer ?? ""}`);
+console.log(`Routing: ${result.routing}`);
+for (const src of (result.sources ?? []).slice(0, 5)) {
+  console.log(`  source: ${src.file_name} (documents_id ${src.documents_id})`);
 }
 
-// 3. Mermaid visualization
-console.log("\n=== Mermaid diagram ===");
-const mermaid = await get_mermaid(pofid);
-if (mermaid.graph) {
-  console.log(mermaid.graph.slice(0, 500));
-} else {
-  console.log(JSON.stringify(mermaid, null, 2));
-}
-
-// 4. Business partners
 console.log("\n=== Business partners ===");
-const partners = await get_partners();
-console.log(JSON.stringify(partners, null, 2));
+for (const p of ((await get_partners(workspace_id)).partners ?? []).slice(0, 10)) {
+  console.log(`  - ${p.name}: ${p.document_count} documents`);
+}
