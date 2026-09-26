@@ -14,8 +14,8 @@ POST https://api.paperoffice.ai/latest/currency_exchange/get_rates
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `from` | string | ✅ | Source currency (ISO 4217, e.g. `EUR`) |
-| `to` | string | ❌ | Target currency (without = all 172+ currencies) |
+| `base` | string | ✅ | Base currency (ISO 4217, e.g. `EUR`) |
+| `symbols` | string | ❌ | Target currency or comma-separated list (without = all currencies) |
 | `amount` | float | ❌ | Amount to convert (default: `1`) |
 
 ## How to run
