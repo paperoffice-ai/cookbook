@@ -16,7 +16,7 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate
 |---|---|---|---|---|
 | `file_1` | file | **Yes** | — | Document to process (PDF, PNG, JPG, TIFF, BMP, WEBP) |
 | `ocr_mode` | string | No | `text` | `text` (fastest), `grid` (+ bounding boxes), `complete` (+ tables + layout) |
-| `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
+| `processing_lane` | string | No | workspace default | Start-SLA: `no_sla` … `instant`. `instant` returns the result inline when it finishes in time; otherwise HTTP 202 with `job_id` — poll `GET /job/get/{job_id}` |
 
 ## How to run
 
@@ -81,4 +81,4 @@ node example.js /path/to/file.pdf
 | `500`   | **Async** — Returns `job_id` for polling        |
 | `100`   | **Low** — Background processing                 |
 
-For synchronous results (as in this example) always use `priority=900`.
+For synchronous results (as in this example) always use `processing_lane=instant`.
