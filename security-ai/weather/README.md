@@ -5,7 +5,7 @@ Provides current weather data, multi-day forecast, and air quality for any GPS c
 ## Endpoint
 
 ```
-POST https://api.paperoffice.ai/latest/location2weather
+GET https://api.paperoffice.ai/latest/weather?lat=52.52&lon=13.41&lang=de
 ```
 
 **Authentication:** Bearer token required, but **free** (no credit charge).
@@ -23,7 +23,7 @@ POST https://api.paperoffice.ai/latest/location2weather
 ## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY=po_sk_xxx
+export PAPEROFFICE_API_KEY=po_ut_xxx
 
 # Bash — Berlin
 bash example.sh 52.52 13.41
