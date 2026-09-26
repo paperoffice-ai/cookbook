@@ -7,6 +7,24 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { basename } from "node:path";
 
+/** HTTP 202 means the job is still running: follow job/get until it is completed. */
+async function wait_for_result(data, token, api_base = "https://api.paperoffice.ai/latest", timeout_ms = 180000) {
+  if (data.result || !data.job_id) return data;
+  const deadline = Date.now() + timeout_ms;
+  while (Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, 2000));
+    const poll = await (await fetch(`${api_base}/job/get/${data.job_id}`, { headers: { Authorization: `Bearer ${token}` } })).json();
+    if (poll.job_status === "completed" || poll.result || poll.job_result) {
+      if (!poll.result && poll.job_result) poll.result = poll.job_result; // same payload, different key
+      return poll;
+    }
+    if (poll.job_status === "failed" || poll.job_status === "error" || poll.status === "error") {
+      throw new Error(`job failed: ${poll.message}`);
+    }
+  }
+  throw new Error(`job ${data.job_id} not finished after ${timeout_ms / 1000}s`);
+}
+
 const api_base = "https://api.paperoffice.ai/latest";
 const api_key = process.env.PAPEROFFICE_API_KEY;
 if (!api_key) {
@@ -29,7 +47,7 @@ const file_buffer = readFileSync(input_file);
 form_data.append("file", new Blob([file_buffer]), basename(input_file));
 form_data.append("template", "document_anonymize");
 form_data.append("redact_categories", redact_categories);
-form_data.append("priority", "900");
+form_data.append("processing_lane", "instant");
 
 const response = await fetch(`${api_base}/job/add/workflow`, {
   method: "POST",
@@ -37,7 +55,7 @@ const response = await fetch(`${api_base}/job/add/workflow`, {
   body: form_data,
 });
 
-const data = await response.json();
+const data = await wait_for_result(await response.json(), api_key);
 console.log(`Status: ${data?.status}`);
 
 if (data?.status !== "success") {
