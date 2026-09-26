@@ -11,14 +11,14 @@ echo "→ Exchange rates: ${AMOUNT} ${FROM}${TO:+ → $TO}"
 API_KEY="${PAPEROFFICE_API_KEY:-}"
 
 CMD=(curl -s -X POST "https://api.paperoffice.ai/latest/currency_exchange/get_rates"
-  -F "from=${FROM}"
+  -F "base=${FROM}"
   -F "amount=${AMOUNT}")
 
 if [ -n "$API_KEY" ]; then
   CMD+=(-H "Authorization: Bearer ${API_KEY}")
 fi
 if [ -n "$TO" ]; then
-  CMD+=(-F "to=${TO}")
+  CMD+=(-F "symbols=${TO}")
 fi
 
 "${CMD[@]}" | python3 -m json.tool
