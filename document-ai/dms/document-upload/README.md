@@ -42,16 +42,26 @@ node example.js contract.pdf "Accounting" "contract,2026"
 ```json
 {
   "status": "success",
-  "document": {
-    "id": 1234,
-    "filename": "contract.pdf",
-    "workspace": "Accounting",
-    "tags": ["contract", "2026"],
-    "size": 245760,
-    "created_at": "2026-04-08T10:30:00Z"
-  }
+  "workspace_id": 28,
+  "workspace_name": "Workspace [SANDBOX] for xAI Grok",
+  "ai_dms_refused_count": 0,
+  "results": [
+    {
+      "status": "success",
+      "filename": "contract.pdf",
+      "documents_id": 1168,
+      "pofid": "5a5b4f1b...POD1.AI256880.MT1790419691639.pdf",
+      "workspace_id": 28,
+      "size": 22692,
+      "total_pages": 1,
+      "version": 1,
+      "ai_dms": { "mode": "ultra", "status": "queued" }
+    }
+  ]
 }
 ```
+
+`document-put` accepts one or more files; each file is reported in `results[]`. If the workspace has AI-DMS enabled, processing starts automatically and is charged according to the workspace mode.
 
 ## Upload workflow
 
