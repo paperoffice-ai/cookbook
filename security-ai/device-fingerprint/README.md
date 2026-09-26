@@ -144,7 +144,7 @@ Integrate client-side fingerprinting in your web application:
 ## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY=po_sk_xxx
+export PAPEROFFICE_API_KEY=po_ut_xxx
 
 # Bash
 bash example.sh "visitor_abc123"
