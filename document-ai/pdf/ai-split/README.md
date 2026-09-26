@@ -24,7 +24,7 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 | `include_date` | bool | No | `false` | Include `date` in response |
 | `include_sender` | bool | No | `false` | Include `sender` in response |
 | `include_reasoning` | bool | No | `false` | Include AI reasoning for the classification |
-| `priority` | int | No | `900` | `≥ 900` = synchronous, `< 900` = async |
+| `processing_lane` | string | No | workspace default | Start-SLA: `no_sla` … `instant`. Inline result on 200, otherwise HTTP 202 with `job_id` |
 
 ### Controlling response detail
 
@@ -42,7 +42,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/workflow" \
   -F "include_date=true" \
   -F "include_sender=true" \
   -F "include_reasoning=true" \
-  -F "priority=900"
+  -F "processing_lane=instant"
 ```
 
 ### Restricting document types
