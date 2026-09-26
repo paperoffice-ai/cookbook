@@ -126,7 +126,7 @@ The `content` parameter accepts two formats:
 ## How to Run
 
 ```bash
-export PAPEROFFICE_API_KEY=po_sk_xxx
+export PAPEROFFICE_API_KEY=po_ut_xxx
 
 # Bash — Create KB, add articles, list, cleanup
 bash example.sh
