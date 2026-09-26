@@ -16,14 +16,14 @@ if not input_file:
 
 headers = {"Authorization": f"Bearer {api_key}"}
 
-# Step 1: Submit job (priority=500 → async)
+# Step 1: Submit job (processing_lane=sla_1h → async)
 print(">>> Submitting job...")
 with open(input_file, "rb") as f:
     submit_response = requests.post(
         f"{api_base}/job/add/paperoffice_aiocr___generate",
         headers=headers,
         files={"file_1": f},
-        data={"ocr_mode": "text", "priority": "500"},
+        data={"ocr_mode": "text", "processing_lane": "sla_1h"},
     )
 
 submit_data = submit_response.json()
@@ -45,12 +45,12 @@ for attempt in range(1, max_attempts + 1):
         headers=headers,
     )
     poll_data = poll_response.json()
-    status = poll_data.get("status", "unknown")
+    status = poll_data.get("job_status", "unknown")  # queued | processing | completed | failed
 
     print(f"  Attempt {attempt}/{max_attempts}: {status}")
 
     if status == "completed":
-        result = poll_data.get("result", {})
+        result = poll_data.get("job_result") or poll_data.get("result", {})
         output = result.get("output", {})
         summary = output.get("summary", {})
         print()
