@@ -2,7 +2,7 @@
 # PaperOffice AI — Chat with documents via GraphRAG
 set -euo pipefail
 
-api_key="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+api_key="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_ut_xxx)}"
 api_base="https://api.paperoffice.ai/latest"
 question="${1:?Usage: $0 <question> [pofid]}"
 pofid="${2:-}"
