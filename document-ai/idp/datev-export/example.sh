@@ -18,7 +18,7 @@ response=$(curl -s -X POST "${api_base}/job/add/workflow" \
   -F "file_1=@${input_file}" \
   -F "model=premium" \
   -F "idp_collection=invoice" \
-  -F "priority=900")
+  -F "processing_lane=instant")
 
 # Convert IDP result to DATEV accounting entry
 echo "${response}" | python3 -c "
