@@ -4,7 +4,7 @@ PaperOffice AI — Text Translation
 Translates text between 100+ languages (3 quality tiers)
 
 Usage:
-    export PAPEROFFICE_API_KEY=po_sk_xxx
+    export PAPEROFFICE_API_KEY=po_ut_xxx
     python example.py "Hello World" de
     python example.py "Hello World" de auto ultra
 """
