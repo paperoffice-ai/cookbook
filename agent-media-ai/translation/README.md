@@ -1,6 +1,6 @@
 # Text Translation
 
-Translates text between 37 languages. Three quality tiers: `basic` (fast), `premium` (balanced), `ultra` (highest quality). Automatic source language detection.
+Translates text between the 35 PaperOffice languages. Three quality tiers: `basic` (fast), `premium` (balanced), `ultra` (highest quality). Automatic source language detection.
 
 ## Endpoints
 
@@ -35,7 +35,14 @@ python3 example.py "Hello World" de auto ultra
 # Node.js (v18+)
 node example.js "Hello World" de
 node example.js "Hello World" de auto ultra
+
+# Bulk client — hybrid wait (200 inline / 202 → poll), JSON objects, pipeline mode
+node bulk_translate.mjs --text "Save changes" --target fr
+node bulk_translate.mjs --json '{"title":"New lead"}' --target es
+node bulk_translate.mjs --text "Relations AI" --target ja --pipeline --lane sla_1h
 ```
+
+`bulk_translate.mjs` waits inline up to the server's client-wait window, follows HTTP 202 with `job_id` by polling `GET /job/get/{job_id}`, and with `--pipeline` sends `client_wait=false` for batch workers. Max 15,000 characters per request — chunk larger JSON.
 
 ## Parameters (Text Translation)
 
