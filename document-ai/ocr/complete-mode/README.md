@@ -17,7 +17,7 @@ POST https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___generate
 | `file_1` | file | **Yes** | — | Document to process (PNG, JPG, TIFF, BMP, WEBP, PDF) |
 | `ocr_mode` | string | No | `text` | Must be `complete` for this recipe (or `grid` for boxes without tables) |
 | `output_searchable_pdf` | bool | No | `false` | Additionally generate a searchable PDF (sandwich PDF) |
-| `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
+| `processing_lane` | string | No | workspace default | Start-SLA: `no_sla` … `instant`. `instant` returns the result inline when it finishes in time; otherwise HTTP 202 with `job_id` — poll `GET /job/get/{job_id}` |
 
 ## OCR modes comparison
 
@@ -185,7 +185,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_aiocr___gene
   -F "file_1=@invoice.pdf" \
   -F "ocr_mode=complete" \
   -F "output_searchable_pdf=true" \
-  -F "priority=900"
+  -F "processing_lane=instant"
 ```
 
 ## Use case: Bounding boxes for redaction
