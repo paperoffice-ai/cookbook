@@ -2,7 +2,7 @@
 """PaperOffice AI — Upload document to DMS
 
 Usage:
-    export PAPEROFFICE_API_KEY=po_sk_xxx
+    export PAPEROFFICE_API_KEY=po_ut_xxx
     python3 example.py contract.pdf "Accounting" "invoice,2026,q1"
 """
 import os
@@ -15,7 +15,7 @@ api_key = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 def document_upload(
     file_path: str,
-    workspace_name: str,
+    workspace_id: int,
     tags: str = "",
     description: str = "",
     token: str = api_key,
@@ -24,7 +24,7 @@ def document_upload(
     if not token:
         raise ValueError("PAPEROFFICE_API_KEY not set")
 
-    data = {"workspace_name": workspace_name}
+    data = {"workspace_id": workspace_id}
     if tags:
         data["tags"] = tags
     if description:
@@ -43,21 +43,22 @@ def document_upload(
 
 def print_document_info(data: dict):
     """Prints the metadata of the uploaded document."""
-    doc = data.get("document", {})
-    print(f"  ID:        {doc.get('id', '—')}")
-    print(f"  Filename:  {doc.get('filename', '—')}")
-    print(f"  Workspace: {doc.get('workspace', '—')}")
-    print(f"  Tags:      {doc.get('tags', [])}")
-    print(f"  Size:      {doc.get('size', '—')}")
-    print(f"  Created:   {doc.get('created_at', '—')}")
+    # document-put accepts several files; each one is reported in results[]
+    for doc in data.get("results", []):
+        print(f"  documents_id: {doc.get('documents_id', '—')}")
+        print(f"  POFID:        {doc.get('pofid', '—')}")
+        print(f"  Filename:     {doc.get('filename', '—')}")
+        print(f"  Workspace:    {doc.get('workspace_name', '—')} (id {doc.get('workspace_id', '—')})")
+        print(f"  Size:         {doc.get('size', '—')} bytes, pages: {doc.get('total_pages', '—')}")
+        print(f"  AI-DMS:       {doc.get('ai_dms', '—')}")
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        sys.exit("Usage: python3 example.py <file> <workspace> [tags]")
+        sys.exit("Usage: python3 example.py <file> <workspace_id> [tags]")
 
     file_path = sys.argv[1]
-    workspace = sys.argv[2]
+    workspace = int(sys.argv[2])
     tags = sys.argv[3] if len(sys.argv) > 3 else ""
 
     print(f"→ Uploading: {file_path} → Workspace: {workspace}")
