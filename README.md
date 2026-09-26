@@ -4,7 +4,7 @@
 
 > **MCP-First · API-First · Vibe Coding First**
 >
-> 357+ AI Tools · 38 Recipes · 8 AI Prompts · 4 MCP Configs
+> 300+ API/MCP tools · 38 Recipes · 8 AI Prompts · 4 MCP Configs
 
 ---
 
@@ -16,7 +16,7 @@ Forget reading docs. Paste one URL into your AI IDE and start building:
 https://api.paperoffice.ai/latest/docs/postman
 ```
 
-**That's it.** Your AI reads the entire API spec — 357+ tools, all parameters, all response formats — and generates production code for you.
+**That's it.** Your AI reads the entire API spec — 300+ tools, all parameters, all response formats — and generates production code for you.
 
 ### Try it now
 
@@ -27,7 +27,7 @@ Read this API documentation:
 https://api.paperoffice.ai/latest/docs/postman
 
 Extract all fields from this invoice PDF using IDP.
-Use model=premium and priority=900 for instant results.
+Use model=premium and processing_lane=instant for instant results.
 ```
 
 Your AI generates a working script. No docs to read. No boilerplate to write.
@@ -36,7 +36,7 @@ Your AI generates a working script. No docs to read. No boilerplate to write.
 
 ## 🔗 MCP Integration — AI-Native Access
 
-Connect your AI IDE **directly** to PaperOffice. All 357+ tools become native AI actions — no REST calls, no boilerplate, no context switching.
+Connect your AI IDE **directly** to PaperOffice. The Documents Operations catalog becomes native AI actions — no REST calls, no boilerplate, no context switching. Auth: OAuth 2.1 (Claude, ChatGPT, Grok) or a user/group token (`po_ut_` / `po_gt_`); `po_sk_` and `po_pk_` are rejected by the MCP server.
 
 ### One-Click Setup
 
@@ -49,7 +49,7 @@ Connect your AI IDE **directly** to PaperOffice. All 357+ tools become native AI
     "paperoffice": {
       "url": "https://mcp.paperoffice.ai/cursor",
       "headers": {
-        "Authorization": "Bearer YOUR_API_KEY"
+        "Authorization": "Bearer po_ut_..."
       }
     }
   }
@@ -67,34 +67,22 @@ Connect your AI IDE **directly** to PaperOffice. All 357+ tools become native AI
 {
   "mcpServers": {
     "paperoffice": {
-      "url": "https://mcp.paperoffice.ai/claude",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_KEY"
-      }
+      "url": "https://mcp.paperoffice.ai/claude"
     }
   }
 }
 ```
+
+Claude signs in with OAuth 2.1 on the first request — no token in the file.
 
 → [Full Claude Setup Guide](mcp/claude-setup/)
 
 </details>
 
 <details>
-<summary><strong>ChatGPT / OpenAI</strong></summary>
+<summary><strong>ChatGPT</strong> — Settings → Connectors</summary>
 
-```json
-{
-  "mcpServers": {
-    "paperoffice": {
-      "url": "https://mcp.paperoffice.ai/openai",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_KEY"
-      }
-    }
-  }
-}
-```
+Paste `https://mcp.paperoffice.ai/chatgpt` and complete the OAuth sign-in. No token in a file.
 
 → [Full ChatGPT Setup Guide](mcp/chatgpt-setup/)
 
@@ -107,14 +95,16 @@ Connect your AI IDE **directly** to PaperOffice. All 357+ tools become native AI
 {
   "mcpServers": {
     "paperoffice": {
-      "url": "https://mcp.paperoffice.ai/mcp",
+      "url": "https://mcp.paperoffice.ai/dms",
       "headers": {
-        "Authorization": "Bearer YOUR_API_KEY"
+        "Authorization": "Bearer po_ut_..."
       }
     }
   }
 }
 ```
+
+`/dms` is the canonical Documents Operations URL (same catalog as `/cursor`). For media, CRM and telephony use `/mcp-full`.
 
 </details>
 
@@ -122,13 +112,14 @@ Connect your AI IDE **directly** to PaperOffice. All 357+ tools become native AI
 
 | Client | URL |
 |--------|-----|
-| Cursor IDE | `https://mcp.paperoffice.ai/cursor` |
-| Claude Desktop / Code | `https://mcp.paperoffice.ai/claude` |
-| ChatGPT / OpenAI | `https://mcp.paperoffice.ai/openai` |
-| Standard MCP | `https://mcp.paperoffice.ai/mcp` |
-| Universal | `https://mcp.paperoffice.ai/` |
+| Cursor / Windsurf | `https://mcp.paperoffice.ai/cursor` |
+| Claude Desktop / Anthropic Directory | `https://mcp.paperoffice.ai/claude` |
+| ChatGPT | `https://mcp.paperoffice.ai/chatgpt` |
+| Grok | `https://mcp.paperoffice.ai/grok` |
+| Headless DMS (canonical) | `https://mcp.paperoffice.ai/dms` |
+| Everything, all modules | `https://mcp.paperoffice.ai/mcp-full` |
 
-→ [Tool Discovery Guide](mcp/tool-discovery/) — explore all 357+ tools via `tools/list`
+→ [Tool Discovery Guide](mcp/tool-discovery/) — `tools/list` shows the core; `po_mcp_tools_search` reaches the rest of the 300+ catalog
 
 ---
 
@@ -205,7 +196,7 @@ Traditional code examples in **Bash**, **Python**, and **Node.js** for every API
 
 | Recipe | What it does | Endpoint |
 |--------|-------------|---------|
-| [Workspace Setup](document-ai/dms/workspace-setup/) | Create/manage workspace (tiers, WORM, BYOS) | `/documents/workspace-create` |
+| [Workspace Setup](document-ai/dms/workspace-setup/) | Create/manage workspace (tiers, WORM, BYOS) | `/documents/workspaces-create` |
 | [Document Upload](document-ai/dms/document-upload/) | Upload documents to DMS | `/documents/document-put` |
 | [Smart Search](document-ai/dms/smart-search/) | 5 search modes (intelligent, semantic, hybrid, fulltext, RAG) | `/documents/document-search` |
 | [Document Generation](document-ai/dms/document-generation/) | Create PDFs from content or templates | `/document_generation/*` |
@@ -245,7 +236,7 @@ Traditional code examples in **Bash**, **Python**, and **Node.js** for every API
 | [Anonymity Detector](security-ai/anonymity-detector/) | Detect VPN/Proxy/Tor | `/ip2location/vpn` |
 | [Geocoding](security-ai/geocoding/) | Address ↔ Coordinates | `/geocoding/*` |
 | [Currency Exchange](security-ai/currency-exchange/) | Exchange rates (172 currencies) | `/currency_exchange/get_rates` |
-| [Weather](security-ai/weather/) | Weather + forecast + air quality | `/location2weather` |
+| [Weather](security-ai/weather/) | Weather + forecast + air quality | `/weather` |
 
 ### Pro Tips
 
@@ -255,16 +246,18 @@ Traditional code examples in **Bash**, **Python**, and **Node.js** for every API
 
 ## Authentication
 
-**Bearer token required for all job endpoints.**
+**Bearer token required for all job endpoints.** Create tokens at [app.paperoffice.ai](https://app.paperoffice.ai) → *Account → API*.
 
 ```bash
-export PAPEROFFICE_API_KEY="po_sk_xxx"
+export PAPEROFFICE_API_KEY="po_ut_xxx"
 ```
 
-| Token Type | Prefix | Usage |
-|------------|--------|-------|
-| System Key | `po_sk_` | Server-to-server, full access |
-| User Token | `po_ut_` | User-scoped, depends on license |
+| Token Type | Prefix | REST API | MCP |
+|------------|--------|----------|-----|
+| User Token | `po_ut_` | yes | yes |
+| Group Token | `po_gt_` | yes — limited to the group's workspaces | yes |
+| System Key | `po_sk_` | yes — server-to-server, full account | **rejected** |
+| Publishable Key | `po_pk_` | browser widgets only | **rejected** |
 
 > **VISITOR Mode** (no token): Only `GET /health`, `POST /ip2location/*`, `POST /currency_exchange/get_rates`, `GET /vat/rates` (rate-limited). All other endpoints require Bearer token.
 
@@ -305,7 +298,7 @@ export PAPEROFFICE_API_KEY="po_sk_xxx"
 | `POST /ip2location/full` | IP Geolocation |
 | `POST /ip2location/vpn` | VPN/Proxy Detection |
 | `POST /currency_exchange/get_rates` | Exchange Rates |
-| `POST /location2weather` | Weather |
+| `GET /weather` | Weather |
 | `GET /webhooks/list` | Webhook Management |
 | `POST /webhooks/subscribe` | Register Webhook |
 | `GET /knowledge/kb_list` | Knowledge Base List |
@@ -313,7 +306,7 @@ export PAPEROFFICE_API_KEY="po_sk_xxx"
 | `POST /documents/documents-list` | DMS Search |
 | `POST /documents/document-search` | Semantic / Hybrid / Fulltext / RAG Search |
 | `POST /documents/document-put` | DMS Upload |
-| `POST /documents/workspace-create` | Create Workspace |
+| `POST /documents/workspaces-create` | Create Workspace |
 | `GET /documents/workspaces-list` | List Workspaces |
 | `POST /document_generation/create-from-content` | Document from Content |
 | `POST /document_generation/create-from-template` | Document from Template |
