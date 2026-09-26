@@ -5,8 +5,8 @@ const API_KEY = process.env.PAPEROFFICE_API_KEY || "";
 const API_URL = "https://api.paperoffice.ai/latest/currency_exchange/get_rates";
 
 async function get_exchange_rates(from_currency = "EUR", to_currency = null, amount = 1) {
-  const params = new URLSearchParams({ from: from_currency, amount });
-  if (to_currency) params.set("to", to_currency);
+  const params = new URLSearchParams({ base: from_currency, amount });
+  if (to_currency) params.set("symbols", to_currency);
 
   const headers = {};
   if (API_KEY) headers["Authorization"] = `Bearer ${API_KEY}`;
