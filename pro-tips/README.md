@@ -91,10 +91,14 @@ Every API call consumes credits. The Start-SLA lane sets the factor; rejected re
 
 The guarantee is the start of processing, not its completion.
 
-**Free endpoints** (no credits):
-- `GET /vat/rates`
-- `GET /weather`
+**Minimum price.** With a product token (`po_ut_` / `po_gt_` / `po_sk_` / `po_pk_`) every billable call costs at least **5 credits**, also cheap list reads such as `documents/workspaces-list`. Per-unit prices (per page, MB, minute, 1k characters) are unchanged; the floor applies to the call total.
+
+**Always free** (no credits, with or without token):
 - `GET /health`
+- `GET /job/get/{job_id}` — job polling
+- `/billing/*` account reads and `/docs/*` (llms.txt, Postman)
+
+**Free without a token** (VISITOR mode, rate-limited): `GET /vat/rates`, `GET /weather`, `POST /currency_exchange/get_rates`, `POST /ip2location/*`. The same calls made with a token are billed at the minimum price.
 
 ---
 
