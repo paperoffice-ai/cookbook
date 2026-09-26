@@ -2,7 +2,7 @@
 """PaperOffice AI — Smart document search in DMS (Ultimate Search)
 
 Usage:
-    export PAPEROFFICE_API_KEY=po_sk_xxx
+    export PAPEROFFICE_API_KEY=po_ut_xxx
     python3 example.py "contract terms" 42
     python3 example.py "invoice 2026" 42 20
 """
