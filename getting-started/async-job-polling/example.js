@@ -20,13 +20,13 @@ const headers = { Authorization: `Bearer ${api_key}` };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Step 1: Submit job (priority=500 → async)
+// Step 1: Submit job (processing_lane=sla_1h → async)
 console.log(">>> Submitting job...");
 const form_data = new FormData();
 const file_buffer = readFileSync(input_file);
 form_data.append("file_1", new Blob([file_buffer]), basename(input_file));
 form_data.append("ocr_mode", "text");
-form_data.append("priority", "500");
+form_data.append("processing_lane", "sla_1h");
 
 const submit_response = await fetch(
   `${api_base}/job/add/paperoffice_aiocr___generate`,
@@ -53,12 +53,12 @@ for (let attempt = 1; attempt <= max_attempts; attempt++) {
     headers,
   });
   const poll_data = await poll_response.json();
-  const status = poll_data.status ?? "unknown";
+  const status = poll_data.job_status ?? "unknown"; // queued | processing | completed | failed
 
   console.log(`  Attempt ${attempt}/${max_attempts}: ${status}`);
 
   if (status === "completed") {
-    const summary = poll_data?.result?.output?.summary ?? {};
+    const summary = (poll_data.job_result ?? poll_data.result)?.output?.summary ?? {};
     console.log();
     console.log("--- Result ---");
     console.log(`Pages: ${summary.total_pages}`);
