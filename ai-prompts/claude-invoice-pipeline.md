@@ -7,8 +7,9 @@
 Copy this prompt directly into Claude:
 
 ```
-Read this API documentation:
-https://api.paperoffice.ai/latest/docs/postman
+Read this API guide first, completely:
+https://api.paperoffice.ai/latest/docs/llms.txt
+Use the Postman collection at https://api.paperoffice.ai/latest/docs/postman only for exact request and response samples.
 
 Create a Python script that:
 1. Takes a folder of invoice PDFs
