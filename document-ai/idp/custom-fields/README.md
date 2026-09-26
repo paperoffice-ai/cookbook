@@ -18,7 +18,7 @@ POST https://api.paperoffice.ai/latest/job/add/workflow
 | `model` | string | **Yes** | — | 9 variants: `basic`, `premium`, `ultra` + `-per`/`-per-max` for more pages (see [Model tiers](../invoice/#model-tiers-9-variants)) |
 | `idp_fields` | string | **Yes** | — | JSON array of field definitions (see below) |
 | `idp_collection` | string | No | — | Optional: combine with a template (e.g. `invoice`) + custom fields |
-| `priority` | int | No | `900` | `≥ 900` = synchronous (result inline) |
+| `processing_lane` | string | No | workspace default | Start-SLA: `no_sla` … `instant`. `instant` returns the result inline when it finishes in time; otherwise HTTP 202 with `job_id` — poll `GET /job/get/{job_id}` |
 
 ## idp_fields syntax
 
