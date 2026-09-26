@@ -1,65 +1,79 @@
-# MCP Setup for Claude Desktop and Claude Code
+# MCP Setup for Claude Desktop, Claude Code and Claude Cowork
 
-Guide for connecting the **PaperOffice MCP Server** to **Claude Desktop** and **Claude Code**. After setup, Claude can invoke PaperOffice tools directly — analogous to usage in other MCP-capable environments.
+Connect the PaperOffice MCP server to Claude. Afterwards Claude can invoke PaperOffice
+tools directly: search, read, OCR, extraction, classification, signatures, audit.
 
-## Verified Endpoint
+## Endpoint
 
 | Transport | URL |
 |-----------|-----|
-| SSE (Server-Sent Events) | `https://mcp.paperoffice.ai/claude` |
+| Streamable HTTP | `https://mcp.paperoffice.ai/claude` |
 
-**Authentication:** Bearer token via HTTP header or query parameter.
+**Authentication:** OAuth 2.1. Claude opens the PaperOffice sign-in page on the first
+request; sign in with your PaperOffice account or paste a **user token** (`po_ut_…`) or
+**group token** (`po_gt_…`) from [app.paperoffice.ai](https://app.paperoffice.ai).
+No token in the config file. System keys (`po_sk_`) and publishable keys (`po_pk_`) are
+rejected.
 
-## Claude Desktop: `claude_desktop_config.json`
+## Claude Desktop
 
-The configuration file is located in the application data folder of Claude Desktop, depending on the operating system (refer to the official Anthropic documentation for the exact path).
-
-Entry for PaperOffice:
+Add the server under **Settings → Connectors**, or in `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "paperoffice": {
-      "url": "https://mcp.paperoffice.ai/claude",
-      "headers": {
-        "Authorization": "Bearer your_api_key"
-      }
+      "url": "https://mcp.paperoffice.ai/claude"
     }
   }
 }
 ```
 
-Replace `your_api_key` with your valid PaperOffice API key. After saving, restart Claude Desktop so that MCP servers are loaded.
+Restart Claude Desktop and complete the OAuth sign-in when prompted.
 
-## Claude Code
+## Claude Code / Claude Cowork
 
-**Claude Code** (CLI / IDE integration) also uses an MCP server list — structurally similar to Claude Desktop: remote server with `url` and `headers` for `Authorization`.
+```bash
+claude mcp add --transport http paperoffice https://mcp.paperoffice.ai/claude
+```
 
-- Add the same server as above (`https://mcp.paperoffice.ai/claude`, Bearer token).
-- The exact file path and JSON schema may differ depending on the Claude Code version; please refer to the **current Anthropic documentation for Claude Code + MCP** and set the fields (`mcpServers`, `url`, `headers`) accordingly.
+For a headless setup with a token in the header use the canonical DMS lane instead:
 
-## Behavior
+```json
+{
+  "mcpServers": {
+    "paperoffice": {
+      "url": "https://mcp.paperoffice.ai/dms",
+      "headers": { "Authorization": "Bearer po_ut_..." }
+    }
+  }
+}
+```
 
-- Claude can **invoke PaperOffice tools directly** (e.g. OCR, IDP, Translation) once the MCP connection is established.
-- Tool selection happens in the dialog — you describe the goal, Claude selects matching tools from the provided list.
+## What Claude sees
 
-## Artifacts Mode (Note)
-
-In Claude's **Artifacts mode**, results from tool calls (e.g. **OCR text** or structured outputs) can often be further processed directly: summaries, tables, post-processing, or embedding in longer responses — without manually copying raw data between windows.
+`/claude` lists the full **Documents Operations** catalog directly (Directory profile,
+without text-to-speech). Every description starts with `READ-ONLY.`, `WRITES DATA.` or
+`DESTRUCTIVE.`, and each tool carries `readOnlyHint`, `destructiveHint` and
+`openWorldHint`. Claude asks for confirmation before destructive calls.
 
 ## Troubleshooting
 
-1. **Configuration path:** Wrong file or JSON syntax error — check the desktop log or developer tools.
-2. **Token:** Verify validity and spelling `Bearer your_api_key`.
-3. **Health:** `GET https://mcp.paperoffice.ai/health` for a quick availability check.
+1. **Sign-in loop:** allow `mcp.paperoffice.ai` and `api.paperoffice.ai` in the Claude.ai
+   network allowlist (two **f**s).
+2. **Health:** `GET https://mcp.paperoffice.ai/health`.
+3. **Wrong token type:** `po_sk_` and `po_pk_` are rejected; create a `po_ut_` or `po_gt_`
+   token.
 
-## Other URLs (Reference)
+## Other endpoints
 
 | Purpose | URL |
 |---------|-----|
-| Cursor | `https://mcp.paperoffice.ai/cursor` |
-| OpenAI / ChatGPT | `https://mcp.paperoffice.ai/openai` |
-| Standard MCP | `https://mcp.paperoffice.ai/mcp` |
-| Universal / Overview | `https://mcp.paperoffice.ai/` |
+| Cursor / Windsurf | `https://mcp.paperoffice.ai/cursor` |
+| ChatGPT | `https://mcp.paperoffice.ai/chatgpt` |
+| Grok | `https://mcp.paperoffice.ai/grok` |
+| Headless DMS (canonical) | `https://mcp.paperoffice.ai/dms` |
+| Everything, all modules | `https://mcp.paperoffice.ai/mcp-full` |
 
-For Claude, the **`/claude`** entry is the appropriate URL.
+Ready-made configs for every client:
+[paperoffice-ai/paperoffice-mcp-setup](https://github.com/paperoffice-ai/paperoffice-mcp-setup).
