@@ -18,7 +18,7 @@ response=$(curl -s -X POST "${api_base}/job/add/workflow" \
   -F "file_1=@${input_file}" \
   -F "model=ultra" \
   -F "idp_collection=legal_document" \
-  -F "priority=900")
+  -F "processing_lane=instant")
 
 echo "${response}" | python3 -c "
 import sys, json
