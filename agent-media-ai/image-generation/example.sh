@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_ut_xxx)}"
 BASE_URL="https://api.paperoffice.ai/latest"
 
 PROMPT="${1:-A futuristic cityscape at sunset with flying cars}"
@@ -26,4 +26,4 @@ curl -s -X POST "${BASE_URL}/job/add/paperoffice_imagestudio___generate" \
   -F "seed=-1" \
   -F "steps=15" \
   -F "guidance_scale=4.0" \
-  -F "priority=900" | python3 -m json.tool
+  -F "processing_lane=instant" | python3 -m json.tool
