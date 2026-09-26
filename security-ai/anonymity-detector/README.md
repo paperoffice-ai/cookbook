@@ -19,7 +19,7 @@ POST https://api.paperoffice.ai/latest/ip2location/vpn
 ## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY=po_sk_xxx
+export PAPEROFFICE_API_KEY=po_ut_xxx
 
 # Bash — check own IP
 bash example.sh
@@ -39,22 +39,29 @@ node example.js "1.2.3.4"
 
 ```json
 {
+  "status": "success",
+  "ip": { "...": "geolocation of the address" },
+  "vpn": {
     "is_vpn": false,
     "is_proxy": false,
     "is_tor": false,
-    "is_datacenter": false,
+    "is_datacenter": true,
     "is_relay": false,
-    "score": 0
+    "score": "95.31%",
+    "type": "datacenter"
+  }
 }
 ```
 
-## Score interpretation
+The anonymity flags live under `vpn`; `score` is the confidence of the classification as a percentage string.
 
-| Score | Meaning |
+## Reading the result
+
+| Field | Meaning |
 |---|---|
-| 0–20 | Normal user, no concealment detected |
-| 21–60 | Suspicious — possibly VPN or corporate proxy |
-| 61–100 | High anonymity — likely VPN, Tor, or datacenter |
+| `type` | `residential`, `datacenter`, `vpn`, `proxy`, `tor`, `relay` |
+| `is_*` flags | which anonymization class matched |
+| `score` | confidence of the classification (percentage) |
 
 ## Common use cases
 
