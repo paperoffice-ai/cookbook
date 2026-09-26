@@ -1,32 +1,28 @@
 #!/usr/bin/env python3
-"""PaperOffice AI — Entity extraction (NER) with grouping by type"""
+"""PaperOffice AI — Entities of a processed document, grouped by type"""
 import os
 import sys
 import requests
 
-API_URL = "https://api.paperoffice.ai/latest/document_intelligence/entities"
+API_BASE = "https://api.paperoffice.ai/latest"
 API_KEY = os.environ.get("PAPEROFFICE_API_KEY", "")
 
-EXAMPLE_TEXT = (
-    "Acme Corporation, based in New York, signed a contract worth "
-    "250,000 USD with Example Inc. on March 15, 2025. "
-    "Contact person is John Smith, reachable at +1 212 555 0123."
-)
 
-
-def extract_entities(text: str, entity_types: list = None) -> dict:
-    """Extracts named entities from a text."""
+def get_document_entities(documents_id: int, entity_type: str = None, min_confidence: float = None) -> dict:
+    """Returns the entities the AI-DMS extracted from a document (companies, persons, IBANs, amounts, dates ...)."""
     if not API_KEY:
         raise ValueError("PAPEROFFICE_API_KEY not set")
 
-    payload = {"text": text}
-    if entity_types:
-        payload["entity_types"] = ",".join(entity_types)
+    params = {"documents_id": documents_id}
+    if entity_type:
+        params["type"] = entity_type
+    if min_confidence is not None:
+        params["min_confidence"] = min_confidence
 
-    response = requests.post(
-        API_URL,
+    response = requests.get(
+        f"{API_BASE}/document_intelligence/entities",
         headers={"Authorization": f"Bearer {API_KEY}"},
-        data=payload,
+        params=params,
     )
     response.raise_for_status()
     return response.json()
@@ -36,25 +32,25 @@ def group_by_type(entities: list) -> dict:
     """Groups entities by type for clear output."""
     grouped = {}
     for entity in entities:
-        typ = entity.get("type", "unknown")
-        grouped.setdefault(typ, []).append(entity)
+        grouped.setdefault(entity.get("type", "unknown"), []).append(entity)
     return grouped
 
 
 if __name__ == "__main__":
-    text = sys.argv[1] if len(sys.argv) > 1 else EXAMPLE_TEXT
+    if len(sys.argv) < 2:
+        sys.exit(f"Usage: {sys.argv[0]} <documents_id> [type] [min_confidence]\n"
+                 "Find documents_id with POST /documents/document-search.")
+    documents_id = int(sys.argv[1])
+    entity_type = sys.argv[2] if len(sys.argv) > 2 else None
+    min_conf = float(sys.argv[3]) if len(sys.argv) > 3 else None
 
-    print(f"=== Entity Extraction ===")
-    print(f"Text: {text[:100]}...\n")
-
-    result = extract_entities(text)
-    entities = result.get("entities", [])
-
-    print(f"Entities found: {len(entities)}\n")
+    data = get_document_entities(documents_id, entity_type, min_conf)
+    entities = data.get("entities", [])
+    print(f"Document:   {data.get('file_name')} (id {data.get('document_id')})")
+    print(f"Entities:   {data.get('total', len(entities))}\n")
 
     for typ, items in group_by_type(entities).items():
-        print(f"--- {typ.upper()} ({len(items)}) ---")
+        print(f"[{typ}]")
         for e in items:
-            conf = e.get("confidence", 0)
-            print(f"  • {e['text']:<30} (Confidence: {conf:.0%})")
-        print()
+            conf = round(float(e.get("confidence", 0)) * 100)
+            print(f"  • {str(e.get('value', '')).ljust(40)} ({conf}%)")
