@@ -2,7 +2,7 @@
 """PaperOffice AI — AI-powered document generation (Create from Content)
 
 Usage:
-    export PAPEROFFICE_API_KEY=po_sk_xxx
+    export PAPEROFFICE_API_KEY=po_ut_xxx
     python3 example.py 42                        # workspace_id
     python3 example.py 42 "Monthly Report"       # with custom title
 """
@@ -88,14 +88,15 @@ document demonstrating the create-from-content endpoint.
     result = create_from_content(content, workspace_id, title=title)
 
     if result.get("status") == "success":
-        doc = result.get("document", {})
-        print(f"  Download URL: {doc.get('download_url', '-')}")
-        print(f"  Format:       {doc.get('format', '-')}")
-        print(f"  Pages:        {doc.get('pages', '-')}")
-        print(f"  POFID:        {doc.get('pofid', '-')}")
+        # The PDF is stored in the workspace; the response is flat.
+        print(f"  documents_id: {result.get('document_id', '-')}")
+        print(f"  POFID:        {result.get('pofid', '-')}")
+        print(f"  File:         {result.get('file_name', '-')} ({result.get('format', '-')}, {result.get('file_size', '-')} bytes)")
+        print(f"  Charged:      {result.get('charged_this_request', '-')} credits"
+              f"{' (idempotent replay)' if result.get('idempotent_replay') else ''}")
 
-        download_url = doc.get("download_url")
-        if download_url:
-            download_document(download_url, f"generated.pdf")
+        pofid = result.get("pofid")
+        if pofid:
+            download_document(f"{api_base}/documents/document-download/{pofid}", "generated.pdf")
     else:
         print("Error:", json.dumps(result, indent=2))
