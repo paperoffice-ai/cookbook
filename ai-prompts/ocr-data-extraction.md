@@ -13,7 +13,7 @@ Create a Node.js (ESM) script that:
 2. Runs OCR via POST /job/add/paperoffice_aiocr___generate with:
    - file_1 = the PDF
    - ocr_mode = complete (extracts text + bounding boxes + tables + layout)
-   - priority = 900 (sync, instant result)
+   - processing_lane = instant (inline result on 200; on 202 poll job/get)
 3. Parses the response:
    - Full text: result.output.summary.poaiocr_extracted_fulltext
    - Per-page text: result.output.pages["00001"].ocr_text
