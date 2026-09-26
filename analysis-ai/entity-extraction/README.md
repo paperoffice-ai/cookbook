@@ -1,41 +1,31 @@
-# Entity Extraction — Named Entity Recognition (NER)
+# Entity Extraction — Entities of Processed Documents
 
-Extracts named entities (persons, organizations, locations, dates, amounts, etc.) from texts or documents using AI-powered NER analysis.
+Returns the named entities the AI-DMS extracted from a document: companies, persons, IBANs, amounts, dates, e-mail addresses, phone numbers, invoice and contract numbers. Entities are created when a document is processed (AI-DMS or an IDP workflow); this endpoint reads them.
 
 ## Endpoints
 
 | Endpoint | Method | Purpose |
 |---|---|---|
-| `/document_intelligence/entities` | POST | Extract entities from text |
-| `/document_intelligence/entities/{document_id}` | GET | Get entities for an existing DMS document |
+| `/document_intelligence/entities` | GET | Entities of one document (`documents_id`) |
+| `/document_intelligence/entities/{pofid}` | GET | Same by POFID, optional `include_relations` |
 | `/document_intelligence/entities/search` | GET | Search entities across all documents |
-| `/document_intelligence/entities/canonical` | GET | Get canonical (deduplicated) entities |
+| `/document_intelligence/entities/canonical` | GET | Canonical (deduplicated) entities of the account |
 
-**Authentication:** Bearer Token
+**Authentication:** Bearer token
 
-## Parameters — `POST /document_intelligence/entities`
-
-| Parameter | Type | Required | Description |
-|---|---|---|---|
-| `text` | string | Yes | Text to analyze |
-| `type` | string | No | Filter by entity type (e.g., `person`, `organization`, `location`) |
-| `min_confidence` | float | No | Minimum confidence threshold (0.0–1.0) |
-| `include_positions` | bool | No | Include character positions in the response |
-
-## Parameters — `GET /document_intelligence/entities/{document_id}`
-
-Returns entities extracted from an already-indexed DMS document.
+## Parameters — `GET /document_intelligence/entities`
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `{document_id}` | path | Yes | DMS document ID |
-| `include_relations` | bool | No | Include entity relationships |
+| `documents_id` | int | Yes | Numeric document ID (from `POST /documents/document-search`) |
+| `type` | string | No | Filter: `company`, `person`, `iban`, `amount`, `email`, `phone`, `location`, `invoice_number`, `contract_number` |
+| `min_confidence` | float | No | Minimum confidence (0.0–1.0) |
 
 ## Parameters — `GET /document_intelligence/entities/search`
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `query` | string | Yes | Search term |
+| `query` | string | Yes | Search term (company name, IBAN, person ...) |
 | `workspace_id` | int | No | Restrict to a workspace |
 | `entity_type` | string | No | Filter by type |
 | `limit` | int | No | Max results |
@@ -43,68 +33,51 @@ Returns entities extracted from an already-indexed DMS document.
 ## How to run
 
 ```bash
-export PAPEROFFICE_API_KEY=po_sk_xxx
+export PAPEROFFICE_API_KEY=po_ut_xxx
 
-# Bash
-bash example.sh "The company ABC GmbH is located in Berlin."
-
-# Python
-pip install requests
-python3 example.py "The company ABC GmbH is located in Berlin."
-
-# Node.js (v18+)
-node example.js "The company ABC GmbH is located in Berlin."
+# documents_id: take it from POST /documents/document-search
+bash example.sh 668
+python3 example.py 668 company
+node example.js 668
 ```
 
 ## Expected response
 
 ```json
 {
-    "status": "success",
-    "entities": [
-        {
-            "text": "Acme Corporation",
-            "type": "organization",
-            "start": 0,
-            "end": 16,
-            "confidence": 0.95
-        },
-        {
-            "text": "New York",
-            "type": "location",
-            "start": 27,
-            "end": 35,
-            "confidence": 0.98
-        },
-        {
-            "text": "March 15, 2025",
-            "type": "date",
-            "start": 82,
-            "end": 96,
-            "confidence": 0.97
-        },
-        {
-            "text": "250,000 USD",
-            "type": "money",
-            "start": 62,
-            "end": 73,
-            "confidence": 0.96
-        }
-    ]
+  "status": "success",
+  "document_id": 668,
+  "pofid": "...",
+  "file_name": "08_invoice_RE-2026-7834_scan.pdf",
+  "total": 5,
+  "entities": [
+    {
+      "type": "company",
+      "type_label": "Firma",
+      "value": "Northstar Industrial Systems Ltd.",
+      "normalized_value": "northstar industrial systems ltd.",
+      "confidence": 0.9,
+      "page_number": null,
+      "source": "entity_extraction"
+    }
+  ],
+  "by_type": { "company": 2, "amount": 1, "date": 2 },
+  "entity_types": ["company", "amount", "date"]
 }
 ```
 
-## Supported entity types
+## Entity types
 
-| Type | Description | Examples |
-|---|---|---|
-| `person` | Person names | John Smith, Dr. Miller |
-| `organization` | Companies, authorities | Acme Corp., IRS |
-| `location` | Places, addresses | New York, 5th Avenue |
-| `date` | Date references | March 15, 2025, Q1/2024 |
-| `money` | Monetary amounts | 250,000 USD, 1,500.00 EUR |
-| `phone` | Phone numbers | +1 212 555 0123 |
-| `email` | Email addresses | info@example.com |
+| Type | Examples |
+|---|---|
+| `company` | Northstar Industrial Systems Ltd. |
+| `person` | John Smith |
+| `iban` | DE89 3704 0044 0532 0130 00 |
+| `amount` | 47500 EUR |
+| `date` | 2026-03-15 |
+| `email` | info@example.com |
+| `phone` | +49 30 123456 |
+| `invoice_number`, `contract_number` | RE-2026-7834 |
 
 ## Common use cases
 
