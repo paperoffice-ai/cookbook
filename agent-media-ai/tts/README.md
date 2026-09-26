@@ -1,6 +1,8 @@
 # Text-to-Speech (TTS)
 
-Converts text to natural-sounding speech using neural voices. Supports **39 languages**, multiple quality tiers, voice cloning, and multi-speaker output.
+Converts text to natural-sounding speech using neural voices. Supports the 35 PaperOffice languages, multiple quality tiers, voice cloning, and multi-speaker output.
+
+> **Token scope:** text-to-speech is a media tool. Group tokens whose group has no audio permission receive `403 GROUP_RESTRICTION`; use a user token (`po_ut_`) or a group with media rights. On the MCP Directory lanes (`/claude`, `/chatgpt`) the TTS tools are not listed at all.
 
 ## Endpoint
 
@@ -40,7 +42,7 @@ node example.js "Hello world" Joanna en mp3
 | `temperature` | float | No | `0.9` | Sampling temperature: `0.1` (deterministic) to `1.0` (creative) |
 | `top_p` | float | No | `0.7` | Nucleus sampling: `0.1` to `1.0` |
 | `repetition_penalty` | float | No | `1.1` | Repetition penalty: `0.9` to `1.99` (higher = less repetition) |
-| `priority` | int | No | `999` | `≥ 900` = synchronous (result inline) |
+| `processing_lane` | string | No | workspace default | Start-SLA: `no_sla` … `instant`. Inline result on 200, otherwise HTTP 202 with `job_id` |
 
 ## Quality tiers
 
@@ -109,7 +111,7 @@ curl -X POST "https://api.paperoffice.ai/latest/job/add/paperoffice_voice___tts"
   -F "text=Hello, this is my cloned voice speaking." \
   -F "voice_sample=@my_voice.wav" \
   -F "quality=premium" \
-  -F "priority=999"
+  -F "processing_lane=no_sla"
 ```
 
 ## Multi-Speaker (Inline Tags)
@@ -168,8 +170,8 @@ Generate audio with multiple voices in a single request using inline tags.
 
 ## Tips
 
-- **Synchronous:** `priority=999` (or any `≥ 900`) returns result directly
-- **Long texts:** For texts > 5,000 characters, use async processing (`priority=500`)
+- **Synchronous:** `processing_lane=no_sla` (or any `≥ 900`) returns result directly
+- **Long texts:** For texts > 5,000 characters, use async processing (`processing_lane=sla_1h`)
 - **Force language:** Set `language` explicitly to override auto-detection
 - **Reproducibility:** Same `text` + `voice` + `temperature=0.1` gives near-identical output
 - **Speed control:** `0.9` is ~10% slower (calmer), `1.1` is ~10% faster (energetic)
