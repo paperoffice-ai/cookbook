@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_ut_xxx)}"
 BASE_URL="https://api.paperoffice.ai/latest"
 
 AUDIO_FILE="${1:?Please pass audio file as first argument (MP3/WAV/OGG/FLAC/M4A/WEBM)}"
@@ -24,7 +24,7 @@ CURL_ARGS=(
   -s -X POST "${BASE_URL}/job/add/paperoffice_voice___stt"
   -H "Authorization: Bearer ${API_KEY}"
   -F "file_1=@${AUDIO_FILE}"
-  -F "priority=900"
+  -F "processing_lane=instant"
 )
 
 if [ -n "${LOCALE}" ]; then
