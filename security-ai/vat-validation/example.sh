@@ -2,7 +2,7 @@
 # PaperOffice AI — Validate VAT ID
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_ut_xxx)}"
 VAT_ID="${1:-DE123456789}"
 
 echo "→ Validating VAT ID: $VAT_ID"
