@@ -67,14 +67,14 @@ document demonstrating the create-from-content endpoint.
   const data = await create_from_content(content, workspace_id, title);
 
   if (data.status === "success") {
-    const doc = data.document || {};
-    console.log(`  Download URL: ${doc.download_url ?? "-"}`);
-    console.log(`  Format:       ${doc.format ?? "-"}`);
-    console.log(`  Pages:        ${doc.pages ?? "-"}`);
-    console.log(`  POFID:        ${doc.pofid ?? "-"}`);
+    // The PDF is stored in the workspace; the response is flat.
+    console.log(`  documents_id: ${data.document_id ?? "-"}`);
+    console.log(`  POFID:        ${data.pofid ?? "-"}`);
+    console.log(`  File:         ${data.file_name ?? "-"} (${data.format ?? "-"}, ${data.file_size ?? "-"} bytes)`);
+    console.log(`  Charged:      ${data.charged_this_request ?? "-"} credits${data.idempotent_replay ? " (idempotent replay)" : ""}`);
 
-    if (doc.download_url) {
-      await download_document(doc.download_url, "generated.pdf");
+    if (data.pofid) {
+      await download_document(`${api_base}/documents/document-download/${data.pofid}`, "generated.pdf");
     }
   } else {
     console.error("Error:", JSON.stringify(data, null, 2));
