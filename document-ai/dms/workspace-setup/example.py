@@ -2,7 +2,7 @@
 """PaperOffice AI — Create & list workspaces
 
 Usage:
-    export PAPEROFFICE_API_KEY=po_sk_xxx
+    export PAPEROFFICE_API_KEY=po_ut_xxx
     python3 example.py "Accounting" "Invoices and receipts"
 """
 import os
@@ -13,15 +13,15 @@ api_base = "https://api.paperoffice.ai/latest"
 api_key = os.environ.get("PAPEROFFICE_API_KEY", "")
 
 
-def workspace_create(name: str, description: str = "", token: str = api_key) -> dict:
+def workspace_create(name: str, description: str = "", ws_type: str = "ablage", token: str = api_key) -> dict:
     """Creates a new workspace in the DMS."""
     if not token:
         raise ValueError("PAPEROFFICE_API_KEY not set")
 
     response = requests.post(
-        f"{api_base}/documents/workspace-create",
+        f"{api_base}/documents/workspaces-create",
         headers={"Authorization": f"Bearer {token}"},
-        data={"name": name, "description": description},
+        data={"name": name, "description": description, "type": ws_type},
     )
     response.raise_for_status()
     return response.json()
