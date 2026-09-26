@@ -4,7 +4,7 @@
  * Translates text between 100+ languages (3 quality tiers)
  *
  * Usage:
- *     export PAPEROFFICE_API_KEY=po_sk_xxx
+ *     export PAPEROFFICE_API_KEY=po_ut_xxx
  *     node example.js "Hello World" de
  *     node example.js "Hello World" de auto ultra
  */
