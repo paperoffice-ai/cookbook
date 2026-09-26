@@ -29,10 +29,11 @@ def detect_anonymity(ip: str = None, token: str = API_KEY) -> dict:
 if __name__ == "__main__":
     ip_addr = sys.argv[1] if len(sys.argv) > 1 else None
     data = detect_anonymity(ip=ip_addr)
+    data = data.get("vpn", data)  # flags live under "vpn"
 
     print(f"VPN:        {data.get('is_vpn')}")
     print(f"Proxy:      {data.get('is_proxy')}")
     print(f"Tor:        {data.get('is_tor')}")
     print(f"Datacenter: {data.get('is_datacenter')}")
     print(f"Relay:      {data.get('is_relay')}")
-    print(f"Score:      {data.get('score')}%")
+    print(f"Score:      {data.get('score')}")
