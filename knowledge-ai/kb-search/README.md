@@ -24,7 +24,7 @@ POST https://api.paperoffice.ai/latest/knowledge/search
 ## How to Run
 
 ```bash
-export PAPEROFFICE_API_KEY=po_sk_xxx
+export PAPEROFFICE_API_KEY=po_ut_xxx
 
 # Bash — simple search
 bash example.sh "How does OCR work?"
