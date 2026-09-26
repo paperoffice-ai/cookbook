@@ -17,7 +17,7 @@ https://api.paperoffice.ai/latest/docs/postman
 [Your goal here]
 ```
 
-The AI reads the full PaperOffice API spec (357+ tools, all parameters, all response formats) and generates a complete, working solution — no manual coding required.
+The AI reads the full PaperOffice API spec (300+ tools, all parameters, all response formats) and generates a complete, working solution — no manual coding required.
 
 ---
 
@@ -39,7 +39,7 @@ The AI reads the full PaperOffice API spec (357+ tools, all parameters, all resp
 ## Tips for Best Results
 
 1. **Always start with the Postman URL** — this gives the AI full API context.
-2. **Be specific about parameters** — mention `file_1`, `priority=900`, `ocr_mode=complete` etc.
+2. **Be specific about parameters** — mention `file_1`, `processing_lane=instant`, `ocr_mode=complete` etc.
 3. **Specify the output format** — "export to CSV", "return JSON", "save as PDF".
 4. **Mention error handling** — "handle rate limits with retry", "check job status".
 5. **Name the language** — "Create a Python script" or "Write a Node.js ESM module".
