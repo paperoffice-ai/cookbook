@@ -75,7 +75,7 @@ const art1 = await article_create(
   "PaperOffice AI provides intelligent document processing, OCR and knowledge management.",
   "Introduction"
 );
-const art1_id = (art1.data || art1).id || art1.article_id;
+const art1_id = (art1.data || art1).knowledge_id; // articles are addressed by knowledge_id (string)
 console.log(`  Article 1: ID=${art1_id}`);
 
 const art2 = await article_create(
@@ -84,14 +84,15 @@ const art2 = await article_create(
   "All API calls require a Bearer Token in the Authorization header.",
   "Technical"
 );
-const art2_id = (art2.data || art2).id || art2.article_id;
+const art2_id = (art2.data || art2).knowledge_id;
 console.log(`  Article 2: ID=${art2_id}`);
 
 // 5. List articles
 console.log("\n=== Articles in KB ===");
 const articles = await article_list(kb_id);
-for (const art of articles.data || []) {
-  console.log(`  • [${art.id}] ${art.title}`);
+for (const art of articles.data?.articles || []) {
+  const title = art.content?.en?.title || art.content?.de?.title || art.title;
+  console.log(`  • [${art.knowledge_id}] ${title}`);
 }
 
 // 6. Update article
