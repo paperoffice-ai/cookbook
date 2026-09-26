@@ -29,7 +29,7 @@ Add this to your `.cursor/mcp.json`:
     "paperoffice": {
       "url": "https://mcp.paperoffice.ai/cursor",
       "headers": {
-        "Authorization": "Bearer YOUR_API_KEY"
+        "Authorization": "Bearer po_ut_..."
       }
     }
   }
@@ -40,13 +40,14 @@ Add this to your `.cursor/mcp.json`:
 
 | Client | URL |
 |---|---|
-| **Cursor IDE** | `https://mcp.paperoffice.ai/cursor` |
+| **Cursor / Windsurf** | `https://mcp.paperoffice.ai/cursor` |
 | **Claude Desktop / Claude Code** | `https://mcp.paperoffice.ai/claude` |
-| **Standard MCP** | `https://mcp.paperoffice.ai/mcp` |
-| **OpenAI / ChatGPT** | `https://mcp.paperoffice.ai/openai` |
+| **ChatGPT** | `https://mcp.paperoffice.ai/chatgpt` |
+| **Grok** | `https://mcp.paperoffice.ai/grok` |
+| **Headless DMS** | `https://mcp.paperoffice.ai/dms` |
 
 ## What you get
 
 - Complete MCP configuration for Cursor
-- List of all available Document AI tools (357+ tools)
+- The core tools plus `po_mcp_tools_search` to reach the rest of the 300+ catalog
 - Examples of how to process documents directly from the workspace
