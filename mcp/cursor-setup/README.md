@@ -1,18 +1,27 @@
 # MCP Setup for Cursor IDE
 
-Guide for connecting the **PaperOffice MCP Server** to the **Cursor IDE**. After successful configuration, all PaperOffice API tools are available directly in the AI chat.
+Connect the PaperOffice MCP server to Cursor. Afterwards the agent can search, read and
+create documents in your PaperOffice account, and reach the whole Documents Operations
+catalog through discovery tools.
 
-## Verified Endpoint
+## Endpoint
 
 | Transport | URL |
 |-----------|-----|
-| SSE (Server-Sent Events) | `https://mcp.paperoffice.ai/cursor` |
+| Streamable HTTP | `https://mcp.paperoffice.ai/cursor` |
 
-**Authentication:** Bearer token via HTTP header or query parameter (`Authorization: Bearer <token>` or corresponding query name depending on client).
+**Authentication:** bearer header with a **user token** (`po_ut_…`) or **group token**
+(`po_gt_…`) from [app.paperoffice.ai](https://app.paperoffice.ai) → *Account → API*.
+A group token limits the connection to the workspaces of that group. System keys
+(`po_sk_`) and publishable keys (`po_pk_`) are rejected by the MCP server.
 
-## Configuration: `.cursor/mcp.json`
+## Option A — Cursor Marketplace plugin
 
-Create or update a file `.cursor/mcp.json` in your project root (or in the Cursor configuration) with the `paperoffice` entry:
+Install **PaperOffice** from the Cursor Marketplace and set the plugin variable
+`PAPEROFFICE_TOKEN` when asked. Nothing else to configure. Source:
+[paperoffice-ai/paperoffice-cursor-plugin](https://github.com/paperoffice-ai/paperoffice-cursor-plugin).
+
+## Option B — `.cursor/mcp.json`
 
 ```json
 {
@@ -20,41 +29,46 @@ Create or update a file `.cursor/mcp.json` in your project root (or in the Curso
     "paperoffice": {
       "url": "https://mcp.paperoffice.ai/cursor",
       "headers": {
-        "Authorization": "Bearer your_api_key"
+        "Authorization": "Bearer po_ut_..."
       }
     }
   }
 }
 ```
 
-Replace `your_api_key` with your valid PaperOffice API key.
+Replace `po_ut_...` with your token and reload the window.
 
-## What happens next?
+## What Cursor sees
 
-- Cursor uses **SSE transport** for the connection to the MCP server.
-- **All 357+ PaperOffice tools** (as of current platform) are available in the AI context — the same tool palette as via the REST API, bundled through MCP.
-- You don't need to manually reference individual endpoints in the chat; the model can select and invoke matching tools.
+`tools/list` on `/cursor` is short on purpose: `po_workspaces_list`, `po_documents_search`,
+`po_documents_get`, `po_documents_text_get`, `po_documents_folders_list`,
+`po_documents_tags_list`, `po_documents_create_from_content`,
+`po_documents_upload_url_get`, `po_extraction_invoice`, `po_job_get`, plus the four
+discovery tools `po_mcp_tools_search`, `po_mcp_tools_schema`, `po_mcp_tools_call_read`
+and `po_mcp_tools_call_write`. Import, classification, signatures, storage, webhooks and
+audit are reached through the discovery tools — see [Tool Discovery](../tool-discovery/).
 
-## Benefits in daily use
-
-- **OCR, IDP, Translation, TTS, STT** and other categories can be tested and automated directly from the editor.
-- Less context switching: experiments and small pipelines stay in Cursor instead of separate scripts or Postman.
-- Consistent authentication using the same API key as for direct API calls.
+Every description starts with `READ-ONLY.`, `WRITES DATA.` or `DESTRUCTIVE.`. The same
+catalog is served on `/dms` and `/grok`. For media, CRM and telephony switch the URL to
+`https://mcp.paperoffice.ai/mcp-full`.
 
 ## Troubleshooting
 
-1. **API Key:** Check that the key is active, belongs to the correct account, and has not expired. The header must be exactly `Bearer <token>` (space after `Bearer`).
-2. **Reachability:** Check the server status with `GET https://mcp.paperoffice.ai/health` (or the health path documented for your environment on the MCP host).
-3. **Network / Proxy:** Firewalls or TLS inspection can disrupt SSE connections — set exceptions for `mcp.paperoffice.ai` if needed.
-4. **Cursor Version:** Make sure the installed Cursor version supports MCP with remote URL and SSE; check the release notes if issues arise.
+1. **401 on connect:** the header must be exactly `Bearer <token>`; the token must be
+   active and of type `po_ut_` or `po_gt_`.
+2. **Reachability:** `GET https://mcp.paperoffice.ai/health`.
+3. **Proxy / TLS inspection:** allow `mcp.paperoffice.ai` and `api.paperoffice.ai`.
+4. **Old Cursor build:** remote MCP over Streamable HTTP needs a current Cursor version.
 
-## Other Endpoints (Overview)
+## Other endpoints
 
 | Purpose | URL |
 |---------|-----|
-| Claude-optimized | `https://mcp.paperoffice.ai/claude` |
-| OpenAI / ChatGPT | `https://mcp.paperoffice.ai/openai` |
-| Standard MCP | `https://mcp.paperoffice.ai/mcp` |
-| Universal | `https://mcp.paperoffice.ai/` |
+| Claude Desktop / Anthropic Directory | `https://mcp.paperoffice.ai/claude` |
+| ChatGPT | `https://mcp.paperoffice.ai/chatgpt` |
+| Grok | `https://mcp.paperoffice.ai/grok` |
+| Headless DMS (canonical) | `https://mcp.paperoffice.ai/dms` |
+| Everything, all modules | `https://mcp.paperoffice.ai/mcp-full` |
 
-For Cursor, the **`/cursor`** entry is the appropriate URL.
+Ready-made configs for every client:
+[paperoffice-ai/paperoffice-mcp-setup](https://github.com/paperoffice-ai/paperoffice-mcp-setup).
