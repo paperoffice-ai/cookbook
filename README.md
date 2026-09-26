@@ -13,24 +13,45 @@
 Forget reading docs. Paste one URL into your AI IDE and start building:
 
 ```
-https://api.paperoffice.ai/latest/docs/postman
+https://api.paperoffice.ai/latest/docs/llms.txt
 ```
 
-**That's it.** Your AI reads the entire API spec — 300+ tools, all parameters, all response formats — and generates production code for you.
+**That's it.** `llms.txt` is the machine-readable API guide — 300+ tools, auth, Start-SLA lanes, response envelopes. Your AI reads it and generates production code for you. The live [Postman collection](https://api.paperoffice.ai/latest/docs/postman) carries the full request/response samples when your AI needs a specific endpoint in detail.
 
 ### Try it now
 
 Open **Cursor**, **Claude**, **ChatGPT**, or **Windsurf** and paste:
 
 ```
-Read this API documentation:
-https://api.paperoffice.ai/latest/docs/postman
+Read this API guide first, completely:
+https://api.paperoffice.ai/latest/docs/llms.txt
 
 Extract all fields from this invoice PDF using IDP.
 Use model=premium and processing_lane=instant for instant results.
+Read the API key from the environment variable PAPEROFFICE_API_KEY.
 ```
 
 Your AI generates a working script. No docs to read. No boilerplate to write.
+
+---
+
+## Before You Start
+
+Three steps, about two minutes, no credit card.
+
+| Step | What to do | Where |
+|------|-----------|-------|
+| 1 · Account | Create a free PaperOffice account. The free plan is meant for trying things out; plan scope and credit prices are on the [pricing page](https://paperoffice.ai/en/pricing/). | [app.paperoffice.ai/en/register/](https://app.paperoffice.ai/en/register/) |
+| 2 · Token | Sign in, open **Account → API** and create a **User token** (`po_ut_…`). You can show and copy it again there at any time, rotate it, or set a credit budget per token. | [app.paperoffice.ai](https://app.paperoffice.ai) → Account → API |
+| 3 · Environment | `cp .env.example .env`, paste the token into `PAPEROFFICE_API_KEY`. Every recipe and every MCP config in this repo reads that variable. | this repo |
+
+**What every call costs.** Processing endpoints consume credits from your plan; the `processing_lane` you choose sets the factor (`no_sla` ×1 … `instant` ×5). Rejected requests cost nothing. With a token, every billable call costs at least 5 credits; `GET /health`, job polling (`GET /job/get`), `/billing/*` reads and `/docs/*` are always free. Without a token, the VISITOR endpoints listed under [Authentication](#authentication) are free and rate-limited. Details: [Pro Tips → Credit System](pro-tips/#credit-system).
+
+**Which token for what.** A User token sees everything your account sees. A Group token (`po_gt_…`) is limited to the workspaces of one group — use it for a team, a customer, or a reviewer. Both work for REST and MCP. System keys (`po_sk_`) are REST-only and the MCP server rejects them; publishable keys (`po_pk_`) are for browser widgets only.
+
+**Using an AI client instead of code?** Claude, ChatGPT and Grok sign in with OAuth — no token to paste. Cursor and Windsurf take the token as a plugin variable. See [MCP Integration](#-mcp-integration--ai-native-access) below.
+
+**Stuck?** [Help & FAQ](https://help.paperoffice.ai/) · [Support](https://paperoffice.ai/en/support/) · [GitHub Issues](https://github.com/paperoffice-ai/cookbook/issues) for anything wrong in this repo.
 
 ---
 
@@ -353,6 +374,17 @@ node getting-started/first-ocr/example.js document.pdf
 ```
 
 ---
+
+## Support
+
+| Question about … | Go to |
+|------------------|-------|
+| Using the API or the app, billing, account | [Help & FAQ](https://help.paperoffice.ai/) · [Support](https://paperoffice.ai/en/support/) |
+| A recipe in this repo that does not work | [GitHub Issues](https://github.com/paperoffice-ai/cookbook/issues) — include the endpoint, the `processing_lane`, and the `error_code` from the response |
+| MCP setup for Claude, ChatGPT, Cursor, Grok | [MCP documentation](https://paperoffice.ai/en/developer/mcp/) · [paperoffice-mcp-setup](https://github.com/paperoffice-ai/paperoffice-mcp-setup) |
+| Reseller or integration partnership | [Partner program](https://paperoffice.ai/en/partner/) |
+
+Typical error codes: `401 NOT_AUTHENTICATED` → no Bearer header sent · `401 TOKEN_NOT_FOUND` → token wrong, revoked, or pasted with a typo · `403 GROUP_RESTRICTION` → the group behind your token lacks that module (use a User token or ask the account owner) · `403 WORKSPACE_ACCESS_DENIED` → the workspace belongs to another group · `402 INSUFFICIENT_CREDITS` → the account is out of credits, top up or use a cheaper `processing_lane` · `402 BUDGET_EXHAUSTED` → this token's own credit budget is reached, raise it under Account → API. The full table is in [llms.txt](https://api.paperoffice.ai/latest/docs/llms.txt).
 
 ## Contributing
 
