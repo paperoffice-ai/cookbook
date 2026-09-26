@@ -2,7 +2,7 @@
 # PaperOffice AI — VPN/Proxy/Tor detection
 set -euo pipefail
 
-API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_sk_xxx)}"
+API_KEY="${PAPEROFFICE_API_KEY:?Please set PAPEROFFICE_API_KEY (export PAPEROFFICE_API_KEY=po_ut_xxx)}"
 IP_ADDR="${1:-}"
 
 echo "→ Anonymity check${IP_ADDR:+ for: $IP_ADDR}"
