@@ -6,6 +6,8 @@
 >
 > 300+ API/MCP tools · 38 Recipes · 8 AI Prompts · 4 MCP Configs
 
+[![Smithery badge](https://img.shields.io/badge/Smithery-document--operations-7c3aed)](https://smithery.ai/servers/paperoffice/document-operations)
+
 ---
 
 ## Start in 30 Seconds
@@ -137,6 +139,7 @@ Paste `https://mcp.paperoffice.ai/chatgpt` and complete the OAuth sign-in. No to
 | Claude Desktop / Anthropic Directory | `https://mcp.paperoffice.ai/claude` |
 | ChatGPT | `https://mcp.paperoffice.ai/chatgpt` |
 | Grok | `https://mcp.paperoffice.ai/grok` |
+| [Smithery](https://smithery.ai/servers/paperoffice/document-operations) | `https://mcp.paperoffice.ai/smithery` |
 | Headless DMS (canonical) | `https://mcp.paperoffice.ai/dms` |
 | Everything, all modules | `https://mcp.paperoffice.ai/mcp-full` |
 
