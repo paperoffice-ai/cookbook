@@ -1,5 +1,7 @@
 # PaperOffice AI Cookbook
 
+> **PaperOffice AI** is an AI document management system (DMS) with intelligent document processing (IDP), AI-OCR, redaction, e-invoice checks (XRechnung, ZUGFeRD) and a hosted MCP server for Claude, ChatGPT, Cursor and Grok. Website: [paperoffice.ai](https://paperoffice.ai)
+
 ### The AI-Native Developer Toolkit for Document Intelligence
 
 > **MCP-First · API-First · Vibe Coding First**
